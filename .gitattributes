@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.txt  text working-tree-encoding=UTF-8
+*.html text
+*.css  text
+*.js   text
+*.py   text

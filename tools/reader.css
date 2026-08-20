@@ -1,0 +1,562 @@
+/* ===========================================================
+   서재 1895—1936 · reading surface
+   Tokens: colour spec (light/sepia/dark/night) + typography spec
+   =========================================================== */
+
+/* ---------- 1. COLOUR TOKENS ---------- */
+:root{
+  color-scheme: light;
+  --bg:#FAF8F4;            --bg-panel:#FFFDF9;
+  --bg-control:#F0ECE4;    --bg-control-hover:#E6E0D5;
+  --bg-sel:#F2DCC4;
+  --fg:#2A2723;            --fg-heading:#211E1A;
+  --fg-muted:#6A635A;      --fg-sel:#26231F;
+  --link:#8A2E22;          --link-hover:#6E241B;
+  --accent:#8A2E22;        --accent-soft:#F0E2DC;
+  --focus:#8A2E22;
+  --rule:#E3DDD1;          --border:#D6CEBF;
+  --sb-track:#F0ECE4;      --sb-thumb:#BEB5A6;  --sb-thumb-hover:#8C8272;
+  --author-kafka:#58688C;  --author-wells:#417262;
+  --author-fitzgerald:#796740; --author-harbou:#756185;
+  --body-wght:400;         --dark-track:0em;
+}
+[data-theme="sepia"]{
+  color-scheme: light;
+  --bg:#F2E8D5;            --bg-panel:#F8F0E0;
+  --bg-control:#E8DCC4;    --bg-control-hover:#DED0B4;
+  --bg-sel:#E6C89A;
+  --fg:#2E2618;            --fg-heading:#241D11;
+  --fg-muted:#6B5D43;      --fg-sel:#2E2618;
+  --link:#7F2C1B;          --link-hover:#661F14;
+  --accent:#7F2C1B;        --accent-soft:#EBD9C4;
+  --focus:#7F2C1B;
+  --rule:#DCCDAE;          --border:#CFBC96;
+  --sb-track:#E8DCC4;      --sb-thumb:#BFAD8B;  --sb-thumb-hover:#92805E;
+  --author-kafka:#526286;  --author-wells:#3B6B5B;
+  --author-fitzgerald:#73603A; --author-harbou:#6F5A7E;
+}
+[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#191817;            --bg-panel:#211F1D;
+  --bg-control:#2A2825;    --bg-control-hover:#34312D;
+  --bg-sel:#4A342A;
+  --fg:#D6D0C6;            --fg-heading:#E4DED3;
+  --fg-muted:#9A9389;      --fg-sel:#F0EAE0;
+  --link:#E0906E;          --link-hover:#EFA987;
+  --accent:#E0906E;        --accent-soft:#2E211C;
+  --focus:#E0906E;
+  --rule:#302D29;          --border:#3C3834;
+  --sb-track:#211F1D;      --sb-thumb:#454039;  --sb-thumb-hover:#6D6760;
+  --author-kafka:#8797B6;  --author-wells:#769F8F;
+  --author-fitzgerald:#A59473; --author-harbou:#A190AF;
+  --body-wght:370;         --dark-track:0.008em;
+}
+[data-theme="night"]{
+  color-scheme: dark;
+  --bg:#0D0C0B;            --bg-panel:#151413;
+  --bg-control:#1B1A18;    --bg-control-hover:#232120;
+  --bg-sel:#3A291F;
+  --fg:#ADA498;            --fg-heading:#B9AFA1;
+  --fg-muted:#8A8175;      --fg-sel:#D2C9BB;
+  --link:#C68A67;          --link-hover:#D69C7A;
+  --accent:#C68A67;        --accent-soft:#221712;
+  --focus:#C68A67;
+  --rule:#252220;          --border:#322E29;
+  --sb-track:#151413;      --sb-thumb:#383430;  --sb-thumb-hover:#605A52;
+  --author-kafka:#7887A5;  --author-wells:#668E80;
+  --author-fitzgerald:#948564; --author-harbou:#92809F;
+  --body-wght:370;         --dark-track:0.008em;
+}
+
+/* ---------- 2. FACES ----------
+   Verified against C:\Windows\Fonts on this machine. All four have a REAL
+   drawn italic and real smcp+c2sc. --adj normalises x-height to Sitka Text
+   (.4844 em); --avgw is the measured average prose advance, which is what
+   keeps characters-per-line honest (ch is the advance of "0", not of prose). */
+:root{
+  --ff-read-1:"Sitka Text",Charter,"Iowan Old Style","Noto Serif",Georgia,serif;
+  --ff-read-2:Constantia,"Iowan Old Style","Palatino Linotype",Palatino,"Noto Serif",Georgia,serif;
+  --ff-read-3:Georgia,Charter,"Bitstream Charter","Noto Serif","Liberation Serif",serif;
+  --ff-read-4:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Roboto,"Noto Sans",sans-serif;
+
+  --adj-1:1.000;  --avgw-1:0.4709;   /* Sitka Text */
+  --adj-2:1.069;  --avgw-2:0.4328;   /* Constantia */
+  --adj-3:1.000;  --avgw-3:0.4390;   /* Georgia    */
+  --adj-4:0.960;  --avgw-4:0.4700;   /* Segoe UI   */
+
+  --ff-body:var(--ff-read-1);
+  --adj:var(--adj-1);
+  --avgw:var(--avgw-1);
+  --ff-display:"Sitka Display","Sitka Banner",Constantia,Georgia,serif;
+
+  --ff-ui:"Pretendard Variable",Pretendard,"Segoe UI",-apple-system,"Malgun Gothic",
+          "Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Nanum Gothic",sans-serif;
+  --ff-mono:Consolas,"Cascadia Mono",ui-monospace,"SF Mono",Menlo,"DejaVu Sans Mono",monospace;
+  --ink-hair:color-mix(in srgb, var(--rule) 55%, transparent);
+}
+[data-font="2"]{ --ff-body:var(--ff-read-2); --adj:var(--adj-2); --avgw:var(--avgw-2);
+                 --ff-display:Constantia,"Iowan Old Style",Georgia,serif; }
+[data-font="3"]{ --ff-body:var(--ff-read-3); --adj:var(--adj-3); --avgw:var(--avgw-3);
+                 --ff-display:Georgia,Charter,"Noto Serif",serif; }
+[data-font="4"]{ --ff-body:var(--ff-read-4); --adj:var(--adj-4); --avgw:var(--avgw-4);
+                 --ff-display:"Segoe UI Variable Display","Segoe UI",-apple-system,sans-serif; }
+
+/* Korean chrome: Latin from Segoe UI, Hangul from Malgun Gothic — a designed pair.
+   Malgun has NO italic, so synthesis must be off or Chrome shears the Hangul. */
+body,.hud,#drawer,#settings,#palette,#help,#toast,#resume{
+  font-synthesis:none;
+  word-break:keep-all;
+  letter-spacing:-.01em;
+  font-variant-numeric:lining-nums tabular-nums;
+}
+
+/* ---------- 3. FRAME ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{
+  background:var(--bg);
+  scrollbar-gutter:stable;
+  scroll-padding-top:3em;
+  -webkit-text-size-adjust:100%; text-size-adjust:100%;
+  overscroll-behavior-y:contain;
+  scrollbar-width:none;
+}
+html::-webkit-scrollbar{ display:none; }
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--ff-ui);
+}
+::selection{ background:var(--bg-sel); color:var(--fg-sel); }
+:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+button,input,select,textarea{ font:inherit; color:inherit; }
+kbd{
+  font-family:Consolas,"Cascadia Mono",monospace; font-size:.85em;
+  background:var(--bg-control); border:1px solid var(--border);
+  border-radius:3px; padding:.1em .42em;
+}
+
+/* ---------- 4. THE READING COLUMN ---------- */
+#book{
+  box-sizing:content-box;
+  /* column = characters-per-line × this face's average advance, in em, so CPL
+     is identical at every type size and on every face. */
+  max-width:calc(var(--cpl,68) * var(--avgw) * 1em);
+  margin-inline:auto;
+  padding-inline:clamp(1rem,4vw,2.5rem);
+  padding-block:9vh 30vh;
+  font-family:var(--ff-body);
+  font-size:calc(var(--fs,20px) * var(--adj));
+  line-height:var(--lh,1.72);
+  letter-spacing:calc(var(--track,0em) + var(--dark-track));
+  font-weight:var(--body-wght);
+  font-variation-settings:"wght" var(--body-wght);
+  font-kerning:normal;
+  font-variant-ligatures:common-ligatures contextual
+                         no-discretionary-ligatures no-historical-ligatures;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  font-synthesis:weight style;
+  font-synthesis-small-caps:none;
+  text-rendering:auto;             /* NOT optimizeLegibility — costly at 1.2M chars */
+  -webkit-font-smoothing:auto;     /* no-op on Windows; 'antialiased' harms macOS */
+  text-align:left;
+  text-wrap:pretty;
+  hyphens:manual;
+  word-break:normal;
+  letter-spacing:calc(var(--track,0em) + var(--dark-track));
+  overflow-wrap:break-word;
+  hanging-punctuation:first last;
+}
+@media (max-width:660px){
+  #book{ hyphens:auto; -webkit-hyphens:auto; hyphenate-limit-chars:7 3 3; }
+}
+[data-justify="on"] #book{ text-align:justify; hyphens:auto; -webkit-hyphens:auto; }
+
+#book p{ margin:0; orphans:3; widows:3; }
+[data-indent="on"]  #book p + p{ text-indent:1.5em; }
+[data-indent="off"] #book p + p{ text-indent:0; margin-top:.85em; }
+#book h1 + p, #book h2 + p, #book h3 + p,
+#book hr.scene + p, #book .titlepage + p,
+#book .ch > p:first-of-type{ text-indent:0; margin-top:0; }
+#book em,#book i{ font-style:italic; }
+#book strong,#book b{ font-weight:700; }
+/* real smcp + c2sc verified in all four faces — no text transformation needed */
+#book .smallcaps{ font-variant-caps:all-small-caps; letter-spacing:.09em; }
+@supports not (font-variant-caps: all-small-caps){
+  #book .smallcaps{ text-transform:uppercase; font-size:.84em; letter-spacing:.1em; font-weight:600; }
+}
+
+/* chapter-level virtualisation — keeps 1.2M-char novels instant */
+#book .ch{ content-visibility:auto; contain-intrinsic-size:auto 1400px; }
+
+/* ---------- 5. TITLE PAGE ---------- */
+.titlepage{ text-align:center; margin:6vh 0 16vh; }
+.titlepage .work{
+  margin:0; font-size:2.1em; font-weight:400; line-height:1.22;
+  font-variant-caps:small-caps; letter-spacing:.05em; text-wrap:balance;
+  color:var(--fg-heading);
+}
+.titlepage .work-ko{
+  margin:.9em 0 0; font-family:var(--ff-ui); font-size:.8em;
+  letter-spacing:.1em; color:var(--fg-muted);
+}
+.titlepage .byline{ margin:1.6em 0 0; font-style:italic; color:var(--fg-muted); }
+.titlepage .year{
+  margin:.7em 0 0; font-size:.82em; letter-spacing:.22em; text-indent:.22em;
+  font-variant-numeric:oldstyle-nums; color:var(--fg-muted);
+}
+.titlepage .tp-rule{ width:5em; height:1px; margin:2.4em auto 0; background:var(--rule); border:0; }
+
+/* ---------- 6. HIERARCHY ---------- */
+#book h2.part{
+  margin:5em 0 4em; padding-block:1.1em; text-align:center;
+  font-size:1.02em; font-weight:400; text-transform:uppercase;
+  letter-spacing:.3em; text-indent:.3em; color:var(--fg-muted);
+  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+}
+#book h2.chapter{
+  margin:3.2em 0 1.7em; text-align:center; font-weight:400;
+  font-size:1em; line-height:1.35; text-wrap:balance;
+}
+#book h2.chapter .num{
+  display:block; font-size:.82em; text-transform:uppercase;
+  letter-spacing:.22em; text-indent:.22em; color:var(--fg-muted);
+  font-variant-numeric:oldstyle-nums;
+}
+#book h2.chapter .ttl{
+  display:block; margin-top:.55em; font-size:1.28em; font-style:italic;
+  color:var(--fg-heading);
+}
+#book h2.chapter::after{
+  content:""; display:block; width:2.5em; height:1px;
+  margin:1.15em auto 0; background:var(--rule);
+}
+#book h3.subhead{
+  margin:2.4em 0 1.1em; text-align:center; font-weight:400; font-size:.95em;
+  font-variant-caps:small-caps; letter-spacing:.12em; color:var(--fg-muted);
+}
+
+/* scene break — compositor's lozenge between tapered rules */
+#book hr.scene{
+  border:0; display:block; height:12px; margin:2.4em auto;
+  color:var(--rule);
+  background:
+    linear-gradient(currentColor,currentColor) left  6px/38% 1px no-repeat,
+    linear-gradient(currentColor,currentColor) right 6px/38% 1px no-repeat;
+  position:relative;
+}
+#book hr.scene::after{
+  content:""; position:absolute; left:50%; top:2px;
+  width:8px; height:8px; margin-left:-4px;
+  border:1px solid currentColor; transform:rotate(45deg);
+}
+
+/* quotes, letters, verse */
+#book blockquote{
+  margin:1.6em 0 1.6em 2.2em; padding-right:1.5em;
+  font-size:.95em; line-height:calc(var(--lh) - .04);
+}
+#book blockquote p{ text-indent:0 !important; }
+#book blockquote p + p{ text-indent:1.4em !important; }
+#book .letter{
+  margin:1.7em 0 1.7em 1.8em; padding-left:1.1em;
+  border-left:1px solid var(--rule); font-size:.95em;
+}
+#book .letter p{ text-indent:0 !important; }
+#book .letter p + p{ text-indent:1.4em !important; }
+#book .letter .sig{ margin-top:.7em; text-align:right; font-style:italic; }
+#book p.verse{
+  margin:.1em 0 .1em 2.4em; padding-left:1.7em; text-indent:-1.7em !important;
+  font-size:.95em; white-space:pre-line;
+}
+#book .verse-block{ margin:1.6em 0; }
+#book .inscription{
+  margin:1.8em auto; max-width:26em; text-align:center;
+  white-space:pre-line; text-indent:0 !important; font-size:.9em;
+  letter-spacing:.05em; font-variant-caps:small-caps;
+}
+/* play (The Vegetable) */
+#book .speaker{
+  margin-top:1.1em; text-indent:0 !important;
+  font-variant-caps:small-caps; letter-spacing:.08em; color:var(--fg-heading);
+}
+#book .stage{ text-indent:0 !important; font-style:italic; color:var(--fg-muted); margin:.6em 0; }
+
+/* end mark */
+#book .endmark{ margin:3.6em 0 0; text-align:center; color:var(--accent); }
+#book .colophon{
+  margin:1.2em 0 0; text-align:center; font-family:var(--ff-ui);
+  font-size:.6em; letter-spacing:.3em; text-indent:.3em; color:var(--fg-muted);
+}
+
+/* bookmarked paragraph — ribbon tab in the margin */
+#book p.bmk{ position:relative; }
+#book p.bmk::before{
+  content:""; position:absolute; left:-1.6em; top:.35em;
+  width:4px; height:1.15em; background:var(--accent);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);
+}
+
+/* ---------- 7. HAIRLINE PROGRESS ---------- */
+#hairline{
+  position:fixed; left:0; right:0; bottom:0; height:2px; z-index:40;
+  background:color-mix(in srgb, var(--accent) 10%, transparent);
+  transition:height .14s ease-out;
+}
+#hairline.hidden{ display:none; }
+body.hud-on #hairline{ height:6px; cursor:pointer; }
+#hair-fill{
+  height:100%; width:100%; transform-origin:0 50%; transform:scaleX(0);
+  background:var(--accent);
+}
+#hair-ticks{ position:absolute; inset:0; pointer-events:none; }
+#hair-ticks i{ position:absolute; top:0; bottom:0; width:1px; }
+#hair-ticks .tk-ch{ background:color-mix(in srgb, var(--fg-muted) 55%, transparent); }
+#hair-ticks .tk-bm{ width:3px; background:var(--accent); }
+
+/* ---------- 8. HUD BARS ---------- */
+.hud{
+  position:fixed; left:0; right:0; z-index:45;
+  display:flex; align-items:center; gap:14px;
+  padding:0 clamp(14px,3vw,28px);
+  font-size:12.5px; color:var(--fg-muted);
+  background:color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease-out, transform .2s ease-out;
+}
+#hud-top{ top:0; height:54px; border-bottom:1px solid var(--ink-hair); transform:translateY(-100%); }
+#hud-bot{ bottom:0; height:42px; border-top:1px solid var(--ink-hair); transform:translateY(100%); }
+body.hud-on .hud{ opacity:1; pointer-events:auto; transform:none; }
+body.hud-on #hud-bot{ bottom:6px; }
+
+.hbtn{
+  all:unset; cursor:pointer; padding:6px 9px; border-radius:3px;
+  font-size:12.5px; color:var(--fg-muted); white-space:nowrap;
+}
+.hbtn:hover{ color:var(--fg); background:var(--bg-control); }
+.h-title{ display:flex; gap:9px; align-items:baseline; min-width:0; }
+.h-title b{ font-family:var(--ff-display); font-weight:400; font-size:14px; color:var(--fg); white-space:nowrap; }
+.h-title i{ font-style:normal; font-size:11.5px; }
+.h-ch{
+  flex:1; text-align:center; font-family:var(--ff-display); font-size:12.5px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.h-right{ display:flex; gap:2px; margin-left:auto; }
+.h-pct{ font-variant-numeric:tabular-nums; color:var(--accent); }
+.h-rem{ cursor:default; }
+.h-sess{ margin-left:auto; }
+
+/* ---------- 9. SCRIM + DRAWERS ---------- */
+#scrim{
+  position:fixed; inset:0; z-index:50; opacity:0; pointer-events:none;
+  background:color-mix(in srgb, var(--fg) 22%, transparent);
+  transition:opacity .18s linear;
+}
+body.drawer-on #scrim, body.set-on #scrim{ opacity:1; pointer-events:auto; }
+
+#drawer,#settings{
+  position:fixed; top:0; bottom:0; z-index:55;
+  width:min(390px,88vw);
+  background:var(--bg-panel); color:var(--fg);
+  display:flex; flex-direction:column;
+  transition:transform .18s cubic-bezier(.22,1,.36,1);
+}
+#drawer{ left:0; border-right:1px solid var(--border); transform:translateX(-101%); }
+#settings{ right:0; width:min(400px,90vw); border-left:1px solid var(--border); transform:translateX(101%); }
+body.drawer-on #drawer{ transform:none; }
+body.set-on #settings{ transform:none; }
+
+.dw-tabs,.st-hd{
+  display:flex; align-items:center; gap:4px; padding:14px 16px;
+  border-bottom:1px solid var(--ink-hair); flex:none;
+}
+.st-hd{ font-size:13px; letter-spacing:.12em; color:var(--fg-muted); }
+.dw-tabs button{
+  all:unset; cursor:pointer; padding:6px 10px; font-size:12.5px;
+  color:var(--fg-muted); border-bottom:1.5px solid transparent;
+}
+.dw-tabs button.on{ color:var(--fg); border-bottom-color:var(--accent); }
+.dw-x,.st-x{ margin-left:auto; all:unset; cursor:pointer; padding:4px 8px; color:var(--fg-muted); }
+.dw-x:hover,.st-x:hover{ color:var(--fg); }
+.dw-filter{
+  all:unset; margin:12px 16px 0; padding:6px 0; flex:none;
+  border-bottom:1px solid var(--ink-hair); font-size:12.5px;
+}
+.dw-filter:focus{ border-bottom-color:var(--accent); }
+.dw-body,.st-body{ flex:1; overflow-y:auto; padding:10px 8px 30px; }
+.dw-head{ padding:8px 10px; font-size:11.5px; letter-spacing:.1em; color:var(--fg-muted); }
+.dw-empty{ padding:22px 12px; font-size:12.5px; line-height:1.9; color:var(--fg-muted); }
+
+.dw-row{
+  display:grid; grid-template-columns:1.3em 1fr auto; gap:9px; align-items:baseline;
+  padding:7px 10px; cursor:pointer; border-left:3px solid transparent;
+  font-size:13px;
+}
+.dw-row:hover{ background:var(--bg-control); }
+.dw-row.cur{ border-left-color:var(--accent); background:var(--accent-soft); }
+.dw-row .dot{ font-size:9px; color:var(--fg-muted); }
+.dw-row.cur .dot{ color:var(--accent); }
+.dw-row .lbl{ font-family:var(--ff-display); overflow:hidden; text-overflow:ellipsis; }
+.dw-row .lbl em{ font-style:italic; color:var(--fg-muted); }
+.dw-row .pc{ font-size:11px; font-variant-numeric:tabular-nums; color:var(--fg-muted); }
+
+.dw-part{
+  margin:16px 10px 6px; padding-bottom:6px; cursor:pointer;
+  font-family:var(--ff-display); font-size:11.5px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--fg-muted);
+  border-bottom:1px solid var(--ink-hair);
+}
+.dw-part:first-child{ margin-top:4px; }
+.dw-part:hover{ color:var(--fg); }
+.dw-part.cur{ color:var(--accent); border-bottom-color:var(--accent); }
+
+.bm-row{ padding:10px 12px; cursor:pointer; border-bottom:1px solid var(--ink-hair); }
+.bm-row:hover{ background:var(--bg-control); }
+.bm-meta{ font-size:11px; color:var(--fg-muted); }
+.bm-meta .pc{ color:var(--accent); font-variant-numeric:tabular-nums; }
+.bm-txt{
+  margin:5px 0; font-family:var(--ff-body); font-size:12.5px; line-height:1.7;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.bm-foot{ display:flex; align-items:center; font-size:10.5px; color:var(--fg-muted); }
+.bm-del{ all:unset; cursor:pointer; margin-left:auto; padding:2px 6px; }
+.bm-del:hover{ color:var(--accent); }
+
+/* ---------- 10. SETTINGS ---------- */
+.st-grp{
+  margin:20px 10px 8px; padding-bottom:6px; font-size:10.5px;
+  letter-spacing:.24em; text-indent:.24em; color:var(--fg-muted);
+  border-bottom:1px solid var(--ink-hair);
+}
+.st-row{ display:flex; align-items:center; gap:12px; padding:9px 10px; min-height:38px; }
+.st-l{ font-size:12.5px; flex:none; }
+.st-c{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+.st-c .v{ font-size:11.5px; color:var(--fg-muted); font-variant-numeric:tabular-nums; min-width:3.4em; text-align:right; }
+.st-row input[type=range]{ width:132px; accent-color:var(--accent); }
+.st-seg{ display:inline-flex; border:1px solid var(--border); border-radius:3px; overflow:hidden; }
+.st-seg button{
+  all:unset; cursor:pointer; padding:5px 9px; font-size:11.5px; color:var(--fg-muted);
+  border-right:1px solid var(--border);
+}
+.st-seg button:last-child{ border-right:0; }
+.st-seg button.on{ background:var(--accent); color:var(--bg); }
+.st-seg button:not(.on):hover{ background:var(--bg-control-hover); color:var(--fg); }
+.st-tog{
+  all:unset; cursor:pointer; width:38px; height:21px; border-radius:11px;
+  background:var(--bg-control); border:1px solid var(--border); position:relative;
+  transition:background .12s;
+}
+.st-tog i{
+  position:absolute; top:2px; left:2px; width:15px; height:15px; border-radius:50%;
+  background:var(--fg-muted); transition:transform .14s cubic-bezier(.22,1,.36,1), background .12s;
+}
+.st-tog.on{ background:var(--accent); border-color:var(--accent); }
+.st-tog.on i{ transform:translateX(17px); background:var(--bg); }
+.mini{
+  all:unset; cursor:pointer; padding:4px 10px; font-size:11.5px;
+  border:1px solid var(--border); border-radius:3px; color:var(--fg-muted);
+}
+.mini:hover{ background:var(--bg-control-hover); color:var(--fg); }
+
+/* ---------- 11. PALETTE (w) ---------- */
+#palette{
+  position:fixed; inset:0; z-index:70; display:none;
+  align-items:flex-start; justify-content:center; padding-top:12vh;
+  background:color-mix(in srgb, var(--fg) 26%, transparent);
+  backdrop-filter:blur(3px);
+}
+body.pal-on #palette{ display:flex; }
+.pl-box{
+  width:min(560px,92vw); max-height:64vh; display:flex; flex-direction:column;
+  background:var(--bg-panel); border:1px solid var(--border);
+  box-shadow:0 18px 50px color-mix(in srgb, var(--fg) 22%, transparent);
+}
+.pl-q{
+  all:unset; padding:15px 18px; font-size:14px; flex:none;
+  border-bottom:1px solid var(--ink-hair);
+}
+.pl-list{ overflow-y:auto; padding:6px 0 10px; }
+.pl-h{
+  padding:11px 18px 5px; font-size:10.5px; letter-spacing:.2em;
+  text-indent:.2em; color:var(--fg-muted);
+}
+.pl-row{
+  display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:baseline;
+  padding:8px 18px; cursor:pointer;
+}
+.pl-row.on{ background:var(--accent-soft); box-shadow:inset 3px 0 0 var(--accent); }
+.pl-t{ font-family:var(--ff-display); font-size:14px; color:var(--fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pl-m{ font-size:11px; color:var(--fg-muted); white-space:nowrap; }
+.pl-p{ font-size:11.5px; color:var(--accent); font-variant-numeric:tabular-nums; min-width:3.2em; text-align:right; }
+.pl-w{ font-size:10.5px; color:var(--fg-muted); min-width:4.4em; text-align:right; }
+.pl-empty{ padding:24px 18px; font-size:12.5px; color:var(--fg-muted); }
+
+/* ---------- 12. HELP ---------- */
+#help{
+  position:fixed; inset:0; z-index:75; display:flex;
+  align-items:center; justify-content:center; padding:4vh 3vw;
+  background:color-mix(in srgb, var(--fg) 30%, transparent); backdrop-filter:blur(3px);
+}
+.hp-box{
+  width:min(760px,96vw); max-height:92vh; overflow-y:auto;
+  background:var(--bg-panel); border:1px solid var(--border);
+}
+.hp-hd{
+  display:flex; align-items:center; padding:15px 20px;
+  border-bottom:1px solid var(--ink-hair);
+  font-size:12px; letter-spacing:.2em; color:var(--fg-muted);
+}
+.hp-x{ all:unset; cursor:pointer; margin-left:auto; padding:3px 8px; }
+.hp-cols{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:8px 26px; padding:18px 22px 26px; }
+.hp-g h4{
+  margin:8px 0 10px; font-size:10.5px; font-weight:400; letter-spacing:.2em;
+  color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); padding-bottom:6px;
+}
+.hp-r{ display:flex; gap:10px; align-items:baseline; padding:3.5px 0; font-size:12px; }
+.hp-r kbd{ min-width:6.4em; text-align:center; flex:none; }
+
+/* ---------- 13. TRANSIENTS ---------- */
+#toast{
+  position:fixed; left:50%; bottom:56px; transform:translate(-50%,10px); z-index:80;
+  padding:9px 17px; font-size:12.5px;
+  background:var(--bg-panel); color:var(--fg);
+  border:1px solid var(--border);
+  opacity:0; pointer-events:none; transition:opacity .16s, transform .16s;
+}
+#toast.on{ opacity:1; transform:translate(-50%,0); }
+#resume{
+  position:fixed; left:clamp(14px,3vw,28px); bottom:56px; z-index:80;
+  display:flex; align-items:center; gap:14px;
+  padding:10px 14px; font-size:12.5px;
+  background:var(--bg-panel); border:1px solid var(--border);
+  box-shadow:inset 3px 0 0 var(--accent);
+  opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s;
+}
+#resume.on{ opacity:1; transform:none; }
+#resume button{
+  all:unset; cursor:pointer; font-size:11.5px; color:var(--accent);
+  border-bottom:1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+#nostore{
+  position:fixed; left:0; right:0; top:0; z-index:90; padding:6px 14px;
+  font-size:11.5px; text-align:center;
+  background:var(--accent-soft); color:var(--fg); border-bottom:1px solid var(--border);
+}
+#dimmer{
+  position:fixed; inset:0; z-index:95; pointer-events:none;
+  background:#000; opacity:0; transition:opacity .2s linear;
+}
+
+/* ---------- 14. REDUCED MOTION / PRINT ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:1ms !important; animation-delay:0ms !important;
+    transition-duration:60ms !important; scroll-behavior:auto !important;
+  }
+}
+@media print{
+  html{ font-size:11pt; background:#fff; }
+  #book{ max-width:none; color:#000; font-size:11pt; }
+  #book .ch{ content-visibility:visible; }
+  #book h2.chapter{ break-before:page; }
+  .hud,#hairline,#drawer,#settings,#scrim,#toast,#resume,#dimmer,#palette,#help,#nostore{ display:none !important; }
+}
