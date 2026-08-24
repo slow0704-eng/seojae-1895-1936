@@ -2,3 +2,9 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# regenerable: `python tools/translate.py plan --tier1` rebuilds these from data/*.js
+tools/tr/jobs/
+tools/tr/todo.json
+tools/tr/remaining.json
+tools/catalog.json

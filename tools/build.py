@@ -97,8 +97,9 @@ def sectionise(lines):
     for i, s in enumerate(secs):
         h = s["head"]
         if h and s["firstp"] is not None:
+            # the id is what the Korean payload keys its heading translations by
             chapters.append({"firstP": s["firstp"], "label": h["label"], "title": "",
-                             "kind": h["kind"]})
+                             "kind": h["kind"], "hid": h["id"]})
         est = max(300, int(s["chars"] * 1.25) + 220)
         out.append('<section class="ch" id="sec%d" style="contain-intrinsic-size:auto %dpx">\n%s\n</section>'
                    % (i, est, "\n".join(s["lines"])))
@@ -127,22 +128,31 @@ def len_bucket(t):
     n = len(t)
     return "s" if n <= 14 else "m" if n <= 24 else "l" if n <= 38 else "xl"
 
+FORM_KO = {"novel": "장편", "collection": "단편집", "story": "단편", "novella": "중편",
+           "play": "희곡", "miscellany": "잡문집", "essay-novel": "사상소설"}
+FACET_KO = {"author": "작가", "decade": "연대", "form": "형식", "size": "분량",
+            "state": "상태", "lang": "언어"}
+
+
 def cover(w, i):
     main, sub = title_split(w["title"])
     subh = '<span class="sub">%s</span>' % html.escape(sub) if sub else ""
     mins = w["minutes"]
     return """<article class="card" data-author="%(a)s" data-decade="%(d)d" data-len="%(len)s"
- data-year="%(y)d" data-id="%(id)s" data-title="%(tl)s" data-ko="%(ko)s" data-mins="%(mins)d" style="--i:%(i)d">
+ data-year="%(y)d" data-id="%(id)s" data-title="%(tl)s" data-ko="%(ko)s" data-mins="%(mins)d"
+ data-form="%(form)s" style="--i:%(i)d">
 <a class="card__link" href="#/w/%(idq)s">
  <div class="cover">%(mark)s<i class="rule rule--head"></i>
   <h3 class="cover__title">%(main)s%(sub)s</h3>
   <i class="rule rule--foot"></i>
-  <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p></div>
+  <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
+  <span class="cover__ko" hidden></span></div>
  <p class="cap"><span class="cap__pct"></span><span>%(chars)s자</span><b>&middot;</b><span>%(time)s</span></p>
 </a></article>""" % {
         "a": w["author"], "d": DECADE(w["year"]), "len": len_bucket(main), "y": w["year"],
         "id": html.escape(w["id"]), "idq": html.escape(w["id"]), "i": i,
         "tl": html.escape(w["title"]), "ko": html.escape(w["titleKo"]), "mins": mins,
+        "form": w.get("form", "novel"),
         "mark": mark(w["author"], "cover__mark"), "main": html.escape(main), "sub": subh,
         "auth": html.escape(w["authorEn"]), "chars": "{:,}".format(w["chars"]),
         "time": ("%d시간 %d분" % (mins // 60, mins % 60)) if mins >= 60 else ("%d분" % mins)}
@@ -154,6 +164,7 @@ READER_SHELL = """
     <button class="hbtn" data-act="lib">&lsaquo; 서재</button>
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
+      <button class="hbtn hbtn--lang" data-act="lang" title="한/영 전환 (l)"><span class="lang-cur">영문</span></button>
       <button class="hbtn" data-act="toc">목차</button>
       <button class="hbtn" data-act="bm">책갈피</button>
       <button class="hbtn" data-act="set">설정</button>
@@ -184,6 +195,10 @@ READER_SHELL = """
     <div class="st-row"><span class="st-l">테마</span><span class="st-c"><span class="st-seg" data-k="theme"><button data-seg="light">종이</button><button data-seg="sepia">세피아</button><button data-seg="dark">야간</button><button data-seg="night">심야</button></span></span></div>
     <div class="st-row"><span class="st-l">화면 어둡기</span><span class="st-c"><input type="range" data-k="dim" min="0" max="55" step="5"><span class="v" data-v="dim"></span></span></div>
     <div class="st-row"><span class="st-l">화면 켜두기</span><span class="st-c"><button class="st-tog" data-tog="wake"><i></i></button></span></div>
+    <div class="st-grp">언어</div>
+    <div class="st-row"><span class="st-l">본문 언어</span><span class="st-c"><span class="st-seg" data-k="lang"><button data-seg="en">영문</button><button data-seg="ko">한글</button><button data-seg="both">대역</button></span></span></div>
+    <div class="st-row"><span class="st-l">대역 원문 크기</span><span class="st-c"><input type="range" data-k="trScale" min="70" max="100" step="5"><span class="v" data-v="trScale"></span></span></div>
+    <div class="st-row"><span class="st-l">미번역 문단 표시</span><span class="st-c"><button class="st-tog" data-tog="markUntr"><i></i></button></span></div>
     <div class="st-grp">표시</div>
     <div class="st-row"><span class="st-l">남은 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showRemaining"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">세션 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showSession"><i></i></button></span></div>
@@ -227,8 +242,43 @@ def index_page(cat, works):
             plates.append('<p class="solo">단 한 편.<br><i>Metropolis</i>, 1926년 — '
                           '이 서재에서 유일한 독일어권 작가의 작품입니다.</p>')
 
-    manifest = [{k: w[k] for k in ("id", "title", "titleKo", "author", "authorKo",
-                                   "authorEn", "year", "chars", "minutes")} for w in works]
+    manifest = [dict({k: w[k] for k in ("id", "title", "titleKo", "author", "authorKo",
+                                        "authorEn", "year", "chars", "minutes", "words")},
+                     titleOrig=w.get("titleOrig", ""), form=w.get("form", "novel"))
+                for w in works]
+
+    # ---- facet chips -------------------------------------------------------
+    def chips(facet, items):
+        return ('<div class="facet" data-facet="%s"><span class="facet__l">%s</span>%s</div>'
+                % (facet, FACET_KO[facet],
+                   "".join('<button class="chip" data-v="%s">%s<span class="chip__n">%s</span></button>'
+                           % (v, html.escape(lab), n) for v, lab, n in items)))
+
+    auth_ct = {}
+    form_ct = {}
+    dec_ct = {}
+    for w in works:
+        auth_ct[w["author"]] = auth_ct.get(w["author"], 0) + 1
+        form_ct[w.get("form", "novel")] = form_ct.get(w.get("form", "novel"), 0) + 1
+        dec_ct[DECADE(w["year"])] = dec_ct.get(DECADE(w["year"]), 0) + 1
+    a_ko = {a["slug"]: a["ko"] for a in cat["authors"]}
+    facets = "\n".join([
+        chips("author", [(s, a_ko[s], auth_ct[s]) for s in
+                         sorted(auth_ct, key=lambda s: -auth_ct[s])]),
+        chips("decade", [(str(d), "%d년대" % d, dec_ct[d]) for d in sorted(dec_ct)]),
+        chips("form", [(f, FORM_KO.get(f, f), form_ct[f]) for f in
+                       sorted(form_ct, key=lambda f: -form_ct[f])]),
+        chips("size", [("short", "3시간 이내", sum(1 for w in works if w["minutes"] < 180)),
+                       ("mid", "3–8시간", sum(1 for w in works if 180 <= w["minutes"] < 480)),
+                       ("long", "8시간 이상", sum(1 for w in works if w["minutes"] >= 480))]),
+        chips("state", [("unread", "안 읽음", ""), ("reading", "읽는 중", ""),
+                        ("done", "완독", ""), ("marked", "책갈피 있음", "")]),
+        chips("lang", [("ko", "한글본 있음", ""), ("kofull", "완역", ""), ("enonly", "원문만", "")]),
+    ])
+
+    authnav = "".join(
+        '<button class="authnav__b" data-go="%s">%s<span>%d</span></button>'
+        % (a["slug"], html.escape(a["ko"]), auth_ct.get(a["slug"], 0)) for a in cat["authors"])
 
     return """<!doctype html>
 <html lang="ko" data-theme="light">
@@ -272,29 +322,42 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <button role="tab" data-sort="author">저자별</button>
     <button role="tab" data-sort="title">제목순</button>
     <button role="tab" data-sort="len">길이순</button>
+    <button role="tab" data-sort="recent">최근순</button>
   </div>
-  <input class="ctl__find" type="search" id="find" placeholder="제목 또는 작가 찾기" aria-label="찾기">
+  <span class="ctl__search">
+    <input class="ctl__find" type="search" id="find" placeholder="제목 · 작가 · 연도 · ㅊㅅ" aria-label="찾기"
+           autocomplete="off" spellcheck="false">
+    <span class="ctl__hint" id="findhint"></span>
+  </span>
+  <button class="ctl__facet" id="facetbtn" aria-expanded="false">거르기<span class="ctl__facetn" hidden></span></button>
   <span class="ctl__count" id="count"></span>
   <select class="ctl__theme" id="theme" aria-label="테마">
     <option value="light">종이</option><option value="sepia">세피아</option>
     <option value="dark">야간</option><option value="night">심야</option>
   </select>
 </nav>
+<div class="facets" id="facets" hidden>%(facets)s
+  <button class="facet__clear" id="facetclear">모두 해제</button>
+</div>
+<div class="sugg" id="sugg" hidden></div>
 <main class="grid" id="grid">%(grid)s</main>
-<div class="grid" id="grid-author" hidden>%(plates)s</div>
+<div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav">%(authnav)s</nav>%(plates)s</div>
 <footer class="lib-foot">
   <p>모든 작품은 퍼블릭 도메인입니다. 출처 — Project Gutenberg &middot; Standard Ebooks &middot; Wikisource</p>
   <p class="lib-foot__k"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>1</kbd>–<kbd>4</kbd> 정렬 &nbsp; <kbd>?</kbd> 단축키</p>
 </footer>
 </div></div>
 %(shell)s
-<script>var MANIFEST=%(manifest)s;</script>
+<script>var MANIFEST=%(manifest)s;
+var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
+<script src="data/ko/index.js" onerror="void 0"></script>
 <script>%(js)s</script>
 </body>
 </html>
 """ % {"css": CSS, "icss": IDXCSS, "js": JS, "shell": READER_SHELL,
        "n": len(works), "chars": "{:,}".format(tot_chars), "hours": tot_min // 60,
        "grid": "\n".join(grid), "plates": "\n".join(plates),
+       "facets": facets, "authnav": authnav,
        "manifest": json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))}
 
 
@@ -327,6 +390,11 @@ def main():
         except Exception as e:
             print("FAIL %-46s %r" % (w["title"][:46], e))
             bad.append((w["title"], repr(e)))
+
+    # the Korean coverage index is a separate script so growing the translation
+    # does not mean rebuilding the portal
+    import translate
+    translate.write_index()
 
     idx = index_page(cat, works)
     with open(_os.path.join(SITE, "index.html"), "wb") as f:

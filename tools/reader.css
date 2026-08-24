@@ -546,7 +546,88 @@ body.pal-on #palette{ display:flex; }
   background:#000; opacity:0; transition:opacity .2s linear;
 }
 
-/* ---------- 14. REDUCED MOTION / PRINT ---------- */
+/* ---------- 14. KOREAN / BILINGUAL ----------
+   The Latin faces carry no Hangul, so the browser falls through per character:
+   Latin keeps Sitka/Constantia/Georgia, Hangul lands on a Korean serif. Batang
+   is the only 명조 present on a stock Windows install, so it anchors the chain.
+   Hangul fills its em far more than Latin does, so Korean runs one notch
+   smaller and one notch looser — otherwise the same 20px reads as heavier. */
+:root{
+  --ff-ko:"Noto Serif KR","Source Han Serif K","본명조",NanumMyeongjo,"나눔명조",
+          Batang,"바탕",Gungsuh,serif;
+  --ff-ko-sans:"Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕",
+               "Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+  --tr-scale:.85;
+}
+[data-font="4"]{ --ff-ko:var(--ff-ko-sans); }
+
+#book :lang(ko){
+  font-family:var(--ff-body),var(--ff-ko);
+  font-size:.97em;
+  line-height:calc(var(--lh,1.72) + .13);
+  /* Hangul must break between words, never inside one */
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  hyphens:none; -webkit-hyphens:none;
+  letter-spacing:calc(var(--track,0em) + var(--dark-track) - .004em);
+  font-variant-numeric:lining-nums proportional-nums;
+  font-synthesis:none;             /* no Korean face here has a drawn italic */
+}
+#book :lang(ko) em{ font-style:normal; font-weight:600; letter-spacing:.02em; }
+[data-indent="on"] #book p[data-ko] + p[data-ko]{ text-indent:1em; }
+
+/* 한글 전용: paragraphs with no translation yet stay in English and say so */
+[data-untr="on"] #book p[data-untr]{
+  color:color-mix(in srgb, var(--fg) 72%, var(--bg));
+}
+[data-untr="on"] #book p[data-untr]::after{
+  content:"원문"; margin-inline-start:.7em; vertical-align:.32em;
+  font-family:var(--ff-ui); font-size:.55em; letter-spacing:.1em;
+  color:var(--fg-muted); white-space:nowrap;
+}
+/* one marker per run, not per paragraph — a novel that is 20% translated
+   would otherwise carry a thousand identical labels */
+[data-untr="on"] #book p[data-untr] + p[data-untr]::after{ content:none; }
+
+/* 대역: the translation is a sibling paragraph, so the character table and
+   every stored reading fraction stay exactly what they are in English. */
+[data-booklang="both"] #book p{ text-indent:0 !important; }
+[data-booklang="both"] #book p[data-p]{ margin-top:1.5em; }
+[data-booklang="both"] #book .ch > p:first-of-type,
+[data-booklang="both"] #book h2 + p{ margin-top:0; }
+#book p.tr{
+  margin-top:.42em;
+  font-size:calc(.97em * var(--tr-scale));
+  color:color-mix(in srgb, var(--fg) 86%, var(--bg));
+  padding-inline-start:.85em;
+  border-inline-start:1px solid var(--ink-hair);
+}
+#book h2 .h-tr{
+  display:block; margin-top:.5em;
+  font-family:var(--ff-body),var(--ff-ko); font-variant-caps:normal;
+  font-size:.72em; letter-spacing:0; color:var(--fg-muted);
+}
+
+/* language button in the HUD */
+.pl-k{ margin-inline-start:.5em; font-weight:400; font-size:.8em; letter-spacing:.04em;
+  color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius:2px; padding:.05em .3em; }
+
+.hbtn--lang{ font-variant-numeric:tabular-nums; }
+.hbtn--lang .lang-cur{ color:var(--accent); }
+.hbtn--lang.off{ opacity:.45; }
+.hbtn--lang.off .lang-cur{ color:inherit; }
+
+.titlepage .tp-note{
+  margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;
+  letter-spacing:.04em; color:var(--fg-muted);
+}
+
+@media print{
+  #book p.tr{ border-inline-start:0; padding-inline-start:0; }
+}
+
+/* ---------- 15. REDUCED MOTION / PRINT ---------- */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{
     animation-duration:1ms !important; animation-delay:0ms !important;

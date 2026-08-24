@@ -31,7 +31,9 @@ def main():
              "id=\"drawer\"", "id=\"settings\"", "id=\"palette\"", "id=\"scrim\"",
              "id=\"grid\"", "id=\"grid-author\"", "id=\"now\"", "id=\"nowlist\"",
              "id=\"find\"", "id=\"count\"", "id=\"theme\"", "id=\"mine\"",
-             "id=\"dimmer\"", "SEOJAE.receive", "data-view=\"library\""]
+             "id=\"dimmer\"", "SEOJAE.receive", "data-view=\"library\"",
+             "id=\"facets\"", "id=\"sugg\"", "id=\"authnav\"", "id=\"facetbtn\"",
+             "data-act=\"lang\"", "data-k=\"lang\"", "SEOJAE.koIndex"]
     missing = [h for h in hooks if h not in idx]
     if missing:
         print("MISSING SHELL HOOKS:", missing)
@@ -93,9 +95,76 @@ def main():
 
     print("\nworks=%d  clean=%d  body chars=%s"
           % (len(MAN), len(MAN) - len(fails), "{:,}".format(chars_total)))
+
+    fails += verify_ko(MAN)
     print("FAILURES:", len(fails))
     for a, b in fails:
         print("  ", a, "->", b)
+
+
+KO_TAG = re.compile(r'<(?!/?em>|span class="smallcaps">|/span>)[^>]+>')
+H_ID = re.compile(r'<h2 class="(?:chapter|part)" id="([^"]+)"')
+
+
+def verify_ko(MAN):
+    """Korean payloads must key off the English spine: every index they carry
+    has to exist in the source, or a language switch would land nowhere."""
+    kod = os.path.join(DATA, "ko")
+    if not os.path.isdir(kod):
+        return []
+    idxp = os.path.join(kod, "index.js")
+    index = {}
+    if os.path.exists(idxp):
+        s = io.open(idxp, encoding="utf-8").read()
+        index = json.loads(s[s.index("(") + 1:s.rindex(")")])
+    fails, tot_n, tot_of = [], 0, 0
+    hdr = "\n%-44s %8s %8s %7s  %s" % ("korean payload", "keys", "of", "cov", "checks")
+    print(hdr + "\n" + "-" * (len(hdr) - 1))
+    for f in sorted(os.listdir(kod)):
+        if not f.endswith(".js") or f == "index.js":
+            continue
+        bid = f[:-3]
+        raw = io.open(os.path.join(kod, f), encoding="utf-8").read().strip()
+        bad = []
+        if not raw.startswith("SEOJAE.receiveKo("):
+            bad.append("bad wrapper")
+        d = json.loads(raw[raw.index("(") + 1:raw.rindex(")")])
+        src = io.open(os.path.join(DATA, bid + ".js"), encoding="utf-8").read()
+        body = json.loads(src[src.index("(") + 1:src.rindex(")")])["html"]
+        pn = set(a for a, _ in P_RX.findall(body))
+        hn = set(H_ID.findall(body))
+        stray_p = [k for k in d["p"] if k not in pn]
+        stray_h = [k for k in d["h"] if k not in hn]
+        if stray_p: bad.append("unknown paragraph %s" % stray_p[:3])
+        if stray_h: bad.append("unknown heading %s" % stray_h[:3])
+        n = len(d["p"]) + len(d["h"])
+        if n != d["n"]: bad.append("count %d != %d" % (n, d["n"]))
+        if d["of"] != len(pn) + len(hn): bad.append("total drifted from source")
+        markup = [k for k, v in list(d["p"].items())[:4000] if KO_TAG.search(v)]
+        if markup: bad.append("stray markup %s" % markup[:3])
+        latin = [k for k, v in d["p"].items()
+                 if v and not re.search(r"[가-힣]", v) and len(re.sub(r"[^A-Za-z]", "", v)) > 12]
+        if latin: bad.append("untranslated %s" % latin[:3])
+        if bid not in index: bad.append("absent from index.js")
+        elif index[bid]["n"] != d["n"]: bad.append("index.js out of date")
+        tot_n += d["n"]; tot_of += d["of"]
+        if bad: fails.append((bid, "; ".join(bad)))
+        print("%-44s %8d %8d %6.1f%%  %s"
+              % (bid[:44], d["n"], d["of"], 100.0 * d["n"] / max(1, d["of"]),
+                 "ok" if not bad else "; ".join(bad)))
+    ids = set(w["id"] for w in MAN)
+    orphan = [k for k in index if k not in ids]
+    if orphan:
+        fails.append(("data/ko/index.js", "unknown works %s" % orphan[:3]))
+    lib = 0
+    for w in MAN:
+        s2 = io.open(os.path.join(DATA, w["id"] + ".js"), encoding="utf-8").read()
+        b2 = json.loads(s2[s2.index("(") + 1:s2.rindex(")")])["html"]
+        lib += len(P_RX.findall(b2)) + len(H_ID.findall(b2))
+    print("korean %s of %s units in these %d works · %s of %s across all %d  (%.1f%%)"
+          % ("{:,}".format(tot_n), "{:,}".format(tot_of), len(index),
+             "{:,}".format(tot_n), "{:,}".format(lib), len(MAN), 100.0 * tot_n / max(1, lib)))
+    return fails
 
 
 if __name__ == "__main__":
