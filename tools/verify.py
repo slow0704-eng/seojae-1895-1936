@@ -83,7 +83,12 @@ def main():
         if ". . ." in txt: bad.append("unfolded ellipsis")
         if "--" in txt: bad.append("unconverted --")
         if "Transcriber" in txt or "Project Gutenberg" in txt: bad.append("boilerplate")
-        if re.search(r"(?i)(macmillan|scribner co|electrotyped)", txt[:400]): bad.append("imprint")
+        # Imprint-page wording only. A bare publisher name is not enough: Wells
+        # thanks "Messrs. Macmillan" in a preface and a character in Bealby
+        # names MACMILLAN'S MAGAZINE, and both are body text we must keep.
+        if re.search(r"(?i)(electrotyped"
+                     r"|macmillan (?:company|and co|& co|co\.)"
+                     r"|scribner(?:['’]s sons| co))", txt[:400]): bad.append("imprint")
         if len(txt) < 400: bad.append("suspiciously short")
 
         status = "ok" if not bad else "; ".join(bad)
