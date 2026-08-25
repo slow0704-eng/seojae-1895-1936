@@ -7,7 +7,7 @@ agents write back, and assembles 서재/data/ko/<id>.js — a parallel payload k
 by the same data-p indices, so the runtime can swap languages without touching
 the anchor arithmetic that stores reading positions.
 
-    python translate.py plan  <id|--tier1|--all>   # write tr/jobs/<id>/NNN.json
+    python translate.py plan  <id|--tier1|--tier2|--all>  # write tr/jobs/<id>/NNN.json
     python translate.py todo  [N]                  # jobs still missing output
     python translate.py build <id|--all>           # out/*.json -> data/ko/<id>.js
     python translate.py check <id/NNN|id|--all>    # verify written output only
@@ -41,6 +41,16 @@ TIER1 = [
     "wells-the-invisible-man", "wells-select-conversations-with-an-uncle",
     "fitzgerald-the-vegetable", "wells-the-war-of-the-worlds",
     "wells-the-door-in-the-wall-and-other-stories", "harbou-metropolis",
+]
+
+# The next six, chosen the same way: short enough to finish whole. Kafka's
+# The Trial and The Castle are held back — their source text lost its
+# paragraph breaks (single blocks over 30,000 chars, larger than a whole job
+# unit), and The Trial's English carries a translator copyright notice.
+TIER2 = [
+    "wells-the-undying-fire", "wells-the-stolen-bacillus-and-other-incidents",
+    "wells-boon", "wells-the-world-set-free", "wells-a-modern-utopia",
+    "wells-the-wonderful-visit",
 ]
 
 META = None
@@ -436,7 +446,8 @@ def main(argv):
     arg = argv[2] if len(argv) > 2 else ""
     ids = [f[:-3] for f in sorted(os.listdir(DATA)) if f.endswith(".js")]
     if cmd == "plan":
-        targets = TIER1 if arg == "--tier1" else ids if arg == "--all" else [arg]
+        targets = (TIER1 if arg == "--tier1" else TIER2 if arg == "--tier2"
+                   else ids if arg == "--all" else [arg])
         tot = 0
         for bid in targets:
             n = plan(bid)
