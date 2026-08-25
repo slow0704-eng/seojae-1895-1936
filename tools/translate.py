@@ -10,6 +10,7 @@ the anchor arithmetic that stores reading positions.
     python translate.py plan  <id|--tier1|--all>   # write tr/jobs/<id>/NNN.json
     python translate.py todo  [N]                  # jobs still missing output
     python translate.py build <id|--all>           # out/*.json -> data/ko/<id>.js
+    python translate.py check <id/NNN|id|--all>    # verify written output only
     python translate.py status                     # coverage table
 
 Invariant: a Korean payload never invents or drops a paragraph index. Every key
@@ -387,7 +388,50 @@ def status():
     print("%-52s %8d %8d %6.1f%%" % ("TOTAL", tw, tdone, 100.0 * tdone / max(1, tw)))
 
 
+def check_cli(args):
+    """Verify already-written out/*.json against their jobs. Prints problems."""
+    targets = []
+    for a in args:
+        if a == "--all":
+            targets += sorted(
+                os.path.relpath(os.path.join(r, f), OUT).replace("\\", "/")[:-5]
+                for r, _, fs in os.walk(OUT) for f in fs if f.endswith(".json"))
+        else:
+            targets.append(a.replace("\\", "/").replace(".json", ""))
+    bad = 0
+    for t in targets:
+        jp = os.path.join(JOBS, t + ".json")
+        op = os.path.join(OUT, t + ".json")
+        if not os.path.exists(jp):
+            print("%-56s no such job" % t); bad += 1; continue
+        if not os.path.exists(op):
+            print("%-56s no output yet" % t); bad += 1; continue
+        job = json.load(io.open(jp, encoding="utf-8"))
+        try:
+            got = json.load(io.open(op, encoding="utf-8"))
+        except Exception as e:
+            print("%-56s unreadable JSON (%s)" % (t, e)); bad += 1; continue
+        if not isinstance(got, dict):
+            print("%-56s not a flat object" % t); bad += 1; continue
+        clean, prob = check(job, got)
+        if prob:
+            bad += 1
+            print("%-56s %d problem(s)" % (t, len(prob)))
+            for m in prob[:12]:
+                print("    " + m)
+        else:
+            print("%-56s ok  %d keys" % (t, len(clean)))
+    print("-" * 72)
+    print("%d checked, %d with problems" % (len(targets), bad))
+    return bad
+
+
 def main(argv):
+    # Titles carry em-dashes and Hangul; a cp949 console would die printing them.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     cmd = argv[1] if len(argv) > 1 else "status"
     arg = argv[2] if len(argv) > 2 else ""
     ids = [f[:-3] for f in sorted(os.listdir(DATA)) if f.endswith(".js")]
@@ -418,6 +462,9 @@ def main(argv):
         for p, n in made:
             print("%-58s %9s bytes" % (p, "{:,}".format(n)))
         print("%d files" % len(made))
+    elif cmd == "check":
+        bad = check_cli(argv[2:] or ["--all"])
+        return 1 if bad else 0
     elif cmd == "status":
         status()
     else:
@@ -425,4 +472,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main(sys.argv) or 0)
