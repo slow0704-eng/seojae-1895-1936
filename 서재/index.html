@@ -895,15 +895,24 @@ html:has(body.lib)::-webkit-scrollbar{ display:block; width:11px; }
 .authnav__b span{ margin-left:6px; font-size:10px; font-variant-numeric:tabular-nums; }
 .plate__stat{ font-size:11px !important; letter-spacing:.03em !important; color:var(--fg-muted); }
 
-/* ---------- 한글본 badge ---------- */
-.cover__ko{ position:absolute; top:3.2cqw; right:3.2cqw; z-index:2;
-  font-family:var(--ff-ui); font-size:5.4cqw; line-height:1; letter-spacing:.02em;
-  padding:1.1cqw 1.7cqw; color:var(--bg);
-  background:color-mix(in srgb, var(--ink-mark) 78%, transparent); }
+/* ---------- 한글본 badge ----------
+   A jacket that has a Korean edition must read as one from across the grid.
+   Sized in cqw alone the tag landed at 9px in a 167px column and disappeared,
+   so every dimension now carries a pixel floor, and the jacket repeats the
+   mark on its head edge. The tag is also a control: it opens the work 한글로. */
+.cover__ko{ position:absolute; top:0; right:0; z-index:2; cursor:pointer;
+  font-family:var(--ff-ui); font-weight:600;
+  font-size:max(10px,4.4cqw); line-height:1; letter-spacing:.02em;
+  padding:max(4px,1.9cqw) max(6px,2.4cqw);
+  color:var(--bg); background:var(--accent);
+  transition:background-color .12s ease-out, color .12s ease-out; }
 .cover__ko[hidden]{ display:none; }
-.cover__ko.part{ background:transparent; color:var(--ink-mark); font-size:4.6cqw;
-  border:1px solid color-mix(in srgb, var(--ink-mark) 45%, transparent); }
-.card__link:hover .cover__ko{ background:var(--accent); color:var(--bg); border-color:var(--accent); }
+.cover__ko.part{ color:var(--accent); background:var(--accent-soft);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.cover__ko:hover{ background:var(--fg-heading); color:var(--bg); box-shadow:none; }
+.card[data-koed] .cover{ box-shadow:inset 0 2px 0 var(--accent); }
+.card[data-koed="part"] .cover{
+  box-shadow:inset 0 2px 0 color-mix(in srgb, var(--accent) 50%, transparent); }
 
 /* ===========================================================
    Portal view switching — library and reader are one document
@@ -3416,6 +3425,15 @@ function buildFacets() {
     btn.setAttribute("aria-expanded", on ? "true" : "false");
   });
   if (facetTotal()) { box.hidden = false; btn.setAttribute("aria-expanded", "true"); }
+  /* 언어 counts are fixed data, not reading state — fill them once, here, so
+     the shelf says how many Korean editions there are before you open it. */
+  var ln = { ko: 0, kofull: 0, enonly: 0 };
+  MANIFEST.forEach(function (w) {
+    langsOf(w.id).forEach(function (k) { ln[k] = (ln[k] || 0) + 1; });
+  });
+  $$('.facet[data-facet="lang"] .chip', box).forEach(function (c) {
+    var n = $(".chip__n", c); if (n) n.textContent = ln[c.dataset.v] || 0;
+  });
   syncFacets();
 }
 function syncFacets() {
@@ -3445,11 +3463,13 @@ function paintCards() {
     var ki = koInfo(id), kb = $(".cover__ko", c);
     if (kb) {
       if (ki) {
+        var full = ki.cov >= 0.999, pc = Math.floor(ki.cov * 100);
         kb.hidden = false;
-        kb.textContent = ki.cov >= 0.999 ? "한" : "한 " + Math.floor(ki.cov * 100) + "%";
-        kb.classList.toggle("part", ki.cov < 0.999);
-        kb.title = ki.cov >= 0.999 ? "한글본 있음" : "부분 번역 " + Math.floor(ki.cov * 100) + "%";
-      } else kb.hidden = true;
+        kb.textContent = full ? "한글본" : "한글본 " + pc + "%";
+        kb.classList.toggle("part", !full);
+        kb.title = (full ? "완역" : "부분 번역 " + pc + "%") + " · 눌러서 한글본으로 엽니다";
+        c.dataset.koed = full ? "full" : "part";
+      } else { kb.hidden = true; delete c.dataset.koed; }
     }
     var t = $(".cover__title", c);
     if (t && !t.dataset.en) t.dataset.en = t.innerHTML;
@@ -3840,6 +3860,10 @@ document.addEventListener("click", function (e) {
   e.preventDefault();
   var href = a.getAttribute("href");
   var m = href.match(/^#\/w\/(.+)$/);
+  /* the 한글본 tag is the one part of the jacket that picks the language:
+     clicking it opens 한글 and keeps that as the reading language, the same
+     way switching in the reader does. */
+  if (m && e.target.closest(".cover__ko") && S.lang === "en") setLang("ko");
   if (m) goWork(decodeURIComponent(m[1]));
   else goLibrary();
 });
