@@ -62,7 +62,7 @@ NAMED_DIVISIONS = {
 # --------------------------------------------------------------------------
 
 DROP_LINE_RX = [
-    re.compile(r"^\s*</?pre>\s*$", re.I),
+    re.compile(r"^\s*</?pre\b[^>]*>\s*$", re.I),   # incl. <pre id="pg-footer">
     re.compile(r"^\s*/\s*$"),
     re.compile(r"^\s*\[?Illustration\b", re.I),
     re.compile(r"^\s*\[?Device\]?\s*$", re.I),
