@@ -244,15 +244,24 @@ html:has(body.lib)::-webkit-scrollbar{ display:block; width:11px; }
 .authnav__b span{ margin-left:6px; font-size:10px; font-variant-numeric:tabular-nums; }
 .plate__stat{ font-size:11px !important; letter-spacing:.03em !important; color:var(--fg-muted); }
 
-/* ---------- 한글본 badge ---------- */
-.cover__ko{ position:absolute; top:3.2cqw; right:3.2cqw; z-index:2;
-  font-family:var(--ff-ui); font-size:5.4cqw; line-height:1; letter-spacing:.02em;
-  padding:1.1cqw 1.7cqw; color:var(--bg);
-  background:color-mix(in srgb, var(--ink-mark) 78%, transparent); }
+/* ---------- 한글본 badge ----------
+   A jacket that has a Korean edition must read as one from across the grid.
+   Sized in cqw alone the tag landed at 9px in a 167px column and disappeared,
+   so every dimension now carries a pixel floor, and the jacket repeats the
+   mark on its head edge. The tag is also a control: it opens the work 한글로. */
+.cover__ko{ position:absolute; top:0; right:0; z-index:2; cursor:pointer;
+  font-family:var(--ff-ui); font-weight:600;
+  font-size:max(10px,4.4cqw); line-height:1; letter-spacing:.02em;
+  padding:max(4px,1.9cqw) max(6px,2.4cqw);
+  color:var(--bg); background:var(--accent);
+  transition:background-color .12s ease-out, color .12s ease-out; }
 .cover__ko[hidden]{ display:none; }
-.cover__ko.part{ background:transparent; color:var(--ink-mark); font-size:4.6cqw;
-  border:1px solid color-mix(in srgb, var(--ink-mark) 45%, transparent); }
-.card__link:hover .cover__ko{ background:var(--accent); color:var(--bg); border-color:var(--accent); }
+.cover__ko.part{ color:var(--accent); background:var(--accent-soft);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.cover__ko:hover{ background:var(--fg-heading); color:var(--bg); box-shadow:none; }
+.card[data-koed] .cover{ box-shadow:inset 0 2px 0 var(--accent); }
+.card[data-koed="part"] .cover{
+  box-shadow:inset 0 2px 0 color-mix(in srgb, var(--accent) 50%, transparent); }
 
 /* ===========================================================
    Portal view switching — library and reader are one document

@@ -1035,6 +1035,15 @@ function buildFacets() {
     btn.setAttribute("aria-expanded", on ? "true" : "false");
   });
   if (facetTotal()) { box.hidden = false; btn.setAttribute("aria-expanded", "true"); }
+  /* 언어 counts are fixed data, not reading state — fill them once, here, so
+     the shelf says how many Korean editions there are before you open it. */
+  var ln = { ko: 0, kofull: 0, enonly: 0 };
+  MANIFEST.forEach(function (w) {
+    langsOf(w.id).forEach(function (k) { ln[k] = (ln[k] || 0) + 1; });
+  });
+  $$('.facet[data-facet="lang"] .chip', box).forEach(function (c) {
+    var n = $(".chip__n", c); if (n) n.textContent = ln[c.dataset.v] || 0;
+  });
   syncFacets();
 }
 function syncFacets() {
@@ -1064,11 +1073,13 @@ function paintCards() {
     var ki = koInfo(id), kb = $(".cover__ko", c);
     if (kb) {
       if (ki) {
+        var full = ki.cov >= 0.999, pc = Math.floor(ki.cov * 100);
         kb.hidden = false;
-        kb.textContent = ki.cov >= 0.999 ? "한" : "한 " + Math.floor(ki.cov * 100) + "%";
-        kb.classList.toggle("part", ki.cov < 0.999);
-        kb.title = ki.cov >= 0.999 ? "한글본 있음" : "부분 번역 " + Math.floor(ki.cov * 100) + "%";
-      } else kb.hidden = true;
+        kb.textContent = full ? "한글본" : "한글본 " + pc + "%";
+        kb.classList.toggle("part", !full);
+        kb.title = (full ? "완역" : "부분 번역 " + pc + "%") + " · 눌러서 한글본으로 엽니다";
+        c.dataset.koed = full ? "full" : "part";
+      } else { kb.hidden = true; delete c.dataset.koed; }
     }
     var t = $(".cover__title", c);
     if (t && !t.dataset.en) t.dataset.en = t.innerHTML;
@@ -1459,6 +1470,10 @@ document.addEventListener("click", function (e) {
   e.preventDefault();
   var href = a.getAttribute("href");
   var m = href.match(/^#\/w\/(.+)$/);
+  /* the 한글본 tag is the one part of the jacket that picks the language:
+     clicking it opens 한글 and keeps that as the reading language, the same
+     way switching in the reader does. */
+  if (m && e.target.closest(".cover__ko") && S.lang === "en") setLang("ko");
   if (m) goWork(decodeURIComponent(m[1]));
   else goLibrary();
 });
