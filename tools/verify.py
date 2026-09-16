@@ -31,9 +31,9 @@ def main():
              "id=\"drawer\"", "id=\"settings\"", "id=\"palette\"", "id=\"scrim\"",
              "id=\"grid\"", "id=\"grid-author\"", "id=\"now\"", "id=\"nowlist\"",
              "id=\"find\"", "id=\"count\"", "id=\"theme\"", "id=\"mine\"",
-             "id=\"dimmer\"", "SEOJAE.receive", "data-view=\"library\"",
+             "id=\"dimmer\"", "SJ.receive", "SJ.receiveKo", "data-view=\"library\"",
              "id=\"facets\"", "id=\"sugg\"", "id=\"authnav\"", "id=\"facetbtn\"",
-             "data-act=\"lang\"", "data-k=\"lang\"", "SEOJAE.koIndex"]
+             "data-act=\"lang\"", "data-k=\"lang\"", "koIndex:function"]
     missing = [h for h in hooks if h not in idx]
     if missing:
         print("MISSING SHELL HOOKS:", missing)
