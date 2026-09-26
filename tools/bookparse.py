@@ -111,6 +111,7 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*End of (?:the )?Project Gutenberg", re.I),
     re.compile(r"^\s*\*\*\* END OF TH", re.I),
     re.compile(r"^\s*ADVERTISEMENTS?\s*$"),
+    re.compile(r"^\s*CORRECTIONS\s*$"),            # transcriber's errata table
     re.compile(r"^\s*MURRAY[’']S\s*$"),          # John Murray's list after Blackwood
 ]
 
