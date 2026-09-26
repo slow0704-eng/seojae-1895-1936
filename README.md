@@ -1,5 +1,18 @@
 # 서재 1895—1936
 
+> **🔗 바로 읽기 — https://slow0704-eng.github.io/seojae-1895-1936/**
+
+| | |
+|---|---|
+| 현관 | https://slow0704-eng.github.io/seojae-1895-1936/ |
+| 서재 (바로 읽기) | [slow0704-eng.github.io/seojae-1895-1936/서재/](https://slow0704-eng.github.io/seojae-1895-1936/%EC%84%9C%EC%9E%AC/) |
+| 저장소 | https://github.com/slow0704-eng/seojae-1895-1936 |
+| 수록 | 소설 60편 · 1895–1936 · 작가 4명 · 한국어판 20편 완역 |
+| 요구 사항 | 최신 브라우저 하나. 설치·로그인·서버 없음. 받아서 `index.html`을 열면 오프라인으로도 읽힘 |
+| 배포 | GitHub Pages — `main` 브랜치 루트. **`main`에 push하면 1–2분 뒤 자동 반영** |
+| 빌드 | Python 3 표준 라이브러리만. `cd tools && python build.py && python verify.py` |
+| 저작권 | 원문 전부 퍼블릭 도메인. 한국어판은 이 저장소에서 새로 옮긴 번역 ([자세히](#저작권)) |
+
 퍼블릭 도메인 영문 소설 60편을 위한 **오프라인 장시간 독서 사이트**.
 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부.
 원문과 **새로 옮긴 한국어판**을 한 화면에서 오갑니다.
