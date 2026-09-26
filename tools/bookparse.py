@@ -1017,6 +1017,12 @@ def drop_repeated_heads(blocks, level):
             a.kind = "drop"
             a.meta["why"] = "half-title"
     last_chap = None
+    prev_of = {}
+    prev = None
+    for b in blocks:
+        prev_of[id(b)] = prev
+        if b.kind not in ("blank", "drop"):
+            prev = b
     for b in heads:
         if b.kind != "head":
             continue
@@ -1026,6 +1032,14 @@ def drop_repeated_heads(blocks, level):
             continue
         k = _norm_key(h["title"])
         if k and k == last_chap:
+            p = prev_of.get(id(b))
+            # a "repeat" that finishes an open sentence is text, not a head:
+            # "Written in staring black letters on the barrier was / RUE BARRÉE."
+            if (p is not None and p.kind == "para"
+                    and re.search(r"[A-Za-z]$", p.text.rstrip())):
+                b.kind = "para"
+                b.meta.pop("h", None)
+                continue
             b.kind = "drop"
             b.meta["why"] = "running head"
         else:
