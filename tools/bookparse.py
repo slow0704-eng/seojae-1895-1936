@@ -1091,7 +1091,7 @@ def merge_number_title(blocks, level):
                 and not b.meta["h"]["title"]
                 and nb.meta["h"]["type"] in ("allcaps", "manifest")
                 and nb.meta["h"]["title"]
-                and level.get(b.meta["h"]["type"]) in ("chapter", "subhead")
+                and level.get(b.meta["h"]["type"]) in ("part", "chapter", "subhead")
                 and b.meta["h"]["type"] not in ("allcaps",)):
             promote = level.get(b.meta["h"]["type"])
             if nb.meta["h"]["type"] == "manifest":
