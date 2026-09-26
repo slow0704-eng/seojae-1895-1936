@@ -1472,7 +1472,19 @@ def parse(path):
 
     # ---- front matter -------------------------------------------------
     in_ad_list = False
+    def _commentary(x):
+        t = x.text.strip()
+        return t.startswith("_") and t.endswith("_") and re.search(r"[a-z]", t)
     for bi, b in enumerate(front):
+        # an annotated contents (Tales of the Jazz Age): each listed title is
+        # followed by the author's italic note on it, so the title stays
+        nb = front[bi + 1] if bi + 1 < len(front) else None
+        if (bi in toc_used and nb is not None and (bi + 1) not in toc_used
+                and _commentary(nb) and len(nb.text) > 80 and len(b.lines) <= 2):
+            em.open("blockquote")
+            em.p(join_lines(b.lines), cls="noindent")
+            em.close("blockquote")
+            continue
         if bi in toc_used or block_is_junk(b):
             doc.dropped.append(("front:apparatus", b.raw))
             continue
@@ -1539,6 +1551,15 @@ def parse(path):
         # 1924") and other-works advertisements have the same *shape* as an
         # epigraph, so shape alone was letting them through; discriminate on
         # whether the block reads as prose or verse rather than as a list.
+        pb = front[bi - 1] if bi else None
+        if (len(b.lines) == 1 and _commentary(b) and nb is not None and pb is not None
+                and _commentary(nb) and _commentary(pb)
+                and not re.search(r"(?i)rights reserved|copyright", b.text)):
+            # a one-line italic sentence inside such a note ("The young lady shivered.")
+            em.open("blockquote")
+            em.p(b.text.strip(), cls="noindent")
+            em.close("blockquote")
+            continue
         if not _front_worth_keeping(b):
             doc.dropped.append(("front:boilerplate", b.raw))
             continue
