@@ -400,6 +400,8 @@ def main():
     # does not mean rebuilding the portal
     import translate
     translate.write_index()
+    import fonts
+    fonts.build()
 
     idx = index_page(cat, works)
     with open(_os.path.join(SITE, "index.html"), "wb") as f:

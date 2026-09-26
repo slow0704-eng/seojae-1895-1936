@@ -568,21 +568,41 @@ body.pal-on #palette{ display:flex; }
 
 /* ---------- 14. KOREAN / BILINGUAL ----------
    The Latin faces carry no Hangul, so the browser falls through per character:
-   Latin keeps Sitka/Constantia/Georgia, Hangul lands on a Korean serif. Batang
-   is the only 명조 present on a stock Windows install, so it anchors the chain.
+   Latin keeps Sitka/Constantia/Georgia, Hangul lands on a Korean serif.
+   Stock Windows has only Batang, hinted for low-res screens and jagged at reading
+   sizes, so the library ships its own: Noto Serif KR, subset by tools/fonts.py to
+   KS X 1001 + every character the translations use (~300 KB a weight, SIL OFL).
+   unicode-range keeps it from loading at all until Korean is on screen, and an
+   installed copy wins over the bundled one. Batang stays as the last resort.
    Hangul fills its em far more than Latin does, so Korean runs one notch
    smaller and one notch looser — otherwise the same 20px reads as heavier. */
+@font-face{
+  font-family:"Seojae Serif KR"; font-weight:400; font-style:normal; font-display:swap;
+  src:local("Noto Serif KR"), local("NotoSerifKR-Regular"), local("Source Han Serif K"),
+      url("fonts/NotoSerifKR-Regular.woff2") format("woff2");
+  unicode-range:U+1100-11FF, U+3000-303F, U+3130-318F, U+AC00-D7A3, U+4E00-9FFF, U+FF00-FFEF;
+}
+@font-face{
+  font-family:"Seojae Serif KR"; font-weight:600; font-style:normal; font-display:swap;
+  src:local("Noto Serif KR SemiBold"), local("NotoSerifKR-SemiBold"),
+      url("fonts/NotoSerifKR-SemiBold.woff2") format("woff2");
+  unicode-range:U+1100-11FF, U+3000-303F, U+3130-318F, U+AC00-D7A3, U+4E00-9FFF, U+FF00-FFEF;
+}
 :root{
-  --ff-ko:"Noto Serif KR","Source Han Serif K","본명조",NanumMyeongjo,"나눔명조",
+  --ff-ko:"Seojae Serif KR","Noto Serif KR","Source Han Serif K","본명조",NanumMyeongjo,"나눔명조",
           Batang,"바탕",Gungsuh,serif;
   --ff-ko-sans:"Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕",
                "Noto Sans KR","Apple SD Gothic Neo",sans-serif;
   --tr-scale:.85;
 }
-[data-font="4"]{ --ff-ko:var(--ff-ko-sans); }
+/* The Korean face must come FIRST. --ff-body ends in the generic `serif`, and on
+   a Korean Windows that generic resolves to Batang — so anything listed after it
+   never gets a Hangul character. unicode-range keeps the lead face off Latin. */
+:root{ --ff-ko-lead:"Seojae Serif KR"; }
+[data-font="4"]{ --ff-ko:var(--ff-ko-sans); --ff-ko-lead:"Pretendard Variable",Pretendard,"Malgun Gothic"; }
 
 #book :lang(ko){
-  font-family:var(--ff-body),var(--ff-ko);
+  font-family:var(--ff-ko-lead),var(--ff-body),var(--ff-ko);
   font-size:.97em;
   line-height:calc(var(--lh,1.72) + .13);
   /* Hangul must break between words, never inside one */
@@ -624,7 +644,7 @@ body.pal-on #palette{ display:flex; }
 }
 #book h2 .h-tr{
   display:block; margin-top:.5em;
-  font-family:var(--ff-body),var(--ff-ko); font-variant-caps:normal;
+  font-family:var(--ff-ko-lead),var(--ff-body),var(--ff-ko); font-variant-caps:normal;
   font-size:.72em; letter-spacing:0; color:var(--fg-muted);
 }
 

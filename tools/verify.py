@@ -157,6 +157,16 @@ def verify_ko(MAN):
         print("%-44s %8d %8d %6.1f%%  %s"
               % (bid[:44], d["n"], d["of"], 100.0 * d["n"] / max(1, d["of"]),
                  "ok" if not bad else "; ".join(bad)))
+    try:
+        import fonts
+        gone = fonts.missing()
+    except ImportError:                       # fontTools absent: nothing to check with
+        gone = []
+    if gone is None:
+        fails.append(("서재/fonts", "bundled Korean serif missing — run tools/fonts.py"))
+    elif gone:
+        fails.append(("서재/fonts", "%d syllables not in the bundled font %s — run tools/fonts.py"
+                      % (len(gone), "".join(gone[:10]))))
     ids = set(w["id"] for w in MAN)
     orphan = [k for k in index if k not in ids]
     if orphan:
