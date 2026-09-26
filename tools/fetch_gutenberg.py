@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os, re, sys, time, urllib.request
 
-ROOT = "C:/Users/user/" + chr(49548) + chr(49444)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ONLY = set(sys.argv[1:])   # folder names; empty = all
 
 MANIFEST = {
 u"\uce74\ud504\uce74": [
@@ -67,6 +68,28 @@ u"\ud53c\uce20\uc81c\ub7f4\ub4dc": [
 u"\ud14c\uc544\ud3f0\ud558\ub974\ubd80": [
     (73727,1926, "Metropolis"),
 ],
+u"블랙우드": [
+    (14471,1906, "The Empty House and Other Ghost Stories"),
+    (11438,1907, "The Willows"),
+    (49222,1908, "John Silence, Physician Extraordinary"),
+    (69668,1909, "The Education of Uncle Paul"),
+    (30974,1909, "Jimbo"),
+    (11988,1910, "The Human Chord"),
+    (10897,1910, "The Wendigo"),
+    (9964, 1911, "The Centaur"),
+    (77472,1912, "Pan's Garden"),
+    (6021, 1913, "A Prisoner in Fairyland"),
+    (43816,1914, "Incredible Adventures"),
+    (72928,1914, "Ten Minute Stories"),
+    (5894, 1915, "The Extra Day"),
+    (50107,1916, "Julius LeVallon"),
+    (33876,1916, "The Wave"),
+    (45964,1917, "Day and Night Stories"),
+    (4046, 1918, "The Garden of Survival"),
+    (35132,1918, "The Promise of Air"),
+    (43594,1921, "The Bright Messenger"),
+    (38310,1921, "The Wolves of God and Other Fey Stories"),
+],
 }
 
 START = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)
@@ -98,6 +121,7 @@ def strip(txt):
 
 fails = []
 for folder, items in MANIFEST.items():
+    if ONLY and folder not in ONLY: continue
     d = os.path.join(ROOT, folder)
     if not os.path.isdir(d): os.makedirs(d)
     for bid, year, title in items:

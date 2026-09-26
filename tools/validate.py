@@ -25,7 +25,7 @@ from collections import Counter
 
 import bookparse as B
 
-ROOT = sys.argv[1] if len(sys.argv) > 1 else "C:/Users/user/소설"
+ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAG = re.compile(r"<[^>]+>")
 NOTALNUM = re.compile(r"[^0-9A-Za-z]+")
 P_RX = re.compile(r"<p\b[^>]*>(.*?)</p>", re.S)

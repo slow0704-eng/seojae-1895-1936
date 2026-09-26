@@ -24,17 +24,18 @@ FAVICON = ("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20vie
            "%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E"
            "%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E")
 
-# A spread across the four hands and four decades. Anything missing from the
+# A spread across the five hands and four decades. Anything missing from the
 # catalogue is simply dropped, so this list can never break the build.
 WALL_A = ["wells-the-time-machine", "kafka-the-metamorphosis", "fitzgerald-the-great-gatsby",
           "wells-the-war-of-the-worlds", "harbou-metropolis", "wells-the-invisible-man",
           "fitzgerald-this-side-of-paradise", "wells-the-island-of-doctor-moreau",
           "kafka-the-trial", "wells-tono-bungay", "fitzgerald-tales-of-the-jazz-age",
-          "wells-the-first-men-in-the-moon"]
+          "wells-the-first-men-in-the-moon", "blackwood-the-willows"]
 WALL_B = ["kafka-the-castle", "wells-a-modern-utopia", "fitzgerald-the-beautiful-and-damned",
           "wells-ann-veronica", "wells-the-world-set-free", "fitzgerald-all-the-sad-young-men",
           "wells-the-food-of-the-gods", "kafka-poseidon", "wells-kipps",
-          "fitzgerald-the-vegetable", "wells-the-sleeper-awakes", "wells-the-dream"]
+          "fitzgerald-the-vegetable", "wells-the-sleeper-awakes", "wells-the-dream",
+          "blackwood-the-wendigo", "blackwood-john-silence-physician-extraordinary"]
 
 # The reading surface, shown rather than described. Written for this page —
 # a type specimen, not an extract.
@@ -132,7 +133,7 @@ def build_landing(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 %(y0)d—%(y1)d · 퍼블릭 도메인 소설 %(n)d편</title>
-<meta name="description" content="카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
+<meta name="description" content="카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -245,9 +246,10 @@ def build_landing(cat, works):
 <section class="sec wrap" id="authors">
   <div class="sec__hd rv">
     <p class="sec__n">03 &nbsp;/&nbsp; 작가</p>
-    <h2 class="sec__t">네 사람이 %(yspan)d년을 나눠 씁니다.</h2>
+    <h2 class="sec__t">다섯 사람이 %(yspan)d년을 나눠 씁니다.</h2>
     <p class="lede">한 명은 세기말의 런던에서, 한 명은 프라하의 보험국에서,
-      한 명은 재즈 시대의 파티에서, 한 명은 바이마르의 촬영장에서 썼습니다.</p>
+      한 명은 재즈 시대의 파티에서, 한 명은 바이마르의 촬영장에서,
+      한 명은 캐나다의 숲과 알프스의 눈 속에서 썼습니다.</p>
   </div>
   <div class="auths">%(auths)s</div>
 </section>

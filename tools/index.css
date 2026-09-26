@@ -35,6 +35,7 @@
 [data-author="wells"]      { --au:var(--author-wells) }
 [data-author="fitzgerald"] { --au:var(--author-fitzgerald) }
 [data-author="harbou"]     { --au:var(--author-harbou) }
+[data-author="blackwood"]  { --au:var(--author-blackwood) }
 
 /* ---------- sticky bar ---------- */
 .topbar{
@@ -243,6 +244,8 @@
    transparent 3.5px 5.5px,var(--ink-rule) 5.5px 6px) }
 [data-author="harbou"]     .rule{ height:5px; background:linear-gradient(
    var(--ink-rule) 0 1px,transparent 1px 4px,var(--ink-rule) 4px 5px) }
+[data-author="blackwood"]  .rule{ height:3px; background:repeating-linear-gradient(90deg,
+   var(--ink-rule) 0 7px,transparent 7px 10px) }
 .rule--head{ margin-top:3.2cqw }
 .rule--foot{ margin-bottom:3.2cqw; transform:scaleY(-1) }
 

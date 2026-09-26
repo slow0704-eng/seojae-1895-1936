@@ -100,7 +100,7 @@ FRONT_DROP_RX = [
 
 # a block starting with one of these ends the body: everything after is dropped
 BACK_MATTER_RX = [
-    re.compile(r"^\s*PRINTED BY\b", re.I),
+    re.compile(r"^\s*_?PRINTED BY(?:\b|_)", re.I),     # "_Printed by_" too
     re.compile(r"^\s*A LIST OF NEW BOOKS\b", re.I),
     re.compile(r"^\s*MESSRS?\.?\s+\w+.{0,40}ANNOUNCEMENTS\b", re.I),
     re.compile(r"^\s*BOOKS FOR BOYS AND GIRLS\s*$"),
@@ -111,6 +111,7 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*End of (?:the )?Project Gutenberg", re.I),
     re.compile(r"^\s*\*\*\* END OF TH", re.I),
     re.compile(r"^\s*ADVERTISEMENTS?\s*$"),
+    re.compile(r"^\s*MURRAY[’']S\s*$"),          # John Murray's list after Blackwood
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
@@ -314,6 +315,9 @@ _RX_SECTWORD = re.compile(
 _RX_CHAPTER = re.compile(
     r"^(CHAPTER|Chapter|CHAP\.)\s*(?:THE\s+|the\s+)?(%s|\d{1,3}|%s)?\b\.?\s*"
     r"(?:[—–:.~-]+\s*)?(.*)$" % (ROMAN, NUMWORD), re.I)
+# Blackwood's "John Silence": CASE I over the story's own title. Capitals and
+# a numeral only, so a sentence that happens to open with "Case" never matches.
+_RX_CASE = re.compile(r"^CASE\s+(%s)\.?$" % ROMAN)
 _RX_ACT = re.compile(
     r"^(ACT|Act)\s+(%s|\d{1,3}|%s)\b\.?\s*(.*)$" % (ROMAN, NUMWORD), re.I)
 _RX_SCENE = re.compile(
@@ -376,6 +380,9 @@ def classify_heading_line(s):
         n = _num_of(m.group(2))
         if n is not None or m.group(3):
             return ("chapter", n, m.group(3).strip(" .—-"))
+    m = _RX_CASE.match(t)
+    if m:
+        return ("chapter", _roman_to_int(m.group(1)), "")
     m = _RX_SECTSIGN.match(t)
     if m:
         return ("sectsign", int(m.group(1)), "")
@@ -388,7 +395,9 @@ def classify_heading_line(s):
     if t.rstrip(".").lower() in NAMED_DIVISIONS:
         return ("named", None, t.rstrip("."))
     m = _RX_NUM_TITLE.match(t)
-    if m and _num_of(m.group(1)) is not None and _title_like(m.group(2)):
+    if (m and _num_of(m.group(1)) is not None and _title_like(m.group(2))
+            # "X. Y. Z." is a signature, not chapter X called "Y. Z."
+            and not re.fullmatch(r"(?:[A-Z]\.\s*)+", m.group(2).strip())):
         # provisional: promoted to "numtitle" only if the TOC confirms it
         return ("numeric", _num_of(m.group(1)), m.group(2).strip(" ."))
     return None
@@ -403,6 +412,7 @@ AUTHOR_BY_FOLDER = {
     "HG웰스": "H. G. Wells",
     "피츠제럴드": "F. Scott Fitzgerald",
     "테아폰하르부": "Thea von Harbou",
+    "블랙우드": "Algernon Blackwood",
 }
 
 
@@ -515,8 +525,11 @@ def harvest_manifest(doc):
                 prev_end = blk.lineno + len(blk.lines) - 1
                 j += 1
                 continue
-            # a wrapped-prose block ends the table of contents
-            if max(len(l.rstrip()) for l in blk.lines) > 66 or len(blk.lines) > 60:
+            # a wrapped-prose block ends the table of contents. Leader padding
+            # does not count: "I. TITLE            1" set out to column 72 is
+            # still an entry (Blackwood's "Ten Minute Stories").
+            if (max(len(re.sub(r"\s{2,}", " ", l.strip())) for l in blk.lines) > 66
+                    or len(blk.lines) > 60):
                 break
             rows = [_toc_row(l) for l in blk.lines]
             ok = sum(1 for r in rows if r)
@@ -1517,7 +1530,8 @@ def parse(path):
             elif h["type"] == "scene":
                 label = "Scene %s" % _roman_num(h["num"])
             elif h["type"] == "chapter":
-                label = "Chapter %s" % _roman_num(h["num"]) if h["num"] else "Chapter"
+                word = "Case" if _RX_CASE.match(b.text.strip().split("\n")[0].strip()) else "Chapter"
+                label = "%s %s" % (word, _roman_num(h["num"])) if h["num"] else word
             elif h["type"] == "sectword":
                 label = "Section %s" % h["num"]
             elif h["type"] == "sectsign":

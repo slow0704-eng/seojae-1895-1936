@@ -1,0 +1,44 @@
+블랙우드
+============================================================
+
+20편 · 영문 원문 · UTF-8
+
+생전에 나온 단행본 가운데 Project Gutenberg에 원문이 있는 소설·단편집 전부입니다.
+「버드나무(The Willows)」와 「웬디고(The Wendigo)」는 각각 단편집 『The Listener』(1907)와
+『The Lost Valley』(1910)에 실렸는데, 두 책은 전자텍스트가 없어 단편만 따로 받았습니다.
+
+받지 않은 것
+  · 다른 책의 일부를 떼어 낸 재수록본 — 『Three John Silence Stories』, 『Four Weird Tales』,
+    「The Camp of the Dog」, 「The Damned」, 「The Man Whom the Trees Loved」 (이미 수록된 책에 들어 있음)
+  · 『Episodes Before Thirty』(1923) — 소설이 아닌 자서전
+  · 『Karma』(1918) — V. A. 펀과 함께 쓴 희곡
+  · 1922년 이후 작품 — 『Tongues of Fire』(1924) 등은 Gutenberg에 전자텍스트가 없고,
+    1931년 이후 작품은 미국 저작권이 남아 있음(한국 기준으로는 2021년 말 모두 만료)
+
+『신의 늑대들 외』는 윌프리드 윌슨과 공저로 나왔으나 대부분 블랙우드의 글입니다.
+
+------------------------------------------------------------
+
+  1906  The Empty House and Other Ghost Stories            369,859 자
+  1907  The Willows                                        109,198 자
+  1908  John Silence, Physician Extraordinary              602,209 자
+  1909  Jimbo                                              273,731 자
+  1909  The Education of Uncle Paul                        441,984 자
+  1910  The Human Chord                                    339,029 자
+  1910  The Wendigo                                        106,492 자
+  1911  The Centaur                                        527,572 자
+  1912  Pan's Garden                                       739,919 자
+  1913  A Prisoner in Fairyland                            791,371 자
+  1914  Incredible Adventures                              599,628 자
+  1914  Ten Minute Stories                                 359,748 자
+  1915  The Extra Day                                      544,978 자
+  1916  Julius LeVallon                                    615,067 자
+  1916  The Wave                                           664,486 자
+  1917  Day and Night Stories                              416,863 자
+  1918  The Garden of Survival                             126,863 자
+  1918  The Promise of Air                                 363,905 자
+  1921  The Bright Messenger                               703,116 자
+  1921  The Wolves of God and Other Fey Stories            593,636 자
+
+------------------------------------------------------------
+출처: Project Gutenberg (모두 퍼블릭 도메인)

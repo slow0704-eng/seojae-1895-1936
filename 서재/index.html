@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 1895—1936</title>
-<meta name="description" content="퍼블릭 도메인 영문 소설 60편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부.">
+<meta name="description" content="퍼블릭 도메인 영문 소설 80편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='3'%20fill='%23FAF8F4'/%3E%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E">
@@ -27,7 +27,7 @@
   --rule:#E3DDD1;          --border:#D6CEBF;
   --sb-track:#F0ECE4;      --sb-thumb:#BEB5A6;  --sb-thumb-hover:#8C8272;
   --author-kafka:#58688C;  --author-wells:#417262;
-  --author-fitzgerald:#796740; --author-harbou:#756185;
+  --author-fitzgerald:#796740; --author-harbou:#756185; --author-blackwood:#86574A;
   --body-wght:400;         --dark-track:0em;
 }
 [data-theme="sepia"]{
@@ -43,7 +43,7 @@
   --rule:#DCCDAE;          --border:#CFBC96;
   --sb-track:#E8DCC4;      --sb-thumb:#BFAD8B;  --sb-thumb-hover:#92805E;
   --author-kafka:#526286;  --author-wells:#3B6B5B;
-  --author-fitzgerald:#73603A; --author-harbou:#6F5A7E;
+  --author-fitzgerald:#73603A; --author-harbou:#6F5A7E; --author-blackwood:#7F5242;
 }
 [data-theme="dark"]{
   color-scheme: dark;
@@ -58,7 +58,7 @@
   --rule:#302D29;          --border:#3C3834;
   --sb-track:#211F1D;      --sb-thumb:#454039;  --sb-thumb-hover:#6D6760;
   --author-kafka:#8797B6;  --author-wells:#769F8F;
-  --author-fitzgerald:#A59473; --author-harbou:#A190AF;
+  --author-fitzgerald:#A59473; --author-harbou:#A190AF; --author-blackwood:#B58D7E;
   --body-wght:370;         --dark-track:0.008em;
 }
 [data-theme="night"]{
@@ -74,7 +74,7 @@
   --rule:#252220;          --border:#322E29;
   --sb-track:#151413;      --sb-thumb:#383430;  --sb-thumb-hover:#605A52;
   --author-kafka:#7887A5;  --author-wells:#668E80;
-  --author-fitzgerald:#948564; --author-harbou:#92809F;
+  --author-fitzgerald:#948564; --author-harbou:#92809F; --author-blackwood:#A5806F;
   --body-wght:370;         --dark-track:0.008em;
 }
 
@@ -729,6 +729,7 @@ body.pal-on #palette{ display:flex; }
 [data-author="wells"]      { --au:var(--author-wells) }
 [data-author="fitzgerald"] { --au:var(--author-fitzgerald) }
 [data-author="harbou"]     { --au:var(--author-harbou) }
+[data-author="blackwood"]  { --au:var(--author-blackwood) }
 
 /* ---------- sticky bar ---------- */
 .topbar{
@@ -937,6 +938,8 @@ body.pal-on #palette{ display:flex; }
    transparent 3.5px 5.5px,var(--ink-rule) 5.5px 6px) }
 [data-author="harbou"]     .rule{ height:5px; background:linear-gradient(
    var(--ink-rule) 0 1px,transparent 1px 4px,var(--ink-rule) 4px 5px) }
+[data-author="blackwood"]  .rule{ height:3px; background:repeating-linear-gradient(90deg,
+   var(--ink-rule) 0 7px,transparent 7px 10px) }
 .rule--head{ margin-top:3.2cqw }
 .rule--foot{ margin-bottom:3.2cqw; transform:scaleY(-1) }
 
@@ -1136,7 +1139,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h1 class="mh__title">1895<em>—</em>1936</h1>
   <p class="mh__roll">Kafka &nbsp;·&nbsp; Wells &nbsp;·&nbsp; Fitzgerald &nbsp;·&nbsp; von Harbou</p>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">60편 &nbsp;·&nbsp; 4인 &nbsp;·&nbsp; 2,509만 자 &nbsp;·&nbsp; 약 309시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat">80편 &nbsp;·&nbsp; 4인 &nbsp;·&nbsp; 3,438만 자 &nbsp;·&nbsp; 약 423시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -1159,10 +1162,10 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <option value="dark">야간</option><option value="night">심야</option>
   </select>
 </nav>
-<div class="facets" id="facets" hidden><div class="facet" data-facet="author"><span class="facet__l">작가</span><button class="chip" data-v="wells">H. G. 웰스<span class="chip__n">45</span></button><button class="chip" data-v="fitzgerald">F. 스콧 피츠제럴드<span class="chip__n">7</span></button><button class="chip" data-v="kafka">프란츠 카프카<span class="chip__n">7</span></button><button class="chip" data-v="harbou">테아 폰 하르부<span class="chip__n">1</span></button></div>
-<div class="facet" data-facet="decade"><span class="facet__l">연대</span><button class="chip" data-v="1890">1890년대<span class="chip__n">14</span></button><button class="chip" data-v="1900">1900년대<span class="chip__n">11</span></button><button class="chip" data-v="1910">1910년대<span class="chip__n">17</span></button><button class="chip" data-v="1920">1920년대<span class="chip__n">14</span></button><button class="chip" data-v="1930">1930년대<span class="chip__n">4</span></button></div>
-<div class="facet" data-facet="form"><span class="facet__l">형식</span><button class="chip" data-v="novel">장편<span class="chip__n">38</span></button><button class="chip" data-v="collection">단편집<span class="chip__n">12</span></button><button class="chip" data-v="story">단편<span class="chip__n">6</span></button><button class="chip" data-v="play">희곡<span class="chip__n">1</span></button><button class="chip" data-v="novella">중편<span class="chip__n">1</span></button><button class="chip" data-v="essay-novel">사변소설<span class="chip__n">1</span></button><button class="chip" data-v="miscellany">잡문집<span class="chip__n">1</span></button></div>
-<div class="facet" data-facet="size"><span class="facet__l">분량</span><button class="chip" data-v="short">3시간 이내<span class="chip__n">12</span></button><button class="chip" data-v="mid">3–8시간<span class="chip__n">38</span></button><button class="chip" data-v="long">8시간 이상<span class="chip__n">10</span></button></div>
+<div class="facets" id="facets" hidden><div class="facet" data-facet="author"><span class="facet__l">작가</span><button class="chip" data-v="wells">H. G. 웰스<span class="chip__n">45</span></button><button class="chip" data-v="blackwood">앨저넌 블랙우드<span class="chip__n">20</span></button><button class="chip" data-v="fitzgerald">F. 스콧 피츠제럴드<span class="chip__n">7</span></button><button class="chip" data-v="kafka">프란츠 카프카<span class="chip__n">7</span></button><button class="chip" data-v="harbou">테아 폰 하르부<span class="chip__n">1</span></button></div>
+<div class="facet" data-facet="decade"><span class="facet__l">연대</span><button class="chip" data-v="1890">1890년대<span class="chip__n">14</span></button><button class="chip" data-v="1900">1900년대<span class="chip__n">16</span></button><button class="chip" data-v="1910">1910년대<span class="chip__n">30</span></button><button class="chip" data-v="1920">1920년대<span class="chip__n">16</span></button><button class="chip" data-v="1930">1930년대<span class="chip__n">4</span></button></div>
+<div class="facet" data-facet="form"><span class="facet__l">형식</span><button class="chip" data-v="novel">장편<span class="chip__n">48</span></button><button class="chip" data-v="collection">단편집<span class="chip__n">19</span></button><button class="chip" data-v="story">단편<span class="chip__n">6</span></button><button class="chip" data-v="novella">중편<span class="chip__n">4</span></button><button class="chip" data-v="play">희곡<span class="chip__n">1</span></button><button class="chip" data-v="essay-novel">사변소설<span class="chip__n">1</span></button><button class="chip" data-v="miscellany">잡문집<span class="chip__n">1</span></button></div>
+<div class="facet" data-facet="size"><span class="facet__l">분량</span><button class="chip" data-v="short">3시간 이내<span class="chip__n">15</span></button><button class="chip" data-v="mid">3–8시간<span class="chip__n">51</span></button><button class="chip" data-v="long">8시간 이상<span class="chip__n">14</span></button></div>
 <div class="facet" data-facet="state"><span class="facet__l">상태</span><button class="chip" data-v="unread">안 읽음<span class="chip__n"></span></button><button class="chip" data-v="reading">읽는 중<span class="chip__n"></span></button><button class="chip" data-v="done">완독<span class="chip__n"></span></button><button class="chip" data-v="marked">책갈피 있음<span class="chip__n"></span></button></div>
 <div class="facet" data-facet="lang"><span class="facet__l">언어</span><button class="chip" data-v="ko">한글본 있음<span class="chip__n"></span></button><button class="chip" data-v="kofull">완역<span class="chip__n"></span></button><button class="chip" data-v="enonly">원문만<span class="chip__n"></span></button></div>
   <button class="facet__clear" id="facetclear">모두 해제</button>
@@ -1379,7 +1382,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>47.2만 자</span><b>&middot;</b><span>5시간 45분</span></p>
  </div>
 </a></article>
-<div class="era" data-decade="1900" role="separator"><span class="era__n">1900</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">11편</span></div>
+<div class="era" data-decade="1900" role="separator"><span class="era__n">1900</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">16편</span></div>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1900" data-id="wells-love-and-mr-lewisham" data-title="Love and Mr Lewisham" data-ko="사랑과 루이셤 씨" data-mins="275"
  data-form="novel" style="--i:14">
@@ -1485,9 +1488,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>63.1만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="m"
+ data-year="1906" data-id="blackwood-the-empty-house-and-other-ghost-stories" data-title="The Empty House and Other Ghost Stories" data-ko="빈집 외 유령 이야기" data-mins="281"
+ data-form="collection" style="--i:21">
+<a class="card__link" href="#/w/blackwood-the-empty-house-and-other-ghost-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Empty House<span class="sub">and Other Ghost Stories</span></h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1906</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">빈집 외 유령 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1906" data-id="wells-in-the-days-of-the-comet" data-title="In the Days of the Comet" data-ko="혜성의 날들" data-mins="338"
- data-form="novel" style="--i:21">
+ data-form="novel" style="--i:22">
 <a class="card__link" href="#/w/wells-in-the-days-of-the-comet">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">In the Days of the Comet</h3>
@@ -1500,9 +1518,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>45.5만 자</span><b>&middot;</b><span>5시간 38분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="s"
+ data-year="1907" data-id="blackwood-the-willows" data-title="The Willows" data-ko="버드나무" data-mins="82"
+ data-form="novella" style="--i:23">
+<a class="card__link" href="#/w/blackwood-the-willows">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Willows</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1907</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">버드나무</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="l"
+ data-year="1908" data-id="blackwood-john-silence-physician-extraordinary" data-title="John Silence, Physician Extraordinary" data-ko="특별한 의사 존 사일런스" data-mins="450"
+ data-form="collection" style="--i:24">
+<a class="card__link" href="#/w/blackwood-john-silence-physician-extraordinary">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">John Silence, Physician Extraordinary</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1908</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">특별한 의사 존 사일런스</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1908" data-id="wells-the-war-in-the-air" data-title="The War in the Air" data-ko="공중전" data-mins="411"
- data-form="novel" style="--i:22">
+ data-form="novel" style="--i:25">
 <a class="card__link" href="#/w/wells-the-war-in-the-air">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The War in the Air</h3>
@@ -1515,9 +1563,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>56만 자</span><b>&middot;</b><span>6시간 51분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="s"
+ data-year="1909" data-id="blackwood-jimbo" data-title="Jimbo" data-ko="짐보" data-mins="206"
+ data-form="novel" style="--i:26">
+<a class="card__link" href="#/w/blackwood-jimbo">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Jimbo</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1909</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">짐보</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>27.4만 자</span><b>&middot;</b><span>3시간 26분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="l"
+ data-year="1909" data-id="blackwood-the-education-of-uncle-paul" data-title="The Education of Uncle Paul" data-ko="폴 삼촌의 교육" data-mins="329"
+ data-form="novel" style="--i:27">
+<a class="card__link" href="#/w/blackwood-the-education-of-uncle-paul">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Education of Uncle Paul</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1909</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">폴 삼촌의 교육</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>44.2만 자</span><b>&middot;</b><span>5시간 29분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1909" data-id="wells-ann-veronica" data-title="Ann Veronica" data-ko="앤 베로니카" data-mins="407"
- data-form="novel" style="--i:23">
+ data-form="novel" style="--i:28">
 <a class="card__link" href="#/w/wells-ann-veronica">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Ann Veronica</h3>
@@ -1532,7 +1610,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1909" data-id="wells-tono-bungay" data-title="Tono-Bungay" data-ko="토노번게이" data-mins="562"
- data-form="novel" style="--i:24">
+ data-form="novel" style="--i:29">
 <a class="card__link" href="#/w/wells-tono-bungay">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tono-Bungay</h3>
@@ -1545,10 +1623,40 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>75.2만 자</span><b>&middot;</b><span>9시간 22분</span></p>
  </div>
 </a></article>
-<div class="era" data-decade="1910" role="separator"><span class="era__n">1910</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">17편</span></div>
+<div class="era" data-decade="1910" role="separator"><span class="era__n">1910</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">30편</span></div>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1910" data-id="blackwood-the-human-chord" data-title="The Human Chord" data-ko="인간 화음" data-mins="246"
+ data-form="novel" style="--i:30">
+<a class="card__link" href="#/w/blackwood-the-human-chord">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Human Chord</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">인간 화음</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>33.9만 자</span><b>&middot;</b><span>4시간 6분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1910" data-id="blackwood-the-wendigo" data-title="The Wendigo" data-ko="웬디고" data-mins="78"
+ data-form="novella" style="--i:31">
+<a class="card__link" href="#/w/blackwood-the-wendigo">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wendigo</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">웬디고</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1910" data-id="wells-the-history-of-mr-polly" data-title="The History of Mr Polly" data-ko="폴리 씨의 일대기" data-mins="289"
- data-form="novel" style="--i:25">
+ data-form="novel" style="--i:32">
 <a class="card__link" href="#/w/wells-the-history-of-mr-polly">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The History of Mr Polly</h3>
@@ -1563,7 +1671,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1910" data-id="wells-the-sleeper-awakes" data-title="The Sleeper Awakes" data-ko="잠든 자 깨어나다" data-mins="320"
- data-form="novel" style="--i:26">
+ data-form="novel" style="--i:33">
 <a class="card__link" href="#/w/wells-the-sleeper-awakes">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Sleeper Awakes</h3>
@@ -1576,9 +1684,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>43.7만 자</span><b>&middot;</b><span>5시간 20분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1911" data-id="blackwood-the-centaur" data-title="The Centaur" data-ko="켄타우로스" data-mins="382"
+ data-form="novel" style="--i:34">
+<a class="card__link" href="#/w/blackwood-the-centaur">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Centaur</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1911</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">켄타우로스</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-country-of-the-blind-and-other-stories" data-title="The Country of the Blind and Other Stories" data-ko="눈먼 자들의 나라 외" data-mins="678"
- data-form="collection" style="--i:27">
+ data-form="collection" style="--i:35">
 <a class="card__link" href="#/w/wells-the-country-of-the-blind-and-other-stories">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Country of the Blind<span class="sub">and Other Stories</span></h3>
@@ -1593,7 +1716,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-door-in-the-wall-and-other-stories" data-title="The Door in the Wall and Other Stories" data-ko="담장 속의 문 외" data-mins="181"
- data-form="collection" style="--i:28">
+ data-form="collection" style="--i:36">
 <a class="card__link" href="#/w/wells-the-door-in-the-wall-and-other-stories">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Door in the Wall<span class="sub">and Other Stories</span></h3>
@@ -1608,7 +1731,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-new-machiavelli" data-title="The New Machiavelli" data-ko="새로운 마키아벨리" data-mins="609"
- data-form="novel" style="--i:29">
+ data-form="novel" style="--i:37">
 <a class="card__link" href="#/w/wells-the-new-machiavelli">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The New Machiavelli</h3>
@@ -1621,9 +1744,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>83.2만 자</span><b>&middot;</b><span>10시간 9분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1912" data-id="blackwood-pan-s-garden" data-title="Pan&#x27;s Garden" data-ko="판의 정원" data-mins="541"
+ data-form="collection" style="--i:38">
+<a class="card__link" href="#/w/blackwood-pan-s-garden">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Pan&#x27;s Garden</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1912</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">판의 정원</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>74만 자</span><b>&middot;</b><span>9시간 1분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1912" data-id="wells-marriage" data-title="Marriage" data-ko="결혼" data-mins="623"
- data-form="novel" style="--i:30">
+ data-form="novel" style="--i:39">
 <a class="card__link" href="#/w/wells-marriage">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Marriage</h3>
@@ -1636,9 +1774,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>85.8만 자</span><b>&middot;</b><span>10시간 23분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1913" data-id="blackwood-a-prisoner-in-fairyland" data-title="A Prisoner in Fairyland" data-ko="요정 나라의 포로" data-mins="587"
+ data-form="novel" style="--i:40">
+<a class="card__link" href="#/w/blackwood-a-prisoner-in-fairyland">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">A Prisoner in Fairyland</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1913</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">요정 나라의 포로</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>79.1만 자</span><b>&middot;</b><span>9시간 47분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1913" data-id="wells-the-passionate-friends" data-title="The Passionate Friends" data-ko="열정적인 친구들" data-mins="439"
- data-form="novel" style="--i:31">
+ data-form="novel" style="--i:41">
 <a class="card__link" href="#/w/wells-the-passionate-friends">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Passionate Friends</h3>
@@ -1651,9 +1804,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 19분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1914" data-id="blackwood-incredible-adventures" data-title="Incredible Adventures" data-ko="믿기 힘든 모험들" data-mins="441"
+ data-form="collection" style="--i:42">
+<a class="card__link" href="#/w/blackwood-incredible-adventures">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Incredible Adventures</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1914</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">믿기 힘든 모험들</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>60만 자</span><b>&middot;</b><span>7시간 21분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1914" data-id="blackwood-ten-minute-stories" data-title="Ten Minute Stories" data-ko="10분 이야기" data-mins="263"
+ data-form="collection" style="--i:43">
+<a class="card__link" href="#/w/blackwood-ten-minute-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Ten Minute Stories</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1914</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">10분 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>36만 자</span><b>&middot;</b><span>4시간 23분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
  data-year="1914" data-id="wells-the-wife-of-sir-isaac-harman" data-title="The Wife of Sir Isaac Harman" data-ko="아이작 하먼 경의 아내" data-mins="540"
- data-form="novel" style="--i:32">
+ data-form="novel" style="--i:44">
 <a class="card__link" href="#/w/wells-the-wife-of-sir-isaac-harman">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Wife of Sir Isaac Harman</h3>
@@ -1668,7 +1851,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1914" data-id="wells-the-world-set-free" data-title="The World Set Free" data-ko="해방된 세계" data-mins="275"
- data-form="novel" style="--i:33">
+ data-form="novel" style="--i:45">
 <a class="card__link" href="#/w/wells-the-world-set-free">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The World Set Free</h3>
@@ -1681,9 +1864,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>37.6만 자</span><b>&middot;</b><span>4시간 35분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1915" data-id="blackwood-the-extra-day" data-title="The Extra Day" data-ko="여분의 하루" data-mins="399"
+ data-form="novel" style="--i:46">
+<a class="card__link" href="#/w/blackwood-the-extra-day">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Extra Day</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1915</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">여분의 하루</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>54.5만 자</span><b>&middot;</b><span>6시간 39분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="kafka" data-decade="1910" data-len="m"
  data-year="1915" data-id="kafka-the-metamorphosis" data-title="The Metamorphosis" data-ko="변신" data-mins="92"
- data-form="novella" style="--i:34">
+ data-form="novella" style="--i:47">
 <a class="card__link" href="#/w/kafka-the-metamorphosis">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Metamorphosis</h3>
@@ -1698,7 +1896,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1915" data-id="wells-bealby" data-title="Bealby" data-ko="빌비" data-mins="288"
- data-form="novel" style="--i:35">
+ data-form="novel" style="--i:48">
 <a class="card__link" href="#/w/wells-bealby">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Bealby</h3>
@@ -1713,7 +1911,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1915" data-id="wells-boon" data-title="Boon" data-ko="분" data-mins="201"
- data-form="miscellany" style="--i:36">
+ data-form="miscellany" style="--i:49">
 <a class="card__link" href="#/w/wells-boon">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Boon</h3>
@@ -1728,7 +1926,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1915" data-id="wells-the-research-magnificent" data-title="The Research Magnificent" data-ko="위대한 탐구" data-mins="466"
- data-form="novel" style="--i:37">
+ data-form="novel" style="--i:50">
 <a class="card__link" href="#/w/wells-the-research-magnificent">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Research Magnificent</h3>
@@ -1741,9 +1939,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>63.3만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1916" data-id="blackwood-julius-levallon" data-title="Julius LeVallon" data-ko="줄리어스 르발롱" data-mins="450"
+ data-form="novel" style="--i:51">
+<a class="card__link" href="#/w/blackwood-julius-levallon">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Julius LeVallon</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1916</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">줄리어스 르발롱</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>61.5만 자</span><b>&middot;</b><span>7시간 30분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1916" data-id="blackwood-the-wave" data-title="The Wave" data-ko="파도" data-mins="490"
+ data-form="novel" style="--i:52">
+<a class="card__link" href="#/w/blackwood-the-wave">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wave</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1916</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">파도</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>66.4만 자</span><b>&middot;</b><span>8시간 10분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
  data-year="1916" data-id="wells-mr-britling-sees-it-through" data-title="Mr Britling Sees It Through" data-ko="브리틀링 씨, 끝까지 지켜보다" data-mins="588"
- data-form="novel" style="--i:38">
+ data-form="novel" style="--i:53">
 <a class="card__link" href="#/w/wells-mr-britling-sees-it-through">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Mr Britling Sees It Through</h3>
@@ -1756,9 +1984,24 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>79.8만 자</span><b>&middot;</b><span>9시간 48분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1917" data-id="blackwood-day-and-night-stories" data-title="Day and Night Stories" data-ko="낮과 밤의 이야기" data-mins="308"
+ data-form="collection" style="--i:54">
+<a class="card__link" href="#/w/blackwood-day-and-night-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Day and Night Stories</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1917</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">낮과 밤의 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>41.7만 자</span><b>&middot;</b><span>5시간 8분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1917" data-id="wells-the-soul-of-a-bishop" data-title="The Soul of a Bishop" data-ko="주교의 영혼" data-mins="333"
- data-form="novel" style="--i:39">
+ data-form="novel" style="--i:55">
 <a class="card__link" href="#/w/wells-the-soul-of-a-bishop">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Soul of a Bishop</h3>
@@ -1771,9 +2014,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>44.8만 자</span><b>&middot;</b><span>5시간 33분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1918" data-id="blackwood-the-garden-of-survival" data-title="The Garden of Survival" data-ko="살아남은 정원" data-mins="93"
+ data-form="novella" style="--i:56">
+<a class="card__link" href="#/w/blackwood-the-garden-of-survival">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Garden of Survival</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1918</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">살아남은 정원</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>12.7만 자</span><b>&middot;</b><span>1시간 33분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1918" data-id="blackwood-the-promise-of-air" data-title="The Promise of Air" data-ko="공기의 약속" data-mins="269"
+ data-form="novel" style="--i:57">
+<a class="card__link" href="#/w/blackwood-the-promise-of-air">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Promise of Air</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1918</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">공기의 약속</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>36.4만 자</span><b>&middot;</b><span>4시간 29분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1918" data-id="wells-joan-and-peter" data-title="Joan and Peter" data-ko="조앤과 피터" data-mins="883"
- data-form="novel" style="--i:40">
+ data-form="novel" style="--i:58">
 <a class="card__link" href="#/w/wells-joan-and-peter">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Joan and Peter</h3>
@@ -1788,7 +2061,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1919" data-id="wells-the-undying-fire" data-title="The Undying Fire" data-ko="꺼지지 않는 불" data-mins="195"
- data-form="novel" style="--i:41">
+ data-form="novel" style="--i:59">
 <a class="card__link" href="#/w/wells-the-undying-fire">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Undying Fire</h3>
@@ -1801,10 +2074,10 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>26.2만 자</span><b>&middot;</b><span>3시간 15분</span></p>
  </div>
 </a></article>
-<div class="era" data-decade="1920" role="separator"><span class="era__n">1920</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">14편</span></div>
+<div class="era" data-decade="1920" role="separator"><span class="era__n">1920</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">16편</span></div>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="l"
  data-year="1920" data-id="fitzgerald-flappers-and-philosophers" data-title="Flappers and Philosophers" data-ko="말괄량이와 철학자들" data-mins="258"
- data-form="collection" style="--i:42">
+ data-form="collection" style="--i:60">
 <a class="card__link" href="#/w/fitzgerald-flappers-and-philosophers">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Flappers and Philosophers</h3>
@@ -1819,7 +2092,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1920" data-id="fitzgerald-this-side-of-paradise" data-title="This Side of Paradise" data-ko="낙원의 이쪽" data-mins="340"
- data-form="novel" style="--i:43">
+ data-form="novel" style="--i:61">
 <a class="card__link" href="#/w/fitzgerald-this-side-of-paradise">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">This Side of Paradise</h3>
@@ -1832,9 +2105,39 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>52만 자</span><b>&middot;</b><span>5시간 40분</span></p>
  </div>
 </a></article>
+<article class="card" data-author="blackwood" data-decade="1920" data-len="m"
+ data-year="1921" data-id="blackwood-the-bright-messenger" data-title="The Bright Messenger" data-ko="빛나는 전령" data-mins="505"
+ data-form="novel" style="--i:62">
+<a class="card__link" href="#/w/blackwood-the-bright-messenger">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Bright Messenger</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1921</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">빛나는 전령</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>70.3만 자</span><b>&middot;</b><span>8시간 25분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1920" data-len="m"
+ data-year="1921" data-id="blackwood-the-wolves-of-god-and-other-fey-stories" data-title="The Wolves of God and Other Fey Stories" data-ko="신의 늑대들 외" data-mins="437"
+ data-form="collection" style="--i:63">
+<a class="card__link" href="#/w/blackwood-the-wolves-of-god-and-other-fey-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wolves of God<span class="sub">and Other Fey Stories</span></h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1921</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">신의 늑대들 외</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 17분</span></p>
+ </div>
+</a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1922" data-id="fitzgerald-tales-of-the-jazz-age" data-title="Tales of the Jazz Age" data-ko="재즈 시대의 이야기들" data-mins="368"
- data-form="collection" style="--i:44">
+ data-form="collection" style="--i:64">
 <a class="card__link" href="#/w/fitzgerald-tales-of-the-jazz-age">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tales of the Jazz Age</h3>
@@ -1849,7 +2152,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1922" data-id="fitzgerald-the-beautiful-and-damned" data-title="The Beautiful and Damned" data-ko="아름답고 저주받은 사람들" data-mins="525"
- data-form="novel" style="--i:45">
+ data-form="novel" style="--i:65">
 <a class="card__link" href="#/w/fitzgerald-the-beautiful-and-damned">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Beautiful and Damned</h3>
@@ -1864,7 +2167,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="m"
  data-year="1922" data-id="wells-tales-of-the-unexpected" data-title="Tales of the Unexpected" data-ko="뜻밖의 이야기들" data-mins="363"
- data-form="collection" style="--i:46">
+ data-form="collection" style="--i:66">
 <a class="card__link" href="#/w/wells-tales-of-the-unexpected">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tales of the Unexpected</h3>
@@ -1879,7 +2182,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
  data-year="1922" data-id="wells-the-secret-places-of-the-heart" data-title="The Secret Places of the Heart" data-ko="마음의 은밀한 곳" data-mins="268"
- data-form="novel" style="--i:47">
+ data-form="novel" style="--i:67">
 <a class="card__link" href="#/w/wells-the-secret-places-of-the-heart">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Secret Places of the Heart</h3>
@@ -1894,7 +2197,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="s"
  data-year="1923" data-id="fitzgerald-the-vegetable" data-title="The Vegetable" data-ko="채소 — 대통령에서 집배원으로" data-mins="113"
- data-form="play" style="--i:48">
+ data-form="play" style="--i:68">
 <a class="card__link" href="#/w/fitzgerald-the-vegetable">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Vegetable</h3>
@@ -1909,7 +2212,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="s"
  data-year="1924" data-id="wells-the-dream" data-title="The Dream" data-ko="꿈" data-mins="359"
- data-form="novel" style="--i:49">
+ data-form="novel" style="--i:69">
 <a class="card__link" href="#/w/wells-the-dream">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Dream</h3>
@@ -1924,7 +2227,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1925" data-id="fitzgerald-the-great-gatsby" data-title="The Great Gatsby" data-ko="위대한 개츠비" data-mins="202"
- data-form="novel" style="--i:50">
+ data-form="novel" style="--i:70">
 <a class="card__link" href="#/w/fitzgerald-the-great-gatsby">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Great Gatsby</h3>
@@ -1939,7 +2242,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
  data-year="1925" data-id="kafka-the-trial" data-title="The Trial" data-ko="소송" data-mins="351"
- data-form="novel" style="--i:51">
+ data-form="novel" style="--i:71">
 <a class="card__link" href="#/w/kafka-the-trial">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Trial</h3>
@@ -1954,7 +2257,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
  data-year="1925" data-id="wells-christina-albertas-father" data-title="Christina Albertas Father" data-ko="크리스티나 앨버타의 아버지" data-mins="504"
- data-form="novel" style="--i:52">
+ data-form="novel" style="--i:72">
 <a class="card__link" href="#/w/wells-christina-albertas-father">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Christina Albertas Father</h3>
@@ -1969,7 +2272,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1926" data-id="fitzgerald-all-the-sad-young-men" data-title="All the Sad Young Men" data-ko="모든 슬픈 젊은이들" data-mins="269"
- data-form="collection" style="--i:53">
+ data-form="collection" style="--i:73">
 <a class="card__link" href="#/w/fitzgerald-all-the-sad-young-men">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">All the Sad Young Men</h3>
@@ -1984,7 +2287,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
  data-year="1926" data-id="kafka-the-castle" data-title="The Castle" data-ko="성" data-mins="407"
- data-form="novel" style="--i:54">
+ data-form="novel" style="--i:74">
 <a class="card__link" href="#/w/kafka-the-castle">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Castle</h3>
@@ -1999,7 +2302,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="harbou" data-decade="1920" data-len="s"
  data-year="1926" data-id="harbou-metropolis" data-title="Metropolis" data-ko="메트로폴리스" data-mins="300"
- data-form="novel" style="--i:55">
+ data-form="novel" style="--i:75">
 <a class="card__link" href="#/w/harbou-metropolis">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/><path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Metropolis</h3>
@@ -2015,7 +2318,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <div class="era" data-decade="1930" role="separator"><span class="era__n">1930</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">4편</span></div>
 <article class="card" data-author="kafka" data-decade="1930" data-len="l"
  data-year="1931" data-id="kafka-the-knock-at-the-manor-gate" data-title="The Knock at the Manor Gate" data-ko="저택 대문을 두드리다" data-mins="2"
- data-form="story" style="--i:56">
+ data-form="story" style="--i:76">
 <a class="card__link" href="#/w/kafka-the-knock-at-the-manor-gate">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Knock at the Manor Gate</h3>
@@ -2030,7 +2333,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-give-it-up" data-title="Give It Up" data-ko="단념해라!" data-mins="1"
- data-form="story" style="--i:57">
+ data-form="story" style="--i:77">
 <a class="card__link" href="#/w/kafka-give-it-up">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Give It Up</h3>
@@ -2045,7 +2348,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-poseidon" data-title="Poseidon" data-ko="포세이돈" data-mins="2"
- data-form="story" style="--i:58">
+ data-form="story" style="--i:78">
 <a class="card__link" href="#/w/kafka-poseidon">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Poseidon</h3>
@@ -2060,7 +2363,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-the-helmsman" data-title="The Helmsman" data-ko="키잡이" data-mins="1"
- data-form="story" style="--i:59">
+ data-form="story" style="--i:79">
 <a class="card__link" href="#/w/kafka-the-helmsman">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Helmsman</h3>
@@ -2073,10 +2376,10 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>1,166자</span><b>&middot;</b><span>1분</span></p>
  </div>
 </a></article></main>
-<div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav"><button class="authnav__b" data-go="kafka">프란츠 카프카<span>7</span></button><button class="authnav__b" data-go="wells">H. G. 웰스<span>45</span></button><button class="authnav__b" data-go="fitzgerald">F. 스콧 피츠제럴드<span>7</span></button><button class="authnav__b" data-go="harbou">테아 폰 하르부<span>1</span></button></nav><header class="plate" data-author="kafka"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg></span><div class="plate__id"><h2>Franz Kafka</h2><p>1883–1924 &middot; 7편 &middot; 1915–1936</p><p class="plate__note">프라하의 보험국 직원이자, 20세기 문학을 다시 쓴 모더니즘의 중심.</p></div><i class="rule plate__rule"></i></header>
+<div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav"><button class="authnav__b" data-go="kafka">프란츠 카프카<span>7</span></button><button class="authnav__b" data-go="wells">H. G. 웰스<span>45</span></button><button class="authnav__b" data-go="fitzgerald">F. 스콧 피츠제럴드<span>7</span></button><button class="authnav__b" data-go="harbou">테아 폰 하르부<span>1</span></button><button class="authnav__b" data-go="blackwood">앨저넌 블랙우드<span>20</span></button></nav><header class="plate" data-author="kafka"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg></span><div class="plate__id"><h2>Franz Kafka</h2><p>1883–1924 &middot; 7편 &middot; 1915–1936</p><p class="plate__note">프라하의 보험국 직원이자, 20세기 문학을 다시 쓴 모더니즘의 중심.</p></div><i class="rule plate__rule"></i></header>
 <article class="card" data-author="kafka" data-decade="1910" data-len="m"
  data-year="1915" data-id="kafka-the-metamorphosis" data-title="The Metamorphosis" data-ko="변신" data-mins="92"
- data-form="novella" style="--i:60">
+ data-form="novella" style="--i:80">
 <a class="card__link" href="#/w/kafka-the-metamorphosis">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Metamorphosis</h3>
@@ -2091,7 +2394,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
  data-year="1925" data-id="kafka-the-trial" data-title="The Trial" data-ko="소송" data-mins="351"
- data-form="novel" style="--i:61">
+ data-form="novel" style="--i:81">
 <a class="card__link" href="#/w/kafka-the-trial">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Trial</h3>
@@ -2106,7 +2409,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
  data-year="1926" data-id="kafka-the-castle" data-title="The Castle" data-ko="성" data-mins="407"
- data-form="novel" style="--i:62">
+ data-form="novel" style="--i:82">
 <a class="card__link" href="#/w/kafka-the-castle">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Castle</h3>
@@ -2121,7 +2424,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="l"
  data-year="1931" data-id="kafka-the-knock-at-the-manor-gate" data-title="The Knock at the Manor Gate" data-ko="저택 대문을 두드리다" data-mins="2"
- data-form="story" style="--i:63">
+ data-form="story" style="--i:83">
 <a class="card__link" href="#/w/kafka-the-knock-at-the-manor-gate">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Knock at the Manor Gate</h3>
@@ -2136,7 +2439,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-give-it-up" data-title="Give It Up" data-ko="단념해라!" data-mins="1"
- data-form="story" style="--i:64">
+ data-form="story" style="--i:84">
 <a class="card__link" href="#/w/kafka-give-it-up">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Give It Up</h3>
@@ -2151,7 +2454,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-poseidon" data-title="Poseidon" data-ko="포세이돈" data-mins="2"
- data-form="story" style="--i:65">
+ data-form="story" style="--i:85">
 <a class="card__link" href="#/w/kafka-poseidon">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Poseidon</h3>
@@ -2166,7 +2469,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
  data-year="1936" data-id="kafka-the-helmsman" data-title="The Helmsman" data-ko="키잡이" data-mins="1"
- data-form="story" style="--i:66">
+ data-form="story" style="--i:86">
 <a class="card__link" href="#/w/kafka-the-helmsman">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Helmsman</h3>
@@ -2182,7 +2485,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <header class="plate" data-author="wells"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg></span><div class="plate__id"><h2>H. G. Wells</h2><p>1866–1946 &middot; 45편 &middot; 1895–1925</p><p class="plate__note">과학소설의 설계자. 사회소설과 미래사를 같은 손으로 썬 사람.</p></div><i class="rule plate__rule"></i></header>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
  data-year="1895" data-id="wells-select-conversations-with-an-uncle" data-title="Select Conversations with an Uncle" data-ko="삼촌과 나눈 대화 몇 토막" data-mins="79"
- data-form="collection" style="--i:67">
+ data-form="collection" style="--i:87">
 <a class="card__link" href="#/w/wells-select-conversations-with-an-uncle">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Select Conversations with an Uncle</h3>
@@ -2197,7 +2500,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1895" data-id="wells-the-stolen-bacillus-and-other-incidents" data-title="The Stolen Bacillus and Other Incidents" data-ko="도난당한 세균 외" data-mins="235"
- data-form="collection" style="--i:68">
+ data-form="collection" style="--i:88">
 <a class="card__link" href="#/w/wells-the-stolen-bacillus-and-other-incidents">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Stolen Bacillus<span class="sub">and Other Incidents</span></h3>
@@ -2212,7 +2515,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1895" data-id="wells-the-time-machine" data-title="The Time Machine" data-ko="타임머신" data-mins="136"
- data-form="novel" style="--i:69">
+ data-form="novel" style="--i:89">
 <a class="card__link" href="#/w/wells-the-time-machine">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Time Machine</h3>
@@ -2227,7 +2530,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1895" data-id="wells-the-wonderful-visit" data-title="The Wonderful Visit" data-ko="놀라운 방문" data-mins="162"
- data-form="novel" style="--i:70">
+ data-form="novel" style="--i:90">
 <a class="card__link" href="#/w/wells-the-wonderful-visit">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Wonderful Visit</h3>
@@ -2242,7 +2545,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
  data-year="1896" data-id="wells-the-island-of-doctor-moreau" data-title="The Island of Doctor Moreau" data-ko="모로 박사의 섬" data-mins="184"
- data-form="novel" style="--i:71">
+ data-form="novel" style="--i:91">
 <a class="card__link" href="#/w/wells-the-island-of-doctor-moreau">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Island of Doctor Moreau</h3>
@@ -2257,7 +2560,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
  data-year="1896" data-id="wells-the-red-room" data-title="The Red Room" data-ko="붉은 방" data-mins="17"
- data-form="story" style="--i:72">
+ data-form="story" style="--i:92">
 <a class="card__link" href="#/w/wells-the-red-room">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Red Room</h3>
@@ -2272,7 +2575,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1896" data-id="wells-the-wheels-of-chance" data-title="The Wheels of Chance" data-ko="우연의 수레바퀴" data-mins="234"
- data-form="novel" style="--i:73">
+ data-form="novel" style="--i:93">
 <a class="card__link" href="#/w/wells-the-wheels-of-chance">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Wheels of Chance</h3>
@@ -2287,7 +2590,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1897" data-id="wells-the-invisible-man" data-title="The Invisible Man" data-ko="투명인간" data-mins="204"
- data-form="novel" style="--i:74">
+ data-form="novel" style="--i:94">
 <a class="card__link" href="#/w/wells-the-invisible-man">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Invisible Man</h3>
@@ -2302,7 +2605,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
  data-year="1897" data-id="wells-the-plattner-story-and-others" data-title="The Plattner Story and Others" data-ko="플래트너 이야기 외" data-mins="330"
- data-form="collection" style="--i:75">
+ data-form="collection" style="--i:95">
 <a class="card__link" href="#/w/wells-the-plattner-story-and-others">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Plattner Story and Others</h3>
@@ -2317,7 +2620,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
  data-year="1897" data-id="wells-the-star" data-title="The Star" data-ko="별" data-mins="18"
- data-form="story" style="--i:76">
+ data-form="story" style="--i:96">
 <a class="card__link" href="#/w/wells-the-star">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Star</h3>
@@ -2332,7 +2635,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1897" data-id="wells-thirty-strange-stories" data-title="Thirty Strange Stories" data-ko="기묘한 이야기 서른 편" data-mins="487"
- data-form="collection" style="--i:77">
+ data-form="collection" style="--i:97">
 <a class="card__link" href="#/w/wells-thirty-strange-stories">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Thirty Strange Stories</h3>
@@ -2347,7 +2650,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1898" data-id="wells-the-war-of-the-worlds" data-title="The War of the Worlds" data-ko="우주 전쟁" data-mins="252"
- data-form="novel" style="--i:78">
+ data-form="novel" style="--i:98">
 <a class="card__link" href="#/w/wells-the-war-of-the-worlds">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The War of the Worlds</h3>
@@ -2362,7 +2665,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1899" data-id="wells-tales-of-space-and-time" data-title="Tales of Space and Time" data-ko="공간과 시간의 이야기" data-mins="307"
- data-form="collection" style="--i:79">
+ data-form="collection" style="--i:99">
 <a class="card__link" href="#/w/wells-tales-of-space-and-time">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tales of Space and Time</h3>
@@ -2377,7 +2680,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
  data-year="1899" data-id="wells-when-the-sleeper-wakes" data-title="When the Sleeper Wakes" data-ko="잠자는 자가 깨어날 때" data-mins="345"
- data-form="novel" style="--i:80">
+ data-form="novel" style="--i:100">
 <a class="card__link" href="#/w/wells-when-the-sleeper-wakes">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">When the Sleeper Wakes</h3>
@@ -2392,7 +2695,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1900" data-id="wells-love-and-mr-lewisham" data-title="Love and Mr Lewisham" data-ko="사랑과 루이셤 씨" data-mins="275"
- data-form="novel" style="--i:81">
+ data-form="novel" style="--i:101">
 <a class="card__link" href="#/w/wells-love-and-mr-lewisham">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Love and Mr Lewisham</h3>
@@ -2407,7 +2710,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="l"
  data-year="1901" data-id="wells-the-first-men-in-the-moon" data-title="The First Men in the Moon" data-ko="달 세계 최초의 인간" data-mins="287"
- data-form="novel" style="--i:82">
+ data-form="novel" style="--i:102">
 <a class="card__link" href="#/w/wells-the-first-men-in-the-moon">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The First Men in the Moon</h3>
@@ -2422,7 +2725,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1902" data-id="wells-the-sea-lady" data-title="The Sea Lady" data-ko="바다 아가씨" data-mins="168"
- data-form="novel" style="--i:83">
+ data-form="novel" style="--i:103">
 <a class="card__link" href="#/w/wells-the-sea-lady">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Sea Lady</h3>
@@ -2437,7 +2740,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1903" data-id="wells-twelve-stories-and-a-dream" data-title="Twelve Stories and a Dream" data-ko="열두 편의 이야기와 꿈 하나" data-mins="309"
- data-form="collection" style="--i:84">
+ data-form="collection" style="--i:104">
 <a class="card__link" href="#/w/wells-twelve-stories-and-a-dream">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Twelve Stories<span class="sub">and a Dream</span></h3>
@@ -2452,7 +2755,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1904" data-id="wells-the-food-of-the-gods" data-title="The Food of the Gods" data-ko="신들의 양식" data-mins="314"
- data-form="novel" style="--i:85">
+ data-form="novel" style="--i:105">
 <a class="card__link" href="#/w/wells-the-food-of-the-gods">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Food of the Gods</h3>
@@ -2467,7 +2770,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1905" data-id="wells-a-modern-utopia" data-title="A Modern Utopia" data-ko="현대의 유토피아" data-mins="391"
- data-form="essay-novel" style="--i:86">
+ data-form="essay-novel" style="--i:106">
 <a class="card__link" href="#/w/wells-a-modern-utopia">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">A Modern Utopia</h3>
@@ -2482,7 +2785,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1905" data-id="wells-kipps" data-title="Kipps" data-ko="킵스" data-mins="466"
- data-form="novel" style="--i:87">
+ data-form="novel" style="--i:107">
 <a class="card__link" href="#/w/wells-kipps">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Kipps</h3>
@@ -2497,7 +2800,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1906" data-id="wells-in-the-days-of-the-comet" data-title="In the Days of the Comet" data-ko="혜성의 날들" data-mins="338"
- data-form="novel" style="--i:88">
+ data-form="novel" style="--i:108">
 <a class="card__link" href="#/w/wells-in-the-days-of-the-comet">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">In the Days of the Comet</h3>
@@ -2512,7 +2815,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
  data-year="1908" data-id="wells-the-war-in-the-air" data-title="The War in the Air" data-ko="공중전" data-mins="411"
- data-form="novel" style="--i:89">
+ data-form="novel" style="--i:109">
 <a class="card__link" href="#/w/wells-the-war-in-the-air">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The War in the Air</h3>
@@ -2527,7 +2830,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1909" data-id="wells-ann-veronica" data-title="Ann Veronica" data-ko="앤 베로니카" data-mins="407"
- data-form="novel" style="--i:90">
+ data-form="novel" style="--i:110">
 <a class="card__link" href="#/w/wells-ann-veronica">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Ann Veronica</h3>
@@ -2542,7 +2845,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
  data-year="1909" data-id="wells-tono-bungay" data-title="Tono-Bungay" data-ko="토노번게이" data-mins="562"
- data-form="novel" style="--i:91">
+ data-form="novel" style="--i:111">
 <a class="card__link" href="#/w/wells-tono-bungay">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tono-Bungay</h3>
@@ -2557,7 +2860,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1910" data-id="wells-the-history-of-mr-polly" data-title="The History of Mr Polly" data-ko="폴리 씨의 일대기" data-mins="289"
- data-form="novel" style="--i:92">
+ data-form="novel" style="--i:112">
 <a class="card__link" href="#/w/wells-the-history-of-mr-polly">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The History of Mr Polly</h3>
@@ -2572,7 +2875,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1910" data-id="wells-the-sleeper-awakes" data-title="The Sleeper Awakes" data-ko="잠든 자 깨어나다" data-mins="320"
- data-form="novel" style="--i:93">
+ data-form="novel" style="--i:113">
 <a class="card__link" href="#/w/wells-the-sleeper-awakes">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Sleeper Awakes</h3>
@@ -2587,7 +2890,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-country-of-the-blind-and-other-stories" data-title="The Country of the Blind and Other Stories" data-ko="눈먼 자들의 나라 외" data-mins="678"
- data-form="collection" style="--i:94">
+ data-form="collection" style="--i:114">
 <a class="card__link" href="#/w/wells-the-country-of-the-blind-and-other-stories">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Country of the Blind<span class="sub">and Other Stories</span></h3>
@@ -2602,7 +2905,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-door-in-the-wall-and-other-stories" data-title="The Door in the Wall and Other Stories" data-ko="담장 속의 문 외" data-mins="181"
- data-form="collection" style="--i:95">
+ data-form="collection" style="--i:115">
 <a class="card__link" href="#/w/wells-the-door-in-the-wall-and-other-stories">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Door in the Wall<span class="sub">and Other Stories</span></h3>
@@ -2617,7 +2920,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1911" data-id="wells-the-new-machiavelli" data-title="The New Machiavelli" data-ko="새로운 마키아벨리" data-mins="609"
- data-form="novel" style="--i:96">
+ data-form="novel" style="--i:116">
 <a class="card__link" href="#/w/wells-the-new-machiavelli">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The New Machiavelli</h3>
@@ -2632,7 +2935,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1912" data-id="wells-marriage" data-title="Marriage" data-ko="결혼" data-mins="623"
- data-form="novel" style="--i:97">
+ data-form="novel" style="--i:117">
 <a class="card__link" href="#/w/wells-marriage">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Marriage</h3>
@@ -2647,7 +2950,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1913" data-id="wells-the-passionate-friends" data-title="The Passionate Friends" data-ko="열정적인 친구들" data-mins="439"
- data-form="novel" style="--i:98">
+ data-form="novel" style="--i:118">
 <a class="card__link" href="#/w/wells-the-passionate-friends">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Passionate Friends</h3>
@@ -2662,7 +2965,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
  data-year="1914" data-id="wells-the-wife-of-sir-isaac-harman" data-title="The Wife of Sir Isaac Harman" data-ko="아이작 하먼 경의 아내" data-mins="540"
- data-form="novel" style="--i:99">
+ data-form="novel" style="--i:119">
 <a class="card__link" href="#/w/wells-the-wife-of-sir-isaac-harman">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Wife of Sir Isaac Harman</h3>
@@ -2677,7 +2980,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1914" data-id="wells-the-world-set-free" data-title="The World Set Free" data-ko="해방된 세계" data-mins="275"
- data-form="novel" style="--i:100">
+ data-form="novel" style="--i:120">
 <a class="card__link" href="#/w/wells-the-world-set-free">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The World Set Free</h3>
@@ -2692,7 +2995,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1915" data-id="wells-bealby" data-title="Bealby" data-ko="빌비" data-mins="288"
- data-form="novel" style="--i:101">
+ data-form="novel" style="--i:121">
 <a class="card__link" href="#/w/wells-bealby">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Bealby</h3>
@@ -2707,7 +3010,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1915" data-id="wells-boon" data-title="Boon" data-ko="분" data-mins="201"
- data-form="miscellany" style="--i:102">
+ data-form="miscellany" style="--i:122">
 <a class="card__link" href="#/w/wells-boon">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Boon</h3>
@@ -2722,7 +3025,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1915" data-id="wells-the-research-magnificent" data-title="The Research Magnificent" data-ko="위대한 탐구" data-mins="466"
- data-form="novel" style="--i:103">
+ data-form="novel" style="--i:123">
 <a class="card__link" href="#/w/wells-the-research-magnificent">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Research Magnificent</h3>
@@ -2737,7 +3040,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
  data-year="1916" data-id="wells-mr-britling-sees-it-through" data-title="Mr Britling Sees It Through" data-ko="브리틀링 씨, 끝까지 지켜보다" data-mins="588"
- data-form="novel" style="--i:104">
+ data-form="novel" style="--i:124">
 <a class="card__link" href="#/w/wells-mr-britling-sees-it-through">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Mr Britling Sees It Through</h3>
@@ -2752,7 +3055,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1917" data-id="wells-the-soul-of-a-bishop" data-title="The Soul of a Bishop" data-ko="주교의 영혼" data-mins="333"
- data-form="novel" style="--i:105">
+ data-form="novel" style="--i:125">
 <a class="card__link" href="#/w/wells-the-soul-of-a-bishop">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Soul of a Bishop</h3>
@@ -2767,7 +3070,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
  data-year="1918" data-id="wells-joan-and-peter" data-title="Joan and Peter" data-ko="조앤과 피터" data-mins="883"
- data-form="novel" style="--i:106">
+ data-form="novel" style="--i:126">
 <a class="card__link" href="#/w/wells-joan-and-peter">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Joan and Peter</h3>
@@ -2782,7 +3085,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
  data-year="1919" data-id="wells-the-undying-fire" data-title="The Undying Fire" data-ko="꺼지지 않는 불" data-mins="195"
- data-form="novel" style="--i:107">
+ data-form="novel" style="--i:127">
 <a class="card__link" href="#/w/wells-the-undying-fire">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Undying Fire</h3>
@@ -2797,7 +3100,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="m"
  data-year="1922" data-id="wells-tales-of-the-unexpected" data-title="Tales of the Unexpected" data-ko="뜻밖의 이야기들" data-mins="363"
- data-form="collection" style="--i:108">
+ data-form="collection" style="--i:128">
 <a class="card__link" href="#/w/wells-tales-of-the-unexpected">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tales of the Unexpected</h3>
@@ -2812,7 +3115,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
  data-year="1922" data-id="wells-the-secret-places-of-the-heart" data-title="The Secret Places of the Heart" data-ko="마음의 은밀한 곳" data-mins="268"
- data-form="novel" style="--i:109">
+ data-form="novel" style="--i:129">
 <a class="card__link" href="#/w/wells-the-secret-places-of-the-heart">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Secret Places of the Heart</h3>
@@ -2827,7 +3130,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="s"
  data-year="1924" data-id="wells-the-dream" data-title="The Dream" data-ko="꿈" data-mins="359"
- data-form="novel" style="--i:110">
+ data-form="novel" style="--i:130">
 <a class="card__link" href="#/w/wells-the-dream">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Dream</h3>
@@ -2842,7 +3145,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
  data-year="1925" data-id="wells-christina-albertas-father" data-title="Christina Albertas Father" data-ko="크리스티나 앨버타의 아버지" data-mins="504"
- data-form="novel" style="--i:111">
+ data-form="novel" style="--i:131">
 <a class="card__link" href="#/w/wells-christina-albertas-father">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Christina Albertas Father</h3>
@@ -2858,7 +3161,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <header class="plate" data-author="fitzgerald"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>F. Scott Fitzgerald</h2><p>1896–1940 &middot; 7편 &middot; 1920–1926</p><p class="plate__note">재즈 시대의 기록자이자 그 시대에 가장 깊이 베인 사람.</p></div><i class="rule plate__rule"></i></header>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="l"
  data-year="1920" data-id="fitzgerald-flappers-and-philosophers" data-title="Flappers and Philosophers" data-ko="말괄량이와 철학자들" data-mins="258"
- data-form="collection" style="--i:112">
+ data-form="collection" style="--i:132">
 <a class="card__link" href="#/w/fitzgerald-flappers-and-philosophers">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Flappers and Philosophers</h3>
@@ -2873,7 +3176,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1920" data-id="fitzgerald-this-side-of-paradise" data-title="This Side of Paradise" data-ko="낙원의 이쪽" data-mins="340"
- data-form="novel" style="--i:113">
+ data-form="novel" style="--i:133">
 <a class="card__link" href="#/w/fitzgerald-this-side-of-paradise">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">This Side of Paradise</h3>
@@ -2888,7 +3191,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1922" data-id="fitzgerald-tales-of-the-jazz-age" data-title="Tales of the Jazz Age" data-ko="재즈 시대의 이야기들" data-mins="368"
- data-form="collection" style="--i:114">
+ data-form="collection" style="--i:134">
 <a class="card__link" href="#/w/fitzgerald-tales-of-the-jazz-age">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Tales of the Jazz Age</h3>
@@ -2903,7 +3206,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1922" data-id="fitzgerald-the-beautiful-and-damned" data-title="The Beautiful and Damned" data-ko="아름답고 저주받은 사람들" data-mins="525"
- data-form="novel" style="--i:115">
+ data-form="novel" style="--i:135">
 <a class="card__link" href="#/w/fitzgerald-the-beautiful-and-damned">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Beautiful and Damned</h3>
@@ -2918,7 +3221,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="s"
  data-year="1923" data-id="fitzgerald-the-vegetable" data-title="The Vegetable" data-ko="채소 — 대통령에서 집배원으로" data-mins="113"
- data-form="play" style="--i:116">
+ data-form="play" style="--i:136">
 <a class="card__link" href="#/w/fitzgerald-the-vegetable">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Vegetable</h3>
@@ -2933,7 +3236,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1925" data-id="fitzgerald-the-great-gatsby" data-title="The Great Gatsby" data-ko="위대한 개츠비" data-mins="202"
- data-form="novel" style="--i:117">
+ data-form="novel" style="--i:137">
 <a class="card__link" href="#/w/fitzgerald-the-great-gatsby">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">The Great Gatsby</h3>
@@ -2948,7 +3251,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
  data-year="1926" data-id="fitzgerald-all-the-sad-young-men" data-title="All the Sad Young Men" data-ko="모든 슬픈 젊은이들" data-mins="269"
- data-form="collection" style="--i:118">
+ data-form="collection" style="--i:138">
 <a class="card__link" href="#/w/fitzgerald-all-the-sad-young-men">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">All the Sad Young Men</h3>
@@ -2964,7 +3267,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <header class="plate" data-author="harbou"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/><path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Thea von Harbou</h2><p>1888–1954 &middot; 1편 &middot; 1926–1926</p><p class="plate__note">『메트로폴리스』의 소설가이자 각본가.</p></div><i class="rule plate__rule"></i></header>
 <article class="card" data-author="harbou" data-decade="1920" data-len="s"
  data-year="1926" data-id="harbou-metropolis" data-title="Metropolis" data-ko="메트로폴리스" data-mins="300"
- data-form="novel" style="--i:119">
+ data-form="novel" style="--i:139">
 <a class="card__link" href="#/w/harbou-metropolis">
  <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/><path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
   <h3 class="cover__title">Metropolis</h3>
@@ -2977,7 +3280,308 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p class="cap"><span class="cap__pct"></span><span>40.7만 자</span><b>&middot;</b><span>5시간 0분</span></p>
  </div>
 </a></article>
-<p class="solo">단 한 편.<br><i>Metropolis</i>, 1926년 — 이 서재에서 유일한 독일어권 작가의 작품입니다.</p></div>
+<p class="solo">단 한 편.<br><i>Metropolis</i>, 1926년 — 이 서재에서 유일한 독일어권 작가의 작품입니다.</p>
+<header class="plate" data-author="blackwood"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Algernon Blackwood</h2><p>1869–1951 &middot; 20편 &middot; 1906–1921</p><p class="plate__note">숲과 눈과 바람 속에서 사람보다 큰 것을 느낀 괴기소설가. 러브크래프트가 스승으로 꼽은 사람.</p></div><i class="rule plate__rule"></i></header>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="m"
+ data-year="1906" data-id="blackwood-the-empty-house-and-other-ghost-stories" data-title="The Empty House and Other Ghost Stories" data-ko="빈집 외 유령 이야기" data-mins="281"
+ data-form="collection" style="--i:140">
+<a class="card__link" href="#/w/blackwood-the-empty-house-and-other-ghost-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Empty House<span class="sub">and Other Ghost Stories</span></h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1906</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">빈집 외 유령 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="s"
+ data-year="1907" data-id="blackwood-the-willows" data-title="The Willows" data-ko="버드나무" data-mins="82"
+ data-form="novella" style="--i:141">
+<a class="card__link" href="#/w/blackwood-the-willows">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Willows</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1907</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">버드나무</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="l"
+ data-year="1908" data-id="blackwood-john-silence-physician-extraordinary" data-title="John Silence, Physician Extraordinary" data-ko="특별한 의사 존 사일런스" data-mins="450"
+ data-form="collection" style="--i:142">
+<a class="card__link" href="#/w/blackwood-john-silence-physician-extraordinary">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">John Silence, Physician Extraordinary</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1908</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">특별한 의사 존 사일런스</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="s"
+ data-year="1909" data-id="blackwood-jimbo" data-title="Jimbo" data-ko="짐보" data-mins="206"
+ data-form="novel" style="--i:143">
+<a class="card__link" href="#/w/blackwood-jimbo">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Jimbo</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1909</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">짐보</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>27.4만 자</span><b>&middot;</b><span>3시간 26분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1900" data-len="l"
+ data-year="1909" data-id="blackwood-the-education-of-uncle-paul" data-title="The Education of Uncle Paul" data-ko="폴 삼촌의 교육" data-mins="329"
+ data-form="novel" style="--i:144">
+<a class="card__link" href="#/w/blackwood-the-education-of-uncle-paul">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Education of Uncle Paul</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1909</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">폴 삼촌의 교육</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>44.2만 자</span><b>&middot;</b><span>5시간 29분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1910" data-id="blackwood-the-human-chord" data-title="The Human Chord" data-ko="인간 화음" data-mins="246"
+ data-form="novel" style="--i:145">
+<a class="card__link" href="#/w/blackwood-the-human-chord">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Human Chord</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">인간 화음</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>33.9만 자</span><b>&middot;</b><span>4시간 6분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1910" data-id="blackwood-the-wendigo" data-title="The Wendigo" data-ko="웬디고" data-mins="78"
+ data-form="novella" style="--i:146">
+<a class="card__link" href="#/w/blackwood-the-wendigo">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wendigo</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">웬디고</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1911" data-id="blackwood-the-centaur" data-title="The Centaur" data-ko="켄타우로스" data-mins="382"
+ data-form="novel" style="--i:147">
+<a class="card__link" href="#/w/blackwood-the-centaur">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Centaur</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1911</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">켄타우로스</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1912" data-id="blackwood-pan-s-garden" data-title="Pan&#x27;s Garden" data-ko="판의 정원" data-mins="541"
+ data-form="collection" style="--i:148">
+<a class="card__link" href="#/w/blackwood-pan-s-garden">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Pan&#x27;s Garden</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1912</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">판의 정원</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>74만 자</span><b>&middot;</b><span>9시간 1분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1913" data-id="blackwood-a-prisoner-in-fairyland" data-title="A Prisoner in Fairyland" data-ko="요정 나라의 포로" data-mins="587"
+ data-form="novel" style="--i:149">
+<a class="card__link" href="#/w/blackwood-a-prisoner-in-fairyland">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">A Prisoner in Fairyland</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1913</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">요정 나라의 포로</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>79.1만 자</span><b>&middot;</b><span>9시간 47분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1914" data-id="blackwood-incredible-adventures" data-title="Incredible Adventures" data-ko="믿기 힘든 모험들" data-mins="441"
+ data-form="collection" style="--i:150">
+<a class="card__link" href="#/w/blackwood-incredible-adventures">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Incredible Adventures</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1914</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">믿기 힘든 모험들</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>60만 자</span><b>&middot;</b><span>7시간 21분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1914" data-id="blackwood-ten-minute-stories" data-title="Ten Minute Stories" data-ko="10분 이야기" data-mins="263"
+ data-form="collection" style="--i:151">
+<a class="card__link" href="#/w/blackwood-ten-minute-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Ten Minute Stories</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1914</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">10분 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>36만 자</span><b>&middot;</b><span>4시간 23분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1915" data-id="blackwood-the-extra-day" data-title="The Extra Day" data-ko="여분의 하루" data-mins="399"
+ data-form="novel" style="--i:152">
+<a class="card__link" href="#/w/blackwood-the-extra-day">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Extra Day</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1915</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">여분의 하루</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>54.5만 자</span><b>&middot;</b><span>6시간 39분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1916" data-id="blackwood-julius-levallon" data-title="Julius LeVallon" data-ko="줄리어스 르발롱" data-mins="450"
+ data-form="novel" style="--i:153">
+<a class="card__link" href="#/w/blackwood-julius-levallon">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Julius LeVallon</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1916</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">줄리어스 르발롱</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>61.5만 자</span><b>&middot;</b><span>7시간 30분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="s"
+ data-year="1916" data-id="blackwood-the-wave" data-title="The Wave" data-ko="파도" data-mins="490"
+ data-form="novel" style="--i:154">
+<a class="card__link" href="#/w/blackwood-the-wave">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wave</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1916</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">파도</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>66.4만 자</span><b>&middot;</b><span>8시간 10분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1917" data-id="blackwood-day-and-night-stories" data-title="Day and Night Stories" data-ko="낮과 밤의 이야기" data-mins="308"
+ data-form="collection" style="--i:155">
+<a class="card__link" href="#/w/blackwood-day-and-night-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">Day and Night Stories</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1917</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">낮과 밤의 이야기</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>41.7만 자</span><b>&middot;</b><span>5시간 8분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1918" data-id="blackwood-the-garden-of-survival" data-title="The Garden of Survival" data-ko="살아남은 정원" data-mins="93"
+ data-form="novella" style="--i:156">
+<a class="card__link" href="#/w/blackwood-the-garden-of-survival">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Garden of Survival</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1918</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">살아남은 정원</p>
+  <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>12.7만 자</span><b>&middot;</b><span>1시간 33분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1910" data-len="m"
+ data-year="1918" data-id="blackwood-the-promise-of-air" data-title="The Promise of Air" data-ko="공기의 약속" data-mins="269"
+ data-form="novel" style="--i:157">
+<a class="card__link" href="#/w/blackwood-the-promise-of-air">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Promise of Air</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1918</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">공기의 약속</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>36.4만 자</span><b>&middot;</b><span>4시간 29분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1920" data-len="m"
+ data-year="1921" data-id="blackwood-the-bright-messenger" data-title="The Bright Messenger" data-ko="빛나는 전령" data-mins="505"
+ data-form="novel" style="--i:158">
+<a class="card__link" href="#/w/blackwood-the-bright-messenger">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Bright Messenger</h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1921</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">빛나는 전령</p>
+  <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>70.3만 자</span><b>&middot;</b><span>8시간 25분</span></p>
+ </div>
+</a></article>
+<article class="card" data-author="blackwood" data-decade="1920" data-len="m"
+ data-year="1921" data-id="blackwood-the-wolves-of-god-and-other-fey-stories" data-title="The Wolves of God and Other Fey Stories" data-ko="신의 늑대들 외" data-mins="437"
+ data-form="collection" style="--i:159">
+<a class="card__link" href="#/w/blackwood-the-wolves-of-god-and-other-fey-stories">
+ <div class="cover"><i class="cover__frame"></i><svg class="cover__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg><i class="rule rule--head"></i>
+  <h3 class="cover__title">The Wolves of God<span class="sub">and Other Fey Stories</span></h3>
+  <i class="rule rule--foot"></i>
+  <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1921</p>
+  <span class="cover__ko" hidden></span></div>
+ <div class="mt">
+  <p class="mt__ko">신의 늑대들 외</p>
+  <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 17분</span></p>
+ </div>
+</a></article></div>
 <footer class="lib-foot">
   <p>모든 작품은 퍼블릭 도메인입니다. 출처 — <a href="https://www.gutenberg.org">Project Gutenberg</a>
      &middot; <a href="https://standardebooks.org">Standard Ebooks</a>
@@ -3041,7 +3645,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 </aside>
 <div id="palette"><div class="pl-box"><input class="pl-q" placeholder="작품 또는 작가 검색"><div class="pl-list"></div></div></div>
 
-<script>var MANIFEST=[{"id":"fitzgerald-flappers-and-philosophers","title":"Flappers and Philosophers","titleKo":"말괄량이와 철학자들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1920,"chars":347672,"minutes":258,"words":61840,"titleOrig":"","form":"collection"},{"id":"fitzgerald-this-side-of-paradise","title":"This Side of Paradise","titleKo":"낙원의 이쪽","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1920,"chars":519943,"minutes":340,"words":81647,"titleOrig":"","form":"novel"},{"id":"fitzgerald-tales-of-the-jazz-age","title":"Tales of the Jazz Age","titleKo":"재즈 시대의 이야기들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1922,"chars":497310,"minutes":368,"words":88271,"titleOrig":"","form":"collection"},{"id":"fitzgerald-the-beautiful-and-damned","title":"The Beautiful and Damned","titleKo":"아름답고 저주받은 사람들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1922,"chars":721529,"minutes":525,"words":126012,"titleOrig":"","form":"novel"},{"id":"fitzgerald-the-vegetable","title":"The Vegetable","titleKo":"채소 — 대통령에서 집배원으로","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1923,"chars":159343,"minutes":113,"words":27188,"titleOrig":"","form":"play"},{"id":"fitzgerald-the-great-gatsby","title":"The Great Gatsby","titleKo":"위대한 개츠비","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1925,"chars":270718,"minutes":202,"words":48381,"titleOrig":"","form":"novel"},{"id":"fitzgerald-all-the-sad-young-men","title":"All the Sad Young Men","titleKo":"모든 슬픈 젊은이들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1926,"chars":358287,"minutes":269,"words":64653,"titleOrig":"","form":"collection"},{"id":"harbou-metropolis","title":"Metropolis","titleKo":"메트로폴리스","author":"harbou","authorKo":"테아 폰 하르부","authorEn":"Thea von Harbou","year":1926,"chars":406503,"minutes":300,"words":71903,"titleOrig":"Metropolis","form":"novel"},{"id":"kafka-the-metamorphosis","title":"The Metamorphosis","titleKo":"변신","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1915,"chars":118416,"minutes":92,"words":21978,"titleOrig":"Die Verwandlung","form":"novella"},{"id":"kafka-the-trial","title":"The Trial","titleKo":"소송","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1925,"chars":449767,"minutes":351,"words":84327,"titleOrig":"Der Prozeß","form":"novel"},{"id":"kafka-the-castle","title":"The Castle","titleKo":"성","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1926,"chars":532973,"minutes":407,"words":97647,"titleOrig":"Das Schloß","form":"novel"},{"id":"kafka-the-knock-at-the-manor-gate","title":"The Knock at the Manor Gate","titleKo":"저택 대문을 두드리다","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1931,"chars":2934,"minutes":2,"words":539,"titleOrig":"Der Schlag ans Hoftor","form":"story"},{"id":"kafka-give-it-up","title":"Give It Up","titleKo":"단념해라!","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":680,"minutes":1,"words":135,"titleOrig":"Gibs auf!","form":"story"},{"id":"kafka-poseidon","title":"Poseidon","titleKo":"포세이돈","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":2468,"minutes":2,"words":439,"titleOrig":"Poseidon","form":"story"},{"id":"kafka-the-helmsman","title":"The Helmsman","titleKo":"키잡이","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":1166,"minutes":1,"words":218,"titleOrig":"Der Steuermann","form":"story"},{"id":"wells-select-conversations-with-an-uncle","title":"Select Conversations with an Uncle","titleKo":"삼촌과 나눈 대화 몇 토막","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":105344,"minutes":79,"words":18853,"titleOrig":"","form":"collection"},{"id":"wells-the-stolen-bacillus-and-other-incidents","title":"The Stolen Bacillus and Other Incidents","titleKo":"도난당한 세균 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":313377,"minutes":235,"words":56400,"titleOrig":"","form":"collection"},{"id":"wells-the-time-machine","title":"The Time Machine","titleKo":"타임머신","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":179699,"minutes":136,"words":32634,"titleOrig":"","form":"novel"},{"id":"wells-the-wonderful-visit","title":"The Wonderful Visit","titleKo":"놀라운 방문","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":219923,"minutes":162,"words":38765,"titleOrig":"","form":"novel"},{"id":"wells-the-island-of-doctor-moreau","title":"The Island of Doctor Moreau","titleKo":"모로 박사의 섬","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":241162,"minutes":184,"words":44141,"titleOrig":"","form":"novel"},{"id":"wells-the-red-room","title":"The Red Room","titleKo":"붉은 방","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":21521,"minutes":17,"words":3963,"titleOrig":"","form":"story"},{"id":"wells-the-wheels-of-chance","title":"The Wheels of Chance","titleKo":"우연의 수레바퀴","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":319654,"minutes":234,"words":56057,"titleOrig":"","form":"novel"},{"id":"wells-the-invisible-man","title":"The Invisible Man","titleKo":"투명인간","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":272816,"minutes":204,"words":48879,"titleOrig":"","form":"novel"},{"id":"wells-the-plattner-story-and-others","title":"The Plattner Story and Others","titleKo":"플래트너 이야기 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":443283,"minutes":330,"words":79090,"titleOrig":"","form":"collection"},{"id":"wells-the-star","title":"The Star","titleKo":"별","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":25314,"minutes":18,"words":4436,"titleOrig":"","form":"story"},{"id":"wells-thirty-strange-stories","title":"Thirty Strange Stories","titleKo":"기묘한 이야기 서른 편","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":654179,"minutes":487,"words":116972,"titleOrig":"","form":"collection"},{"id":"wells-the-war-of-the-worlds","title":"The War of the Worlds","titleKo":"우주 전쟁","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1898,"chars":337424,"minutes":252,"words":60371,"titleOrig":"","form":"novel"},{"id":"wells-tales-of-space-and-time","title":"Tales of Space and Time","titleKo":"공간과 시간의 이야기","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1899,"chars":411680,"minutes":307,"words":73768,"titleOrig":"","form":"collection"},{"id":"wells-when-the-sleeper-wakes","title":"When the Sleeper Wakes","titleKo":"잠자는 자가 깨어날 때","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1899,"chars":471735,"minutes":345,"words":82832,"titleOrig":"","form":"novel"},{"id":"wells-love-and-mr-lewisham","title":"Love and Mr Lewisham","titleKo":"사랑과 루이셤 씨","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1900,"chars":378668,"minutes":275,"words":65920,"titleOrig":"","form":"novel"},{"id":"wells-the-first-men-in-the-moon","title":"The First Men in the Moon","titleKo":"달 세계 최초의 인간","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1901,"chars":379463,"minutes":287,"words":68811,"titleOrig":"","form":"novel"},{"id":"wells-the-sea-lady","title":"The Sea Lady","titleKo":"바다 아가씨","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1902,"chars":228793,"minutes":168,"words":40328,"titleOrig":"","form":"novel"},{"id":"wells-twelve-stories-and-a-dream","title":"Twelve Stories and a Dream","titleKo":"열두 편의 이야기와 꿈 하나","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1903,"chars":403996,"minutes":309,"words":74088,"titleOrig":"","form":"collection"},{"id":"wells-the-food-of-the-gods","title":"The Food of the Gods","titleKo":"신들의 양식","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1904,"chars":425843,"minutes":314,"words":75386,"titleOrig":"","form":"novel"},{"id":"wells-a-modern-utopia","title":"A Modern Utopia","titleKo":"현대의 유토피아","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1905,"chars":540072,"minutes":391,"words":93739,"titleOrig":"","form":"essay-novel"},{"id":"wells-kipps","title":"Kipps","titleKo":"킵스","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1905,"chars":631180,"minutes":466,"words":111739,"titleOrig":"","form":"novel"},{"id":"wells-in-the-days-of-the-comet","title":"In the Days of the Comet","titleKo":"혜성의 날들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1906,"chars":454624,"minutes":338,"words":81240,"titleOrig":"","form":"novel"},{"id":"wells-the-war-in-the-air","title":"The War in the Air","titleKo":"공중전","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1908,"chars":559921,"minutes":411,"words":98649,"titleOrig":"","form":"novel"},{"id":"wells-ann-veronica","title":"Ann Veronica","titleKo":"앤 베로니카","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1909,"chars":548114,"minutes":407,"words":97597,"titleOrig":"","form":"novel"},{"id":"wells-tono-bungay","title":"Tono-Bungay","titleKo":"토노번게이","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1909,"chars":752487,"minutes":562,"words":134988,"titleOrig":"","form":"novel"},{"id":"wells-the-history-of-mr-polly","title":"The History of Mr Polly","titleKo":"폴리 씨의 일대기","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1910,"chars":392834,"minutes":289,"words":69396,"titleOrig":"","form":"novel"},{"id":"wells-the-sleeper-awakes","title":"The Sleeper Awakes","titleKo":"잠든 자 깨어나다","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1910,"chars":436523,"minutes":320,"words":76736,"titleOrig":"","form":"novel"},{"id":"wells-the-country-of-the-blind-and-other-stories","title":"The Country of the Blind and Other Stories","titleKo":"눈먼 자들의 나라 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":897886,"minutes":678,"words":162808,"titleOrig":"","form":"collection"},{"id":"wells-the-door-in-the-wall-and-other-stories","title":"The Door in the Wall and Other Stories","titleKo":"담장 속의 문 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":236326,"minutes":181,"words":43405,"titleOrig":"","form":"collection"},{"id":"wells-the-new-machiavelli","title":"The New Machiavelli","titleKo":"새로운 마키아벨리","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":832312,"minutes":609,"words":146171,"titleOrig":"","form":"novel"},{"id":"wells-marriage","title":"Marriage","titleKo":"결혼","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1912,"chars":857550,"minutes":623,"words":149411,"titleOrig":"","form":"novel"},{"id":"wells-the-passionate-friends","title":"The Passionate Friends","titleKo":"열정적인 친구들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1913,"chars":594071,"minutes":439,"words":105397,"titleOrig":"","form":"novel"},{"id":"wells-the-wife-of-sir-isaac-harman","title":"The Wife of Sir Isaac Harman","titleKo":"아이작 하먼 경의 아내","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1914,"chars":743562,"minutes":540,"words":129656,"titleOrig":"","form":"novel"},{"id":"wells-the-world-set-free","title":"The World Set Free","titleKo":"해방된 세계","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1914,"chars":376408,"minutes":275,"words":65949,"titleOrig":"","form":"novel"},{"id":"wells-bealby","title":"Bealby","titleKo":"빌비","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":397012,"minutes":288,"words":69139,"titleOrig":"","form":"novel"},{"id":"wells-boon","title":"Boon","titleKo":"분","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":279866,"minutes":201,"words":48167,"titleOrig":"","form":"miscellany"},{"id":"wells-the-research-magnificent","title":"The Research Magnificent","titleKo":"위대한 탐구","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":633141,"minutes":466,"words":111763,"titleOrig":"","form":"novel"},{"id":"wells-mr-britling-sees-it-through","title":"Mr Britling Sees It Through","titleKo":"브리틀링 씨, 끝까지 지켜보다","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1916,"chars":797571,"minutes":588,"words":141138,"titleOrig":"","form":"novel"},{"id":"wells-the-soul-of-a-bishop","title":"The Soul of a Bishop","titleKo":"주교의 영혼","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1917,"chars":447534,"minutes":333,"words":79864,"titleOrig":"","form":"novel"},{"id":"wells-joan-and-peter","title":"Joan and Peter","titleKo":"조앤과 피터","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1918,"chars":1213437,"minutes":883,"words":211929,"titleOrig":"","form":"novel"},{"id":"wells-the-undying-fire","title":"The Undying Fire","titleKo":"꺼지지 않는 불","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1919,"chars":261576,"minutes":195,"words":46730,"titleOrig":"","form":"novel"},{"id":"wells-tales-of-the-unexpected","title":"Tales of the Unexpected","titleKo":"뜻밖의 이야기들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1922,"chars":474637,"minutes":363,"words":87157,"titleOrig":"","form":"collection"},{"id":"wells-the-secret-places-of-the-heart","title":"The Secret Places of the Heart","titleKo":"마음의 은밀한 곳","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1922,"chars":358864,"minutes":268,"words":64253,"titleOrig":"","form":"novel"},{"id":"wells-the-dream","title":"The Dream","titleKo":"꿈","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1924,"chars":469053,"minutes":359,"words":86205,"titleOrig":"","form":"novel"},{"id":"wells-christina-albertas-father","title":"Christina Albertas Father","titleKo":"크리스티나 앨버타의 아버지","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1925,"chars":677673,"minutes":504,"words":121040,"titleOrig":"","form":"novel"}];
+<script>var MANIFEST=[{"id":"blackwood-the-empty-house-and-other-ghost-stories","title":"The Empty House and Other Ghost Stories","titleKo":"빈집 외 유령 이야기","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1906,"chars":369859,"minutes":281,"words":67432,"titleOrig":"","form":"collection"},{"id":"blackwood-the-willows","title":"The Willows","titleKo":"버드나무","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1907,"chars":109198,"minutes":82,"words":19661,"titleOrig":"","form":"novella"},{"id":"blackwood-john-silence-physician-extraordinary","title":"John Silence, Physician Extraordinary","titleKo":"특별한 의사 존 사일런스","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1908,"chars":602209,"minutes":450,"words":107896,"titleOrig":"","form":"collection"},{"id":"blackwood-jimbo","title":"Jimbo","titleKo":"짐보","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1909,"chars":273731,"minutes":206,"words":49546,"titleOrig":"","form":"novel"},{"id":"blackwood-the-education-of-uncle-paul","title":"The Education of Uncle Paul","titleKo":"폴 삼촌의 교육","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1909,"chars":441984,"minutes":329,"words":79008,"titleOrig":"","form":"novel"},{"id":"blackwood-the-human-chord","title":"The Human Chord","titleKo":"인간 화음","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1910,"chars":339029,"minutes":246,"words":59028,"titleOrig":"","form":"novel"},{"id":"blackwood-the-wendigo","title":"The Wendigo","titleKo":"웬디고","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1910,"chars":106492,"minutes":78,"words":18692,"titleOrig":"","form":"novella"},{"id":"blackwood-the-centaur","title":"The Centaur","titleKo":"켄타우로스","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1911,"chars":527572,"minutes":382,"words":91670,"titleOrig":"","form":"novel"},{"id":"blackwood-pan-s-garden","title":"Pan's Garden","titleKo":"판의 정원","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1912,"chars":739919,"minutes":541,"words":129900,"titleOrig":"","form":"collection"},{"id":"blackwood-a-prisoner-in-fairyland","title":"A Prisoner in Fairyland","titleKo":"요정 나라의 포로","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1913,"chars":791371,"minutes":587,"words":140880,"titleOrig":"","form":"novel"},{"id":"blackwood-incredible-adventures","title":"Incredible Adventures","titleKo":"믿기 힘든 모험들","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1914,"chars":599628,"minutes":441,"words":105897,"titleOrig":"","form":"collection"},{"id":"blackwood-ten-minute-stories","title":"Ten Minute Stories","titleKo":"10분 이야기","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1914,"chars":359748,"minutes":263,"words":63123,"titleOrig":"","form":"collection"},{"id":"blackwood-the-extra-day","title":"The Extra Day","titleKo":"여분의 하루","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1915,"chars":544978,"minutes":399,"words":95689,"titleOrig":"","form":"novel"},{"id":"blackwood-julius-levallon","title":"Julius LeVallon","titleKo":"줄리어스 르발롱","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1916,"chars":615067,"minutes":450,"words":107890,"titleOrig":"","form":"novel"},{"id":"blackwood-the-wave","title":"The Wave","titleKo":"파도","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1916,"chars":664486,"minutes":490,"words":117683,"titleOrig":"","form":"novel"},{"id":"blackwood-day-and-night-stories","title":"Day and Night Stories","titleKo":"낮과 밤의 이야기","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1917,"chars":416863,"minutes":308,"words":73958,"titleOrig":"","form":"collection"},{"id":"blackwood-the-garden-of-survival","title":"The Garden of Survival","titleKo":"살아남은 정원","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1918,"chars":126863,"minutes":93,"words":22438,"titleOrig":"","form":"novella"},{"id":"blackwood-the-promise-of-air","title":"The Promise of Air","titleKo":"공기의 약속","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1918,"chars":363905,"minutes":269,"words":64622,"titleOrig":"","form":"novel"},{"id":"blackwood-the-bright-messenger","title":"The Bright Messenger","titleKo":"빛나는 전령","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1921,"chars":703116,"minutes":505,"words":121122,"titleOrig":"","form":"novel"},{"id":"blackwood-the-wolves-of-god-and-other-fey-stories","title":"The Wolves of God and Other Fey Stories","titleKo":"신의 늑대들 외","author":"blackwood","authorKo":"앨저넌 블랙우드","authorEn":"Algernon Blackwood","year":1921,"chars":593636,"minutes":437,"words":104894,"titleOrig":"","form":"collection"},{"id":"fitzgerald-flappers-and-philosophers","title":"Flappers and Philosophers","titleKo":"말괄량이와 철학자들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1920,"chars":347672,"minutes":258,"words":61840,"titleOrig":"","form":"collection"},{"id":"fitzgerald-this-side-of-paradise","title":"This Side of Paradise","titleKo":"낙원의 이쪽","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1920,"chars":519943,"minutes":340,"words":81647,"titleOrig":"","form":"novel"},{"id":"fitzgerald-tales-of-the-jazz-age","title":"Tales of the Jazz Age","titleKo":"재즈 시대의 이야기들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1922,"chars":497310,"minutes":368,"words":88271,"titleOrig":"","form":"collection"},{"id":"fitzgerald-the-beautiful-and-damned","title":"The Beautiful and Damned","titleKo":"아름답고 저주받은 사람들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1922,"chars":721529,"minutes":525,"words":126012,"titleOrig":"","form":"novel"},{"id":"fitzgerald-the-vegetable","title":"The Vegetable","titleKo":"채소 — 대통령에서 집배원으로","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1923,"chars":159343,"minutes":113,"words":27188,"titleOrig":"","form":"play"},{"id":"fitzgerald-the-great-gatsby","title":"The Great Gatsby","titleKo":"위대한 개츠비","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1925,"chars":270718,"minutes":202,"words":48381,"titleOrig":"","form":"novel"},{"id":"fitzgerald-all-the-sad-young-men","title":"All the Sad Young Men","titleKo":"모든 슬픈 젊은이들","author":"fitzgerald","authorKo":"F. 스콧 피츠제럴드","authorEn":"F. Scott Fitzgerald","year":1926,"chars":358287,"minutes":269,"words":64653,"titleOrig":"","form":"collection"},{"id":"harbou-metropolis","title":"Metropolis","titleKo":"메트로폴리스","author":"harbou","authorKo":"테아 폰 하르부","authorEn":"Thea von Harbou","year":1926,"chars":406503,"minutes":300,"words":71903,"titleOrig":"Metropolis","form":"novel"},{"id":"kafka-the-metamorphosis","title":"The Metamorphosis","titleKo":"변신","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1915,"chars":118416,"minutes":92,"words":21978,"titleOrig":"Die Verwandlung","form":"novella"},{"id":"kafka-the-trial","title":"The Trial","titleKo":"소송","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1925,"chars":449767,"minutes":351,"words":84327,"titleOrig":"Der Prozeß","form":"novel"},{"id":"kafka-the-castle","title":"The Castle","titleKo":"성","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1926,"chars":532973,"minutes":407,"words":97647,"titleOrig":"Das Schloß","form":"novel"},{"id":"kafka-the-knock-at-the-manor-gate","title":"The Knock at the Manor Gate","titleKo":"저택 대문을 두드리다","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1931,"chars":2934,"minutes":2,"words":539,"titleOrig":"Der Schlag ans Hoftor","form":"story"},{"id":"kafka-give-it-up","title":"Give It Up","titleKo":"단념해라!","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":680,"minutes":1,"words":135,"titleOrig":"Gibs auf!","form":"story"},{"id":"kafka-poseidon","title":"Poseidon","titleKo":"포세이돈","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":2468,"minutes":2,"words":439,"titleOrig":"Poseidon","form":"story"},{"id":"kafka-the-helmsman","title":"The Helmsman","titleKo":"키잡이","author":"kafka","authorKo":"프란츠 카프카","authorEn":"Franz Kafka","year":1936,"chars":1166,"minutes":1,"words":218,"titleOrig":"Der Steuermann","form":"story"},{"id":"wells-select-conversations-with-an-uncle","title":"Select Conversations with an Uncle","titleKo":"삼촌과 나눈 대화 몇 토막","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":105344,"minutes":79,"words":18853,"titleOrig":"","form":"collection"},{"id":"wells-the-stolen-bacillus-and-other-incidents","title":"The Stolen Bacillus and Other Incidents","titleKo":"도난당한 세균 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":313377,"minutes":235,"words":56400,"titleOrig":"","form":"collection"},{"id":"wells-the-time-machine","title":"The Time Machine","titleKo":"타임머신","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":179699,"minutes":136,"words":32634,"titleOrig":"","form":"novel"},{"id":"wells-the-wonderful-visit","title":"The Wonderful Visit","titleKo":"놀라운 방문","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1895,"chars":219923,"minutes":162,"words":38765,"titleOrig":"","form":"novel"},{"id":"wells-the-island-of-doctor-moreau","title":"The Island of Doctor Moreau","titleKo":"모로 박사의 섬","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":241162,"minutes":184,"words":44141,"titleOrig":"","form":"novel"},{"id":"wells-the-red-room","title":"The Red Room","titleKo":"붉은 방","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":21521,"minutes":17,"words":3963,"titleOrig":"","form":"story"},{"id":"wells-the-wheels-of-chance","title":"The Wheels of Chance","titleKo":"우연의 수레바퀴","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1896,"chars":319654,"minutes":234,"words":56057,"titleOrig":"","form":"novel"},{"id":"wells-the-invisible-man","title":"The Invisible Man","titleKo":"투명인간","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":272816,"minutes":204,"words":48879,"titleOrig":"","form":"novel"},{"id":"wells-the-plattner-story-and-others","title":"The Plattner Story and Others","titleKo":"플래트너 이야기 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":443283,"minutes":330,"words":79090,"titleOrig":"","form":"collection"},{"id":"wells-the-star","title":"The Star","titleKo":"별","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":25314,"minutes":18,"words":4436,"titleOrig":"","form":"story"},{"id":"wells-thirty-strange-stories","title":"Thirty Strange Stories","titleKo":"기묘한 이야기 서른 편","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1897,"chars":654179,"minutes":487,"words":116972,"titleOrig":"","form":"collection"},{"id":"wells-the-war-of-the-worlds","title":"The War of the Worlds","titleKo":"우주 전쟁","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1898,"chars":337424,"minutes":252,"words":60371,"titleOrig":"","form":"novel"},{"id":"wells-tales-of-space-and-time","title":"Tales of Space and Time","titleKo":"공간과 시간의 이야기","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1899,"chars":411680,"minutes":307,"words":73768,"titleOrig":"","form":"collection"},{"id":"wells-when-the-sleeper-wakes","title":"When the Sleeper Wakes","titleKo":"잠자는 자가 깨어날 때","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1899,"chars":471735,"minutes":345,"words":82832,"titleOrig":"","form":"novel"},{"id":"wells-love-and-mr-lewisham","title":"Love and Mr Lewisham","titleKo":"사랑과 루이셤 씨","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1900,"chars":378668,"minutes":275,"words":65920,"titleOrig":"","form":"novel"},{"id":"wells-the-first-men-in-the-moon","title":"The First Men in the Moon","titleKo":"달 세계 최초의 인간","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1901,"chars":379463,"minutes":287,"words":68811,"titleOrig":"","form":"novel"},{"id":"wells-the-sea-lady","title":"The Sea Lady","titleKo":"바다 아가씨","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1902,"chars":228793,"minutes":168,"words":40328,"titleOrig":"","form":"novel"},{"id":"wells-twelve-stories-and-a-dream","title":"Twelve Stories and a Dream","titleKo":"열두 편의 이야기와 꿈 하나","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1903,"chars":403996,"minutes":309,"words":74088,"titleOrig":"","form":"collection"},{"id":"wells-the-food-of-the-gods","title":"The Food of the Gods","titleKo":"신들의 양식","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1904,"chars":425843,"minutes":314,"words":75386,"titleOrig":"","form":"novel"},{"id":"wells-a-modern-utopia","title":"A Modern Utopia","titleKo":"현대의 유토피아","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1905,"chars":540072,"minutes":391,"words":93739,"titleOrig":"","form":"essay-novel"},{"id":"wells-kipps","title":"Kipps","titleKo":"킵스","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1905,"chars":631180,"minutes":466,"words":111739,"titleOrig":"","form":"novel"},{"id":"wells-in-the-days-of-the-comet","title":"In the Days of the Comet","titleKo":"혜성의 날들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1906,"chars":454624,"minutes":338,"words":81240,"titleOrig":"","form":"novel"},{"id":"wells-the-war-in-the-air","title":"The War in the Air","titleKo":"공중전","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1908,"chars":559921,"minutes":411,"words":98649,"titleOrig":"","form":"novel"},{"id":"wells-ann-veronica","title":"Ann Veronica","titleKo":"앤 베로니카","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1909,"chars":548114,"minutes":407,"words":97597,"titleOrig":"","form":"novel"},{"id":"wells-tono-bungay","title":"Tono-Bungay","titleKo":"토노번게이","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1909,"chars":752487,"minutes":562,"words":134988,"titleOrig":"","form":"novel"},{"id":"wells-the-history-of-mr-polly","title":"The History of Mr Polly","titleKo":"폴리 씨의 일대기","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1910,"chars":392834,"minutes":289,"words":69396,"titleOrig":"","form":"novel"},{"id":"wells-the-sleeper-awakes","title":"The Sleeper Awakes","titleKo":"잠든 자 깨어나다","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1910,"chars":436523,"minutes":320,"words":76736,"titleOrig":"","form":"novel"},{"id":"wells-the-country-of-the-blind-and-other-stories","title":"The Country of the Blind and Other Stories","titleKo":"눈먼 자들의 나라 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":897886,"minutes":678,"words":162808,"titleOrig":"","form":"collection"},{"id":"wells-the-door-in-the-wall-and-other-stories","title":"The Door in the Wall and Other Stories","titleKo":"담장 속의 문 외","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":236326,"minutes":181,"words":43405,"titleOrig":"","form":"collection"},{"id":"wells-the-new-machiavelli","title":"The New Machiavelli","titleKo":"새로운 마키아벨리","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1911,"chars":832312,"minutes":609,"words":146171,"titleOrig":"","form":"novel"},{"id":"wells-marriage","title":"Marriage","titleKo":"결혼","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1912,"chars":857550,"minutes":623,"words":149411,"titleOrig":"","form":"novel"},{"id":"wells-the-passionate-friends","title":"The Passionate Friends","titleKo":"열정적인 친구들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1913,"chars":594071,"minutes":439,"words":105397,"titleOrig":"","form":"novel"},{"id":"wells-the-wife-of-sir-isaac-harman","title":"The Wife of Sir Isaac Harman","titleKo":"아이작 하먼 경의 아내","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1914,"chars":743562,"minutes":540,"words":129656,"titleOrig":"","form":"novel"},{"id":"wells-the-world-set-free","title":"The World Set Free","titleKo":"해방된 세계","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1914,"chars":376408,"minutes":275,"words":65949,"titleOrig":"","form":"novel"},{"id":"wells-bealby","title":"Bealby","titleKo":"빌비","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":397012,"minutes":288,"words":69139,"titleOrig":"","form":"novel"},{"id":"wells-boon","title":"Boon","titleKo":"분","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":279866,"minutes":201,"words":48167,"titleOrig":"","form":"miscellany"},{"id":"wells-the-research-magnificent","title":"The Research Magnificent","titleKo":"위대한 탐구","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1915,"chars":633141,"minutes":466,"words":111763,"titleOrig":"","form":"novel"},{"id":"wells-mr-britling-sees-it-through","title":"Mr Britling Sees It Through","titleKo":"브리틀링 씨, 끝까지 지켜보다","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1916,"chars":797571,"minutes":588,"words":141138,"titleOrig":"","form":"novel"},{"id":"wells-the-soul-of-a-bishop","title":"The Soul of a Bishop","titleKo":"주교의 영혼","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1917,"chars":447534,"minutes":333,"words":79864,"titleOrig":"","form":"novel"},{"id":"wells-joan-and-peter","title":"Joan and Peter","titleKo":"조앤과 피터","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1918,"chars":1213437,"minutes":883,"words":211929,"titleOrig":"","form":"novel"},{"id":"wells-the-undying-fire","title":"The Undying Fire","titleKo":"꺼지지 않는 불","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1919,"chars":261576,"minutes":195,"words":46730,"titleOrig":"","form":"novel"},{"id":"wells-tales-of-the-unexpected","title":"Tales of the Unexpected","titleKo":"뜻밖의 이야기들","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1922,"chars":474637,"minutes":363,"words":87157,"titleOrig":"","form":"collection"},{"id":"wells-the-secret-places-of-the-heart","title":"The Secret Places of the Heart","titleKo":"마음의 은밀한 곳","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1922,"chars":358864,"minutes":268,"words":64253,"titleOrig":"","form":"novel"},{"id":"wells-the-dream","title":"The Dream","titleKo":"꿈","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1924,"chars":469053,"minutes":359,"words":86205,"titleOrig":"","form":"novel"},{"id":"wells-christina-albertas-father","title":"Christina Albertas Father","titleKo":"크리스티나 앨버타의 아버지","author":"wells","authorKo":"H. G. 웰스","authorEn":"H. G. Wells","year":1925,"chars":677673,"minutes":504,"words":121040,"titleOrig":"","form":"novel"}];
 var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 <script src="data/ko/index.js" onerror="void 0"></script>
 <script>/* ============================================================

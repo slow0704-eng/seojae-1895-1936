@@ -26,6 +26,11 @@ AUTHORS = {
         "life": "1888\u20131954", "slug": "harbou",
         "note": "\u300e\uba54\ud2b8\ub85c\ud3f4\ub9ac\uc2a4\u300f\uc758 \uc18c\uc124\uac00\uc774\uc790 \uac01\ubcf8\uac00.",
     },
+    "블랙우드": {
+        "en": "Algernon Blackwood", "ko": "앨저넌 블랙우드",
+        "life": "1869–1951", "slug": "blackwood",
+        "note": "숲과 눈과 바람 속에서 사람보다 큰 것을 느낀 괴기소설가. 러브크래프트가 스승으로 꼽은 사람.",
+    },
 }
 
 KO_TITLES = {
@@ -93,6 +98,27 @@ KO_TITLES = {
     "All the Sad Young Men": ("\ubaa8\ub4e0 \uc2ac\ud508 \uc80a\uc740\uc774\ub4e4", ""),
     # Harbou
     "Metropolis": ("\uba54\ud2b8\ub85c\ud3f4\ub9ac\uc2a4", "Metropolis"),
+    # Blackwood
+    "The Empty House and Other Ghost Stories": ("빈집 외 유령 이야기", ""),
+    "The Willows": ("버드나무", ""),
+    "John Silence, Physician Extraordinary": ("특별한 의사 존 사일런스", ""),
+    "The Education of Uncle Paul": ("폴 삼촌의 교육", ""),
+    "Jimbo": ("짐보", ""),
+    "The Human Chord": ("인간 화음", ""),
+    "The Wendigo": ("웬디고", ""),
+    "The Centaur": ("켄타우로스", ""),
+    "Pan's Garden": ("판의 정원", ""),
+    "A Prisoner in Fairyland": ("요정 나라의 포로", ""),
+    "Incredible Adventures": ("믿기 힘든 모험들", ""),
+    "Ten Minute Stories": ("10분 이야기", ""),
+    "The Extra Day": ("여분의 하루", ""),
+    "Julius LeVallon": ("줄리어스 르발롱", ""),
+    "The Wave": ("파도", ""),
+    "Day and Night Stories": ("낮과 밤의 이야기", ""),
+    "The Garden of Survival": ("살아남은 정원", ""),
+    "The Promise of Air": ("공기의 약속", ""),
+    "The Bright Messenger": ("빛나는 전령", ""),
+    "The Wolves of God and Other Fey Stories": ("신의 늑대들 외", ""),
 }
 
 FORM = {
@@ -118,6 +144,16 @@ FORM = {
     "Poseidon": "story",
     "The Helmsman": "story",
     "The Metamorphosis": "novella",
+    "The Empty House and Other Ghost Stories": "collection",
+    "John Silence, Physician Extraordinary": "collection",
+    "Pan's Garden": "collection",
+    "Incredible Adventures": "collection",
+    "Ten Minute Stories": "collection",
+    "Day and Night Stories": "collection",
+    "The Wolves of God and Other Fey Stories": "collection",
+    "The Willows": "novella",
+    "The Wendigo": "novella",
+    "The Garden of Survival": "novella",
 }
 
 WPM = 240   # words per minute, unhurried literary reading
@@ -125,7 +161,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder

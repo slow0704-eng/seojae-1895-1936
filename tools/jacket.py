@@ -18,6 +18,9 @@ MARKS = {
  "fitzgerald": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/>'
           '<path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g>',
+ "blackwood": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
+          '<path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/>'
+          '<path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
  "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
           '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
