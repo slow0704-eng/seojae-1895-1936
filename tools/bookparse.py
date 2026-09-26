@@ -115,7 +115,7 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*MURRAY[’']S\s*$"),          # John Murray's list after Blackwood
     # the novels list after the text (Soul of a Bishop); the italic front-page
     # form in The Undying Fire is left alone, its translation keys depend on it
-    re.compile(r"^\s*MR\.? WELLS has also written the following novels:\s*$", re.I),
+    re.compile(r"^\s*(?:¶\s*)?MR\.? WELLS has also written the following novels:\s*$", re.I),
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
@@ -1109,7 +1109,7 @@ def merge_number_title(blocks, level):
         nb = blocks[i + 1] if i + 1 < len(blocks) else None
         if (b.kind == "head" and nb is not None and nb.kind == "head"
                 and not b.meta["h"]["title"]
-                and nb.meta["h"]["type"] in ("allcaps", "manifest")
+                and nb.meta["h"]["type"] in ("allcaps", "manifest", "named")
                 and nb.meta["h"]["title"]
                 and level.get(b.meta["h"]["type"]) in ("part", "chapter", "subhead")
                 and b.meta["h"]["type"] not in ("allcaps",)):
@@ -1161,6 +1161,16 @@ def normalise_punct(s, curly_source):
     return s
 
 
+# words that commonly lose their first letters in dialogue; any other quote
+# before a word opens a quotation ('if you call me Fenny …')
+_ELISION_RX = re.compile(
+    r"(?:em|tis|twas|twere|twill|twould|twon|n|ave|avin|ad|ard|ere|ers|im|imself"
+    r"|erself|ow|ome|ouse|alf|eard|ope|appen|appened|oo|un|cos|bout"
+    r"|mongst|gainst|nough|orse|ead|eart|igh|oliday|usband|ands|eavens|ungry"
+    r"|ullo|allo|ello|scuse|spect|pon|stead|tween|twixt|neath"
+    r"|E|Arry|Enry|Im|Er)\b")
+
+
 def _curl_quotes(s):
     out, dq_open = [], False
     prev = ""
@@ -1170,14 +1180,14 @@ def _curl_quotes(s):
             dq_open = not dq_open
         elif c == "'":
             nxt = s[i + 1] if i + 1 < len(s) else ""
-            if prev.isalnum() and nxt.isalnum():
-                out.append("’")                       # don't
-            elif prev.isalnum() and not nxt.isalnum():
-                out.append("’")                       # dogs'
-            elif re.match(r"[a-z]", nxt) and not prev.isalnum():
-                out.append("’")                       # 'em, 'tis
+            if prev.isalnum():
+                out.append("’")                       # don't, dogs'
+            elif prev and not prev.isspace() and prev not in "“\"(—[":
+                out.append("’")                       # 'Harry,' she said
+            elif _ELISION_RX.match(s, i + 1):
+                out.append("’")                       # 'em, 'tis, 'ave
             else:
-                out.append("‘")
+                out.append("‘")                       # 'if you call me …
         else:
             out.append(c)
         prev = c
