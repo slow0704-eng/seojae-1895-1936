@@ -8,7 +8,8 @@
 돌아옵니다. 로컬 서버 없이 브라우저로 바로 열 수 있고, 네트워크 요청이 하나도 없습니다.
 
 ```
-서재/index.html   ← 여기서 시작
+index.html        ← 현관 (소개 · 소장작 · 조판 · 작가)
+서재/index.html   ← 서재. 여기서 읽습니다
 ```
 
 ---
@@ -20,11 +21,12 @@
 | 작품 | **60편** · 본문 2,465만 자 · 445만 단어 |
 | 예상 독서 시간 | 분당 200단어 기준 **약 370시간** |
 | 한국어판 | 영문 → 한글 → 대역 3단 전환. 진행 상황은 `python tools/translate.py status` |
-| 형식 | 단일 페이지 포털 (`index.html`) + 작품별 본문 `data/*.js` |
+| 형식 | 현관 한 장 + 단일 페이지 포털 (`서재/index.html`) + 작품별 본문 `data/*.js` |
 | 의존성 | 없음. 프레임워크·빌드·CDN·웹폰트 전부 없음 |
 
 ```
 소설/
+├── index.html               ← 현관. 카탈로그에서 생성되므로 숫자가 어긋나지 않습니다
 ├── 카프카/            7편   1915–1936   원문 TXT
 ├── HG웰스/           45편   1895–1925
 ├── 피츠제럴드/         7편   1920–1926
@@ -43,7 +45,8 @@
 
 ## 읽기
 
-**시작** — `서재/index.html`을 브라우저로 엽니다.
+**시작** — `index.html`(현관)이나 `서재/index.html`(바로 서재)을 브라우저로 엽니다.
+현관에서 고른 테마는 서재가 그대로 이어받습니다 — 같은 `rdr/v1/settings`를 씁니다.
 
 **단축키**
 
@@ -199,7 +202,7 @@ Python 3, 표준 라이브러리만 필요합니다.
 
 ```bash
 cd tools
-python build.py     # TXT 60개 → 서재/index.html + 서재/data/*.js + data/ko/index.js
+python build.py     # TXT 60개 → index.html + 서재/index.html + 서재/data/*.js + data/ko/index.js
 python verify.py    # 불변식 검사 (문단 번호 연속성, 텍스트 보존, 번역본 정합)
 ```
 
@@ -208,7 +211,9 @@ python verify.py    # 불변식 검사 (문단 번호 연속성, 텍스트 보�
 | 파일 | 하는 일 |
 |---|---|
 | `bookparse.py` | 평문 TXT → 구조화 HTML. 장 검출, 앞·뒤 부속물 제거, 이탤릭/스몰캡/따옴표 변환 |
-| `build.py` | 포털 `index.html`과 작품별 `data/*.js` 생성 |
+| `build.py` | 포털 `서재/index.html`과 작품별 `data/*.js` 생성. 끝에 현관도 함께 굽습니다 |
+| `landing.py` | 현관 `index.html` 생성. 편수·글자수·시간은 전부 카탈로그에서 계산 |
+| `jacket.py` | 두 페이지가 공유하는 표지 어휘 — 작가 마크, 제목 분할, 제목 크기 등급, 형식 이름 |
 | `meta.py` | 카탈로그 (한국어 제목, 분량, 예상 시간, 형식) |
 | `translate.py` | 번역 작업 쪼개기 · 결과 검사 · `data/ko/*.js` 조립 |
 | `tr/GUIDE.md` | 번역 지침 (문체, 경어법, 마크업, 표기법) |
@@ -216,7 +221,7 @@ python verify.py    # 불변식 검사 (문단 번호 연속성, 텍스트 보�
 | `verify.py` | 빌드 결과 불변식 검사 (원문 + 번역본) |
 | `validate.py` | 파서 자체 검증 (문자 보존 등식) |
 | `portal.js` | 포털 전체 — 라우팅, 서재, 찾기, 거르기, 리더, 언어 전환, 설정, 책갈피 |
-| `reader.css` `index.css` | 조판과 서재 |
+| `reader.css` `index.css` `landing.css` | 조판 · 서재 · 현관 |
 | `fetch_*.py` | 원문 수집 (Gutenberg / Wikisource / Standard Ebooks) |
 
 `verify.py` 는 번역본도 함께 봅니다 — 한국어 payload의 모든 키가 원문에 실재하는지,

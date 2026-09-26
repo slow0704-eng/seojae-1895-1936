@@ -22,22 +22,8 @@ CSS = io.open(_os.path.join(HERE, "reader.css"), encoding="utf-8").read()
 IDXCSS = io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read()
 JS = io.open(_os.path.join(HERE, "portal.js"), encoding="utf-8").read()
 
-MARKS = {
- "kafka": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
-          '<path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/>'
-          '<path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/>',
- "wells": '<g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/>'
-          '<path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g>'
-          '<circle cx="12" cy="12" r=".85" fill="currentColor"/>',
- "fitzgerald": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
-          '<path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/>'
-          '<path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g>',
- "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
-          '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
-          '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
-}
-def mark(slug, cls="mark"):
-    return '<svg class="%s" viewBox="0 0 24 24" aria-hidden="true" focusable="false">%s</svg>' % (cls, MARKS[slug])
+from jacket import mark, title_split, len_bucket, FORM_KO
+import landing
 
 HEAD_RX = re.compile(r'^<h2 class="(chapter|part)" id="([^"]+)"[^>]*>(.*)</h2>$')
 P_RX = re.compile(r'^<p[^>]*data-p="(\d+)"')
@@ -117,44 +103,50 @@ def sig(text):
 # ---------------------------------------------------------------- index page
 DECADE = lambda y: min(1930, (y // 10) * 10)
 
-def title_split(t):
-    for sep in (" and Other ", " and a ", ", or ", ": "):
-        i = t.find(sep)
-        if i > 0:
-            return t[:i], (sep.strip(", :") + " " + t[i + len(sep):]).strip()
-    return t, ""
 
-def len_bucket(t):
-    n = len(t)
-    return "s" if n <= 14 else "m" if n <= 24 else "l" if n <= 38 else "xl"
+def man(n):
+    """Bulk, the way Korean actually reads it: 만 units, one decimal under 100만."""
+    if n < 10000:
+        return "{:,}자".format(n)
+    v = n / 10000.0
+    return ("%.1f만 자" % v).replace(".0만", "만") if v < 100 else "{:,}만 자".format(round(v))
 
-FORM_KO = {"novel": "장편", "collection": "단편집", "story": "단편", "novella": "중편",
-           "play": "희곡", "miscellany": "잡문집", "essay-novel": "사상소설"}
+
 FACET_KO = {"author": "작가", "decade": "연대", "form": "형식", "size": "분량",
             "state": "상태", "lang": "언어"}
 
 
 def cover(w, i):
+    """A card is: the board, then the shelf label under it.
+
+    The runtime owns .cap (it appends a bookmark count) and .cap__pct, and it
+    sorts on the data-* here — see the contract in portal.js. Everything else
+    on the card is free."""
     main, sub = title_split(w["title"])
     subh = '<span class="sub">%s</span>' % html.escape(sub) if sub else ""
     mins = w["minutes"]
     return """<article class="card" data-author="%(a)s" data-decade="%(d)d" data-len="%(len)s"
  data-year="%(y)d" data-id="%(id)s" data-title="%(tl)s" data-ko="%(ko)s" data-mins="%(mins)d"
- data-form="%(form)s" style="--i:%(i)d">
+ data-form="%(formk)s" style="--i:%(i)d">
 <a class="card__link" href="#/w/%(idq)s">
- <div class="cover">%(mark)s<i class="rule rule--head"></i>
+ <div class="cover"><i class="cover__frame"></i>%(mark)s<i class="rule rule--head"></i>
   <h3 class="cover__title">%(main)s%(sub)s</h3>
   <i class="rule rule--foot"></i>
   <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
   <span class="cover__ko" hidden></span></div>
- <p class="cap"><span class="cap__pct"></span><span>%(chars)s자</span><b>&middot;</b><span>%(time)s</span></p>
+ <div class="mt">
+  <p class="mt__ko">%(ko)s</p>
+  <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>%(chars)s</span><b>&middot;</b><span>%(time)s</span></p>
+ </div>
 </a></article>""" % {
         "a": w["author"], "d": DECADE(w["year"]), "len": len_bucket(main), "y": w["year"],
         "id": html.escape(w["id"]), "idq": html.escape(w["id"]), "i": i,
         "tl": html.escape(w["title"]), "ko": html.escape(w["titleKo"]), "mins": mins,
-        "form": w.get("form", "novel"),
+        "formk": w.get("form", "novel"),
         "mark": mark(w["author"], "cover__mark"), "main": html.escape(main), "sub": subh,
-        "auth": html.escape(w["authorEn"]), "chars": "{:,}".format(w["chars"]),
+        "auth": html.escape(w["authorEn"]), "authko": html.escape(w["authorKo"]),
+        "form": FORM_KO.get(w.get("form", "novel"), "장편"), "chars": man(w["chars"]),
         "time": ("%d시간 %d분" % (mins // 60, mins % 60)) if mins >= 60 else ("%d분" % mins)}
 
 
@@ -287,6 +279,9 @@ def index_page(cat, works):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 1895—1936</title>
 <meta name="description" content="퍼블릭 도메인 영문 소설 60편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부.">
+<meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="%(fav)s">
 <style>%(css)s
 %(icss)s</style>
 <script>
@@ -307,13 +302,18 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <body data-view="library">
 <div id="dimmer"></div>
 
-<div id="library"><div class="wrap">
+<div id="library">
+<div class="topbar"><div class="topbar__in">
+  <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
+  <span class="topbar__hint"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>?</kbd> 단축키</span>
+</div></div>
+<div class="wrap">
 <header class="masthead">
   <p class="mh__kicker">개인 서재</p>
-  <h1 class="mh__title">1895&#8202;—&#8202;1936</h1>
+  <h1 class="mh__title">1895<em>—</em>1936</h1>
   <p class="mh__roll">Kafka &nbsp;·&nbsp; Wells &nbsp;·&nbsp; Fitzgerald &nbsp;·&nbsp; von Harbou</p>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 4인 &nbsp;·&nbsp; %(chars)s자 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 4인 &nbsp;·&nbsp; %(mchars)s &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -343,7 +343,9 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <main class="grid" id="grid">%(grid)s</main>
 <div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav">%(authnav)s</nav>%(plates)s</div>
 <footer class="lib-foot">
-  <p>모든 작품은 퍼블릭 도메인입니다. 출처 — Project Gutenberg &middot; Standard Ebooks &middot; Wikisource</p>
+  <p>모든 작품은 퍼블릭 도메인입니다. 출처 — <a href="https://www.gutenberg.org">Project Gutenberg</a>
+     &middot; <a href="https://standardebooks.org">Standard Ebooks</a>
+     &middot; <a href="https://en.wikisource.org">Wikisource</a></p>
   <p class="lib-foot__k"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>1</kbd>–<kbd>4</kbd> 정렬 &nbsp; <kbd>?</kbd> 단축키</p>
 </footer>
 </div></div>
@@ -355,7 +357,8 @@ var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 </body>
 </html>
 """ % {"css": CSS, "icss": IDXCSS, "js": JS, "shell": READER_SHELL,
-       "n": len(works), "chars": "{:,}".format(tot_chars), "hours": tot_min // 60,
+       "fav": landing.FAVICON,
+       "n": len(works), "mchars": man(tot_chars), "hours": tot_min // 60,
        "grid": "\n".join(grid), "plates": "\n".join(plates),
        "facets": facets, "authnav": authnav,
        "manifest": json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))}
@@ -399,7 +402,8 @@ def main():
     idx = index_page(cat, works)
     with open(_os.path.join(SITE, "index.html"), "wb") as f:
         f.write(idx.encode("utf-8"))
-    print("\nindex.html  %s bytes" % "{:,}".format(len(idx)))
+    print("\n서재/index.html  %s bytes" % "{:,}".format(len(idx)))
+    print("index.html      %s bytes  (front door)" % "{:,}".format(landing.write(cat, works)))
     print("data/       %s bytes across %d files" % ("{:,}".format(total), len(works) - len(bad)))
     print("FAILURES:", len(bad))
     for b in bad:
