@@ -85,6 +85,9 @@ u"체임버스": [
 u"안드레예프": [
     (6722, 1908, "The Seven Who Were Hanged"),
 ],
+u"제이컵스": [
+    (12122,1902, "The Monkey's Paw"),
+],
 }
 
 START = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)

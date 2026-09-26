@@ -32,6 +32,11 @@ MARKS = {
           '<path d="M6.5 21.5V3.2h10.4"/><path d="M6.5 7.4 10.7 3.2" opacity=".6"/>'
           '<path d="M16.9 3.2v5.3"/><circle cx="16.9" cy="10.4" r="1.9"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
+ "jacobs": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">'
+          '<path d="M9 21.5v-6.3c-1.6-.6-2.4-2-2.4-3.6"/><path d="M15 21.5v-6.3c1.2-.9 1.9-2.4 1.9-4.1"/>'
+          '<path d="M9.6 14.6V6.1c0-1.2 1.6-1.2 1.6 0v6.2"/><path d="M11.2 12.3V4.4c0-1.2 1.6-1.2 1.6 0v7.9"/>'
+          '<path d="M12.8 12.3V6.3c0-1.2 1.6-1.2 1.6 0v6"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
  "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
           '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',

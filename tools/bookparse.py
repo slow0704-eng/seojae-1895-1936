@@ -416,6 +416,7 @@ AUTHOR_BY_FOLDER = {
     "체임버스": "Robert W. Chambers",
     "마켄": "Arthur Machen",
     "안드레예프": "Leonid Andreyev",
+    "제이컵스": "W. W. Jacobs",
 }
 
 
