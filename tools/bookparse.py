@@ -113,6 +113,9 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*ADVERTISEMENTS?\s*$"),
     re.compile(r"^\s*CORRECTIONS\s*$"),            # transcriber's errata table
     re.compile(r"^\s*MURRAY[’']S\s*$"),          # John Murray's list after Blackwood
+    # the novels list after the text (Soul of a Bishop); the italic front-page
+    # form in The Undying Fire is left alone, its translation keys depend on it
+    re.compile(r"^\s*MR\.? WELLS has also written the following novels:\s*$", re.I),
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
