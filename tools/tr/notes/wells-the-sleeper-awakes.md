@@ -65,3 +65,12 @@
 - the song of the revolt **“봉기의 노래”** · the Revolt “봉기” · the Word/his word “한마디” · “Men and women of the new age!” “새 시대의 남녀들이여!”(서술) · “It is expedient for us that one man should die for the people.” “한 사람이 백성을 위하여 죽는 것이 우리에게 유익하니라.” · Principalities, powers, dominions “정사와 권세와 주관들”.
 - “Two hundred years” “이백 년” · “It is no dream” “꿈이 아니다” · “I am the Sleeper.” “내가 잠자는 자요.” · “He who takes the greatest danger, he who bears the heaviest burden, that man is King” “가장 큰 위험을 무릅쓰고 가장 무거운 짐을 지는 자, 그가 왕이다” · “To wake—for this!” “깨어나서—이런 일을!” · “I have said my word.” “내 할 말은 했소.” · “They win—the people win!” “이긴다—민중이 이긴다!”
 - “All that is mine in the world I give to the people of the world.” “세상에 있는 내 모든 것을 세상 사람들에게 드립니다.”(두 번 똑같이).
+
+## 번역 후 확정
+- 용어·고정 문구는 65청크 전체에서 위 표 그대로 확인. thickset man(하워드) “다부진 사내”, archway “아치”, 대기실(Atlas 홀 곁방), 짧은 작품 제목은 「」(「왕이 되려던 사나이」 등).
+- 수 조어: “this gross of years” “한 그로스 해”, “eight and twaindy myriads” “여덟하고 트웨인디 미리어드”(p:846–847).
+- 말투 확정: 그레이엄 → 노인(11장) 하오체 “노인장”(“당신”은 성낼 때만) · → 아사노·비행사 하게체(반말 끝 “-야/-어” 쓰지 않음) · → 노란 옷 사내·구 지도자: 21장 극장에선 하오체, 23–24장 지휘할 땐 하게체(“전하게”). 헬렌에게는 끝까지 하오체 “그대”.
+- 오스트로그는 22장 첫 대면(p:1392 “오히려 늦은 편이오”)부터 하오체. 헬렌은 23장까지 하십시오체, 24장 둘만 남은 뒤 해요체.
+- 원문 판단: p:499 fiat=flat · p:712 “I might reasonably before getting—” → “이제 깜빡깜빡할 만도 한데” · p:776 “nigger” dialect → “흑인” 사투리(서술어) · p:850/852 have/am awakened 둘 다 고정 문장 하나로.
+- p:1467 원문엔 닫는 따옴표가 없으나 한국어는 닫음. p:1532 “the old man in yellow”는 두 사람(회색 머리 노인·노란 옷 사내)을 잇는 오기로 보고 “노인과 노란 옷 사내에게로”. p:1540 “노인이 … 눈으로 묻자, 노란 옷 사내가 고개를 끄덕였고, 노인은 서둘러 나갔다.”
+- 말줄임은 “…” 하나(“……” 쓰지 않음). 서술 속 인용어는 “ ”·‘ ’ 모두 허용(p:176 ‘나리’/‘폐하’는 ‘ ’).
