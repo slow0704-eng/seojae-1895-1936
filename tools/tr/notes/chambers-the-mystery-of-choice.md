@@ -7,7 +7,7 @@
 ## 제목
 | 키 | 원문 | 번역 | 키 | 원문 | 번역 |
 |---|---|---|---|---|---|
-| ch001 | The Purple Emperor | 보라 황제 | ch005 | “Passeur!” | “사공!” (따옴표 유지) |
+| ch001 | The Purple Emperor | 보라 황제 | ch005 | Passeur | 사공 |
 | ch002 | Pompe Funèbre | 장례 | ch006 | The Key to Grief | 슬픔의 암초 |
 | ch003 | The Messenger | 전령 | ch007 | A Matter of Interest | 흥미로운 문제 |
 | ch004 | The White Shadow | 하얀 그림자 | ch008 | Envoi | 맺는 노래 |

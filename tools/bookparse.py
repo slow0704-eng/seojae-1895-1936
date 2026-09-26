@@ -663,6 +663,11 @@ def find_body_start(doc, manifest, toc_used):
         elif h and h[0] in ("numeric", "sectsign"):
             cands.append((bi, 1))
     cands = [c for c in cands if _followed_by_prose(doc, c[0])] or cands
+    # a prologue before BOOK THE FIRST belongs to the body, though it scores lower
+    for bi, sc in cands:
+        b = doc.blocks[bi]
+        if re.match(r"^\s*(?:THE\s+)?PROLOGUE\.?\s*$", b.lines[0], re.I) and _followed_by_prose(doc, bi):
+            return bi
     if cands:
         best = max(x[1] for x in cands)
         for bi, sc in cands:
@@ -896,6 +901,10 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
             continue
 
         mm = manifest_match(b.text) if len(b.lines) <= 2 else None
+        # a quoted mixed-case line is dialogue even when it happens to repeat
+        # a chapter title ("Nettie?" in In the Days of the Comet)
+        if mm and b.text.strip()[:1] in "“‘\"'" and not _is_allcaps(b.text):
+            mm = None
         if mm and not mm["group"]:
             b.kind = "head"
             b.meta["h"] = {"type": "manifest", "num": _num_of(mm["label"]),
@@ -914,6 +923,14 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
                                "title": b.text.strip(), "mlabel": mq["label"]}
                 prev_live = b
                 continue
+
+        # letters read off a smudged postmark, "I A P    A M P": kept as a line
+        toks = b.text.split()
+        if len(b.lines) == 1 and len(toks) >= 3 and all(
+                len(t) == 1 and t.isupper() for t in toks):
+            b.kind = "verse"
+            prev_live = b
+            continue
 
         ac = allcaps_head_candidate(b, prev_live, nxt, body_indent)
         if ac:
