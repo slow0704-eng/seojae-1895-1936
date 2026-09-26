@@ -807,6 +807,18 @@ def _looks_like_signature(t):
     return initials > 0 or len(words) <= 3
 
 
+_ART_RX = re.compile(r"^[\s_/\\|.:+-]*$")
+
+
+def _is_line_art(b):
+    """A block drawn with rules and slashes (the growth curve in The Food of
+    the Gods). Read as prose, its underscores would open italics that run on
+    into the following paragraphs."""
+    ls = [ln for ln in b.lines if ln.strip()]
+    return (len(ls) >= 3 and all(_ART_RX.match(ln) for ln in ls)
+            and sum(ln.count("/") + ln.count("|") + ln.count("\\") for ln in ls) >= 3)
+
+
 def classify_blocks(doc, blocks, manifest, profile, body_indent):
     keys = {}
     for e in manifest:
@@ -907,7 +919,9 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
             prev_live = b
             continue
 
-        if looks_verse(b, body_indent):
+        if _is_line_art(b):
+            b.kind = "art"
+        elif looks_verse(b, body_indent):
             b.kind = "verse"
         elif looks_smallblock_quote(b, body_indent):
             b.kind = "quote"
@@ -1569,6 +1583,16 @@ def parse(path):
             em.heading(lvl, label, h["title"], b.text)
             after_break = True
             prev_live = b
+            i += 1
+            continue
+
+        if k == "art":
+            # a text diagram: no words to translate, so no data-p; kept verbatim
+            ls = [ln.rstrip() for ln in b.lines if ln.strip()]
+            cut = min(len(ln) - len(ln.lstrip()) for ln in ls)
+            em.out.append('<pre class="art" aria-hidden="true">%s</pre>'
+                          % _html.escape("\n".join(ln[cut:] for ln in ls), quote=False))
+            after_break = False
             i += 1
             continue
 
