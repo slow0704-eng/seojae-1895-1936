@@ -36,6 +36,8 @@
 [data-author="fitzgerald"] { --au:var(--author-fitzgerald) }
 [data-author="harbou"]     { --au:var(--author-harbou) }
 [data-author="blackwood"]  { --au:var(--author-blackwood) }
+[data-author="chambers"]   { --au:var(--author-chambers) }
+[data-author="machen"]     { --au:var(--author-machen) }
 
 /* ---------- sticky bar ---------- */
 .topbar{
@@ -246,6 +248,10 @@
    var(--ink-rule) 0 1px,transparent 1px 4px,var(--ink-rule) 4px 5px) }
 [data-author="blackwood"]  .rule{ height:3px; background:repeating-linear-gradient(90deg,
    var(--ink-rule) 0 7px,transparent 7px 10px) }
+[data-author="chambers"]   .rule{ height:2px; background:repeating-linear-gradient(90deg,
+   var(--ink-rule) 0 2px,transparent 2px 5px) }
+[data-author="machen"]     .rule{ height:3px; background:repeating-linear-gradient(90deg,
+   var(--ink-rule) 0 10px,transparent 10px 13px,var(--ink-rule) 13px 15px,transparent 15px 18px) }
 .rule--head{ margin-top:3.2cqw }
 .rule--foot{ margin-bottom:3.2cqw; transform:scaleY(-1) }
 
@@ -358,6 +364,20 @@
 .chip.on{ color:var(--bg); background:var(--accent); border-color:var(--accent); }
 .chip__n{ margin-left:.45em; font-size:.82em; opacity:.7; font-variant-numeric:tabular-nums; }
 .chip__n:empty{ display:none; }
+/* author bar: the author facet, always in view inside the sticky controls */
+.aubar{ flex:1 0 100%; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+  margin-top:2px; padding-bottom:1px; -webkit-overflow-scrolling:touch; }
+.aubar::-webkit-scrollbar{ display:none; }
+.aub{ all:unset; cursor:pointer; flex:none; display:inline-flex; align-items:center; gap:.42em;
+  font-size:12px; padding:.34em .8em .34em .62em; white-space:nowrap;
+  border:1px solid var(--ink-hair); border-radius:999px; color:var(--fg-muted);
+  transition:color .1s, border-color .1s, background-color .1s; }
+.aub:hover{ color:var(--fg); border-color:color-mix(in srgb, var(--au,var(--fg)) 45%, transparent); }
+.aub:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.aub.on{ color:var(--bg); background:var(--au,var(--accent)); border-color:var(--au,var(--accent)); }
+.aub__mark{ width:14px; height:14px; color:var(--au); }
+.aub.on .aub__mark{ color:currentColor; }
+.aub__n{ font-size:.82em; opacity:.65; font-variant-numeric:tabular-nums; }
 .facet__clear{ all:unset; cursor:pointer; justify-self:start; font-size:11px;
   color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); }
 .facet__clear:hover{ color:var(--accent); border-bottom-color:var(--accent); }

@@ -413,6 +413,8 @@ AUTHOR_BY_FOLDER = {
     "피츠제럴드": "F. Scott Fitzgerald",
     "테아폰하르부": "Thea von Harbou",
     "블랙우드": "Algernon Blackwood",
+    "체임버스": "Robert W. Chambers",
+    "마켄": "Arthur Machen",
 }
 
 
@@ -945,6 +947,13 @@ def infer_levels(blocks):
                 level[t] = "subhead"
 
     nchap = sum(counts[t] for t in counts if level.get(t) == "chapter")
+    # a lone PREFACE must not outrank a run of bare numerals: when the only
+    # chapter-level marker is a named division, the numerals are the chapters
+    # (Chambers, "In Search of the Unknown": PREFACE, then I–XXV)
+    chap_types = [t for t in counts if level.get(t) == "chapter"]
+    if chap_types == ["named"] and counts.get("numeric", 0) >= 3 > counts["named"]:
+        level["numeric"] = "chapter"
+        nchap = sum(counts[t] for t in counts if level.get(t) == "chapter")
     if nchap == 0:
         # promote the most frequent low-level marker to chapter
         low = [(counts[t], t) for t in counts if level.get(t) == "subhead"]

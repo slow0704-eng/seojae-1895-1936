@@ -22,7 +22,7 @@ CSS = io.open(_os.path.join(HERE, "reader.css"), encoding="utf-8").read()
 IDXCSS = io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read()
 JS = io.open(_os.path.join(HERE, "portal.js"), encoding="utf-8").read()
 
-from jacket import mark, title_split, len_bucket, FORM_KO
+from jacket import mark, title_split, len_bucket, FORM_KO, roll
 import landing
 
 HEAD_RX = re.compile(r'^<h2 class="(chapter|part)" id="([^"]+)"[^>]*>(.*)</h2>$')
@@ -256,6 +256,14 @@ def index_page(cat, works):
         form_ct[w.get("form", "novel")] = form_ct.get(w.get("form", "novel"), 0) + 1
         dec_ct[DECADE(w["year"])] = dec_ct.get(DECADE(w["year"]), 0) + 1
     a_ko = {a["slug"]: a["ko"] for a in cat["authors"]}
+    # the same author facet, always in view: one tap narrows the shelf to one hand
+    aubar = ('<div class="aubar" id="aubar" role="group" aria-label="작가별로 보기">'
+             '<button class="aub" data-v="">전체<span class="aub__n">%d</span></button>%s</div>'
+             % (len(works), "".join(
+                 '<button class="aub" data-v="%s" data-author="%s">%s%s<span class="aub__n">%d</span></button>'
+                 % (a["slug"], a["slug"], mark(a["slug"], "aub__mark"), html.escape(a["ko"]),
+                    auth_ct.get(a["slug"], 0))
+                 for a in cat["authors"] if auth_ct.get(a["slug"]))))
     facets = "\n".join([
         chips("author", [(s, a_ko[s], auth_ct[s]) for s in
                          sorted(auth_ct, key=lambda s: -auth_ct[s])]),
@@ -280,7 +288,7 @@ def index_page(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 1895—1936</title>
-<meta name="description" content="퍼블릭 도메인 영문 소설 %(n)d편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드.">
+<meta name="description" content="퍼블릭 도메인 영문 소설 %(n)d편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -313,9 +321,9 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <header class="masthead">
   <p class="mh__kicker">개인 서재</p>
   <h1 class="mh__title">1895<em>—</em>1936</h1>
-  <p class="mh__roll">Kafka &nbsp;·&nbsp; Wells &nbsp;·&nbsp; Fitzgerald &nbsp;·&nbsp; von Harbou</p>
+  <p class="mh__roll">%(roll)s</p>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 4인 &nbsp;·&nbsp; %(mchars)s &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; %(nauth)d인 &nbsp;·&nbsp; %(mchars)s &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -337,6 +345,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <option value="light">종이</option><option value="sepia">세피아</option>
     <option value="dark">야간</option><option value="night">심야</option>
   </select>
+  %(aubar)s
 </nav>
 <div class="facets" id="facets" hidden>%(facets)s
   <button class="facet__clear" id="facetclear">모두 해제</button>
@@ -361,8 +370,9 @@ var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 """ % {"css": CSS, "icss": IDXCSS, "js": JS, "shell": READER_SHELL,
        "fav": landing.FAVICON,
        "n": len(works), "mchars": man(tot_chars), "hours": tot_min // 60,
+       "roll": roll(cat["authors"]), "nauth": len(cat["authors"]),
        "grid": "\n".join(grid), "plates": "\n".join(plates),
-       "facets": facets, "authnav": authnav,
+       "facets": facets, "authnav": authnav, "aubar": aubar,
        "manifest": json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))}
 
 

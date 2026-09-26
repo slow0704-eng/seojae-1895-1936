@@ -1041,6 +1041,14 @@ function buildFacets() {
       syncFacets(); saveUI(); applyFilter();
     }
   });
+  var bar = $("#aubar");
+  if (bar) bar.addEventListener("click", function (e) {
+    var b = e.target.closest(".aub"); if (!b) return;
+    var v = b.dataset.v;
+    /* one author at a time from the bar; tapping the lit one (or 전체) clears */
+    FACETS.author = (!v || (FACETS.author.length === 1 && FACETS.author[0] === v)) ? [] : [v];
+    syncFacets(); saveUI(); applyFilter();
+  });
   btn.addEventListener("click", function () {
     var on = box.hidden;
     box.hidden = !on;
@@ -1062,6 +1070,11 @@ function syncFacets() {
   $$("#facets .chip").forEach(function (c) {
     var f = c.closest(".facet").dataset.facet;
     c.classList.toggle("on", FACETS[f].indexOf(c.dataset.v) >= 0);
+  });
+  $$("#aubar .aub").forEach(function (c) {
+    var v = c.dataset.v;
+    var on = v ? (FACETS.author.length === 1 && FACETS.author[0] === v) : !FACETS.author.length;
+    c.classList.toggle("on", on); c.setAttribute("aria-pressed", on ? "true" : "false");
   });
   var n = facetTotal(), b = $(".ctl__facetn");
   if (b) { b.hidden = !n; b.textContent = n; }

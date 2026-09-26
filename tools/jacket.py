@@ -21,10 +21,28 @@ MARKS = {
  "blackwood": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/>'
           '<path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
+ "chambers": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter">'
+          '<path d="M4.6 17.4 3.6 7.6l4.9 4.1L12 5.2l3.5 6.5 4.9-4.1-1 9.8z"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g><circle cx="12" cy="14.2" r=".85" fill="currentColor"/>',
+ "machen": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
+          '<path d="M9.6 17.6V6.4c0-2.2 4.8-2.2 4.8 0v11.2"/>'
+          '<path d="M2.8 21.5c3.6-3.9 14.8-3.9 18.4 0" opacity=".45"/></g>'
+          '<circle cx="12" cy="9.4" r=".8" fill="currentColor"/>',
  "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
           '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
 }
+
+
+def surname(en):
+    """'Thea von Harbou' -> 'von Harbou', 'H. G. Wells' -> 'Wells'."""
+    w = en.split()
+    return " ".join(w[-2:]) if len(w) > 2 and w[-2].islower() else w[-1]
+
+
+def roll(authors):
+    """The masthead name line, from the catalogue so it can never fall behind."""
+    return " &nbsp;·&nbsp; ".join(surname(a["en"]) for a in authors)
 
 
 def mark(slug, cls="mark"):

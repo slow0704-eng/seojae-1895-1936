@@ -15,7 +15,7 @@ HERE = _os.path.join(ROOT, "tools")
 SITE_DIR = chr(49436) + chr(51116)                     # 서재
 SITE_HREF = "%EC%84%9C%EC%9E%AC/index.html"            # 서재/index.html, percent-encoded
 
-from jacket import mark, jacket
+from jacket import mark, jacket, roll
 
 LCSS = io.open(_os.path.join(HERE, "landing.css"), encoding="utf-8").read()
 
@@ -24,18 +24,21 @@ FAVICON = ("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20vie
            "%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E"
            "%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E")
 
-# A spread across the five hands and four decades. Anything missing from the
+# A spread across the seven hands and four decades. Anything missing from the
 # catalogue is simply dropped, so this list can never break the build.
 WALL_A = ["wells-the-time-machine", "kafka-the-metamorphosis", "fitzgerald-the-great-gatsby",
           "wells-the-war-of-the-worlds", "harbou-metropolis", "wells-the-invisible-man",
           "fitzgerald-this-side-of-paradise", "wells-the-island-of-doctor-moreau",
           "kafka-the-trial", "wells-tono-bungay", "fitzgerald-tales-of-the-jazz-age",
-          "wells-the-first-men-in-the-moon", "blackwood-the-willows"]
+          "wells-the-first-men-in-the-moon", "blackwood-the-willows",
+          "chambers-the-king-in-yellow",
+          "machen-the-white-people"]
 WALL_B = ["kafka-the-castle", "wells-a-modern-utopia", "fitzgerald-the-beautiful-and-damned",
           "wells-ann-veronica", "wells-the-world-set-free", "fitzgerald-all-the-sad-young-men",
           "wells-the-food-of-the-gods", "kafka-poseidon", "wells-kipps",
           "fitzgerald-the-vegetable", "wells-the-sleeper-awakes", "wells-the-dream",
-          "blackwood-the-wendigo", "blackwood-john-silence-physician-extraordinary"]
+          "blackwood-the-wendigo", "blackwood-john-silence-physician-extraordinary",
+          "chambers-the-slayer-of-souls"]
 
 # The reading surface, shown rather than described. Written for this page —
 # a type specimen, not an extract.
@@ -133,7 +136,7 @@ def build_landing(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 %(y0)d—%(y1)d · 퍼블릭 도메인 소설 %(n)d편</title>
-<meta name="description" content="카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
+<meta name="description" content="카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -172,7 +175,7 @@ def build_landing(cat, works):
 <section class="hero wrap">
   <p class="kicker hero__kick">개인 서재 &middot; 퍼블릭 도메인</p>
   <h1 class="hero__t">%(y0)d<em>—</em>%(y1)d</h1>
-  <p class="hero__roll">Kafka &nbsp;·&nbsp; Wells &nbsp;·&nbsp; Fitzgerald &nbsp;·&nbsp; von Harbou</p>
+  <p class="hero__roll">%(roll)s</p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
     소설 %(n)d편이 한 페이지 안에 있고, 덮은 자리의 <b>글자</b> 위에 다시 세워 둡니다.
     설치도, 계정도, 네트워크도 필요하지 않습니다.</p>
@@ -246,10 +249,11 @@ def build_landing(cat, works):
 <section class="sec wrap" id="authors">
   <div class="sec__hd rv">
     <p class="sec__n">03 &nbsp;/&nbsp; 작가</p>
-    <h2 class="sec__t">다섯 사람이 %(yspan)d년을 나눠 씁니다.</h2>
+    <h2 class="sec__t">일곱 사람이 %(yspan)d년을 나눠 씁니다.</h2>
     <p class="lede">한 명은 세기말의 런던에서, 한 명은 프라하의 보험국에서,
       한 명은 재즈 시대의 파티에서, 한 명은 바이마르의 촬영장에서,
-      한 명은 캐나다의 숲과 알프스의 눈 속에서 썼습니다.</p>
+      한 명은 캐나다의 숲과 알프스의 눈 속에서, 한 명은 파리의 화실과 뉴욕의 잡지사에서,
+      한 명은 웨일스의 언덕을 등진 런던의 하숙방에서 썼습니다.</p>
   </div>
   <div class="auths">%(auths)s</div>
 </section>
@@ -292,10 +296,7 @@ def build_landing(cat, works):
     <div>
       <h4>저작권</h4>
       <ul>
-        <li>Franz Kafka &middot; 1924</li>
-        <li>H. G. Wells &middot; 1946</li>
-        <li>F. Scott Fitzgerald &middot; 1940</li>
-        <li>Thea von Harbou &middot; 1954</li>
+        %(deaths)s
       </ul>
     </div>
   </div>
@@ -357,7 +358,9 @@ def build_landing(cat, works):
 """ % {"css": LCSS, "fav": FAVICON, "site": SITE_HREF,
        "n": len(works), "y0": span[0], "y1": span[1], "yspan": span[1] - span[0],
        "chars": "{:,}".format(tot_chars), "mchars": man(tot_chars),
-       "hours": tot_min // 60, "facts": facts_h,
+       "hours": tot_min // 60, "facts": facts_h, "roll": roll(cat["authors"]),
+       "deaths": "\n        ".join("<li>%s &middot; %s</li>" % (html.escape(a["en"]), a["life"][-4:])
+                                   for a in cat["authors"]),
        "wall_a": wall(WALL_A), "wall_b": wall(WALL_B),
        "auths": "\n".join(auths_h), "keys": keys_h, "spec": SPECIMEN,
        "longest": html.escape(longest["titleKo"]), "lch": man(longest["chars"]),

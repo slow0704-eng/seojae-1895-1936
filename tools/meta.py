@@ -31,6 +31,16 @@ AUTHORS = {
         "life": "1869–1951", "slug": "blackwood",
         "note": "숲과 눈과 바람 속에서 사람보다 큰 것을 느낀 괴기소설가. 러브크래프트가 스승으로 꼽은 사람.",
     },
+    "체임버스": {
+        "en": "Robert W. Chambers", "ko": "로버트 W. 체임버스",
+        "life": "1865–1933", "slug": "chambers",
+        "note": "『노란 옷의 왕』으로 코즈믹 호러의 문을 연 뒤, 당대 가장 잘 팔리는 대중소설가가 된 사람.",
+    },
+    "마켄": {
+        "en": "Arthur Machen", "ko": "아서 마켄",
+        "life": "1863–1947", "slug": "machen",
+        "note": "웨일스 언덕의 옛 신들을 불러낸 신비주의자. 괴기소설을 경이의 문학으로 쓴 사람.",
+    },
 }
 
 KO_TITLES = {
@@ -103,6 +113,14 @@ KO_TITLES = {
     "The Willows": ("버드나무", ""),
     "John Silence, Physician Extraordinary": ("특별한 의사 존 사일런스", ""),
     "The Wendigo": ("웬디고", ""),
+    # Chambers
+    "The King in Yellow": ("노란 옷의 왕", ""),
+    "The Mystery of Choice": ("선택의 수수께끼", ""),
+    "Cardigan": ("카디건", ""),
+    "In Search of the Unknown": ("미지를 찾아서", ""),
+    "The Slayer of Souls": ("영혼을 죽이는 자", ""),
+    # Machen
+    "The White People": ("백색 사람들", ""),
     "The Centaur": ("켄타우로스", ""),
 }
 
@@ -133,6 +151,9 @@ FORM = {
     "John Silence, Physician Extraordinary": "collection",
     "The Willows": "novella",
     "The Wendigo": "novella",
+    "The King in Yellow": "collection",
+    "The Mystery of Choice": "collection",
+    "The White People": "novella",
 }
 
 WPM = 240   # words per minute, unhurried literary reading
@@ -140,7 +161,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder

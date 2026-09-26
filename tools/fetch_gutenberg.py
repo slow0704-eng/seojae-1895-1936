@@ -75,6 +75,13 @@ u"블랙우드": [
     (10897,1910, "The Wendigo"),
     (9964, 1911, "The Centaur"),
 ],
+u"체임버스": [
+    (8492, 1895, "The King in Yellow"),
+    (46581,1897, "The Mystery of Choice"),
+    (38958,1901, "Cardigan"),
+    (18668,1904, "In Search of the Unknown"),
+    (36281,1920, "The Slayer of Souls"),
+],
 }
 
 START = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)
