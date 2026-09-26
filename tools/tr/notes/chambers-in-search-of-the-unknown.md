@@ -30,7 +30,7 @@
 - dingue **딩그**(울음 ding-dong → “딩동”) · *Dingus solitarius* 딩구스 솔리타리우스 · monodactyl 모노닥틸(빌리가 한 자씩: “모-노-닥-틸”) · mammoth 매머드
 - ux **억스**, 복수 uxen 억스들 · Tasmanian devil 태즈메이니아데블 · purple-spotted zoombok 자주점박이 줌복
 - Sphyx **스픽스** · rosium oxide 산화로지움 · chlorate strontium 염소산스트론튬 · Fountain of Youth 젊음의 샘
-- thermosaurus **테르모사우루스** · ichthyosaurus/plesiosaurus/anthracosaurus 이크티오사우루스/플레시오사우루스/안트라코사우루스 · kree 크리 · ekaf-bird **에카프새** · ool-yllik **울일릭**(각각 fake, killy-loo를 뒤집은 말 — 그대로 음역) · pallium 팔리움 · Gulf loop 걸프 고리 해류
+- thermosaurus **테르모사우루스** · ichthyosaurus/plesiosaurus/anthracosaurus 이크티오사우루스/플레시오사우루스/안트라코사우루스 · kree 크리 · ekaf-bird **에카프새** · ool-yllik **울일릭**(각각 fake, killy-loo를 뒤집은 말 — 그대로 음역) · pallium 팔리움 · Gulf Stream 멕시코 만류 / Gulf loop 멕시코 만류 고리(→ 번역 후 확정 참고)
 - *Felis domestica* 펠리스 도메스티카 · Boston Dodo Society of Pythagorean Research 보스턴 도도 피타고라스 연구회(회원 dodo 도도) · Junior Ornithological Jay Society 청년 조류학 어치회(jay 어치) · Mahatmas 마하트마들 · Consolidated/Pythagorean Trust 합동 신탁 회사/피타고라스 트러스트 · Crimson Diamond **진홍 다이아몬드**
 
 ## 말투
@@ -68,3 +68,12 @@
 ## 대문자·강조
 - 원문 대문자 강조(36청크 p:1463 THE ETERNAL ENIGMA, 태그 밖)는 태그를 새로 만들지 않고 **어휘로** 세웁니다: “바로 그 영원한 수수께끼를”. 앞뒤 `<em>`은 그대로. 교수 대사의 the Eternal Enigma도 “영원한 수수께끼”.
 - 전보·편지 머리의 대문자(EVERGLADES, FLORIDA / ATLANTA, GEORGIA / BLACK HARBOR / FARRAGO)는 평범한 한글로(“플로리다주 에버글레이즈”, “조지아주 애틀랜타”, “블랙하버에서”, “퍼라고”). smallcaps 서명은 태그 유지. `<em>`으로 된 강조 한 낱말(*is*, *has*, *that*, *Our*)은 조사까지 포함해 대응 한국어에 겁니다(“정말로 <em>있다</em>”).
+
+## 번역 후 확정
+- 장 제목: 머리말, 제1장–제25장(h:ch001–ch026) 확인 완료.
+- Gulf Stream → **멕시코 만류**, Gulf loop → **멕시코 만류(의) 고리**(“걸프 고리 해류”는 폐기). the loop 단독은 “고리 해류”.
+- 따옴표: 원문의 뒤집힌·짝 안 맞는 따옴표(‘Come,‘ / ”Unknown bird“ / F.“)는 모두 정상 “ ” ‘ ’ 짝으로 바로잡음. 액자 안 대사 속 인용은 “ ”(‘…“익스프레스” 총…’). 속생각은 ‘ ’(나는 생각했다). 작품 제목은 괄호 없이 ‘ ’ 또는 원문의 <em>.
+- Zoological Society의 president → **회장**(원장 아님). blue-stocking → “블루스타킹”. scarlet tape → 주홍색 테이프.
+- 스몰 → 빌리 해라체 확정. 켄셋 → 데이지 첫 만남(38장 p:1551·1553)은 하십시오체, 39장부터 해요체.
+- 켄셋 → 윌헬미나: “나”+해요체(“저” 아님). 윌헬미나: 부를 때 papa → “아빠”, 서술적 my father → “아버지”(052 ‘아부지’ 말장난 유지).
+- 와이어스 → 켄셋은 주로 “자네”+하게체(“젊은이”는 58장부터). 켄셋 → 와이어스 하오체(“–구려/–소”).

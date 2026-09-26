@@ -427,6 +427,16 @@ def check_cli(args):
         if not isinstance(got, dict):
             print("%-56s not a flat object" % t); bad += 1; continue
         clean, prob = check(job, got)
+        # emphasis is easy to drop in translation and the key check cannot see it;
+        # a count mismatch is only a warning (merging two <em> can be right)
+        src = {it["k"]: str(it["t"]) for it in job["items"]}
+        warn = [k for k, v in clean.items()
+                if src[k].count("<em>") != v.count("<em>")
+                or src[k].count("<span") != v.count("<span")]
+        for k in warn[:12]:
+            print("    warn: emphasis count differs in %s (%d -> %d)"
+                  % (k, src[k].count("<em>") + src[k].count("<span"),
+                     clean[k].count("<em>") + clean[k].count("<span")))
         if prob:
             bad += 1
             print("%-56s %d problem(s)" % (t, len(prob)))
