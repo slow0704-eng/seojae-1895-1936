@@ -40,10 +40,11 @@ def ptext(h):
 
 
 def files():
+    import aozora                    # Japanese originals have their own parser
     out = []
     for d in sorted(os.listdir(ROOT)):
         p = os.path.join(ROOT, d)
-        if os.path.isdir(p):
+        if os.path.isdir(p) and d not in aozora.WORKS:
             for f in sorted(os.listdir(p)):
                 if f.endswith(".txt") and not f.startswith("00_"):
                     out.append(os.path.join(p, f))

@@ -17,7 +17,7 @@
   --rule:#E3DDD1;          --border:#D6CEBF;
   --sb-track:#F0ECE4;      --sb-thumb:#BEB5A6;  --sb-thumb-hover:#8C8272;
   --author-kafka:#58688C;  --author-wells:#417262;
-  --author-fitzgerald:#796740; --author-harbou:#756185; --author-blackwood:#86574A; --author-chambers:#86733A; --author-machen:#8B5566; --author-andreyev:#5F6670; --author-jacobs:#6E5F4B;
+  --author-fitzgerald:#796740; --author-harbou:#756185; --author-blackwood:#86574A; --author-chambers:#86733A; --author-machen:#8B5566; --author-andreyev:#5F6670; --author-jacobs:#6E5F4B; --author-yumeno:#9A5334; --author-akutagawa:#356E7B;
   --body-wght:400;         --dark-track:0em;
 }
 [data-theme="sepia"]{
@@ -33,7 +33,7 @@
   --rule:#DCCDAE;          --border:#CFBC96;
   --sb-track:#E8DCC4;      --sb-thumb:#BFAD8B;  --sb-thumb-hover:#92805E;
   --author-kafka:#526286;  --author-wells:#3B6B5B;
-  --author-fitzgerald:#73603A; --author-harbou:#6F5A7E; --author-blackwood:#7F5242; --author-chambers:#7E6B2F; --author-machen:#845061; --author-andreyev:#5A6069; --author-jacobs:#685942;
+  --author-fitzgerald:#73603A; --author-harbou:#6F5A7E; --author-blackwood:#7F5242; --author-chambers:#7E6B2F; --author-machen:#845061; --author-andreyev:#5A6069; --author-jacobs:#685942; --author-yumeno:#924E30; --author-akutagawa:#316774;
 }
 [data-theme="dark"]{
   color-scheme: dark;
@@ -48,7 +48,7 @@
   --rule:#302D29;          --border:#3C3834;
   --sb-track:#211F1D;      --sb-thumb:#454039;  --sb-thumb-hover:#6D6760;
   --author-kafka:#8797B6;  --author-wells:#769F8F;
-  --author-fitzgerald:#A59473; --author-harbou:#A190AF; --author-blackwood:#B58D7E; --author-chambers:#C2AD6A; --author-machen:#BD8E9C; --author-andreyev:#9AA2AD; --author-jacobs:#AC9D86;
+  --author-fitzgerald:#A59473; --author-harbou:#A190AF; --author-blackwood:#B58D7E; --author-chambers:#C2AD6A; --author-machen:#BD8E9C; --author-andreyev:#9AA2AD; --author-jacobs:#AC9D86; --author-yumeno:#CF9474; --author-akutagawa:#78AAB5;
   --body-wght:370;         --dark-track:0.008em;
 }
 [data-theme="night"]{
@@ -64,7 +64,7 @@
   --rule:#252220;          --border:#322E29;
   --sb-track:#151413;      --sb-thumb:#383430;  --sb-thumb-hover:#605A52;
   --author-kafka:#7887A5;  --author-wells:#668E80;
-  --author-fitzgerald:#948564; --author-harbou:#92809F; --author-blackwood:#A5806F; --author-chambers:#AE9C62; --author-machen:#AC8190; --author-andreyev:#8C939C; --author-jacobs:#9D8F7A;
+  --author-fitzgerald:#948564; --author-harbou:#92809F; --author-blackwood:#A5806F; --author-chambers:#AE9C62; --author-machen:#AC8190; --author-andreyev:#8C939C; --author-jacobs:#9D8F7A; --author-yumeno:#BD876A; --author-akutagawa:#6D9BA5;
   --body-wght:370;         --dark-track:0.008em;
 }
 
@@ -565,6 +565,28 @@ body.pal-on #palette{ display:flex; }
   position:fixed; inset:0; z-index:95; pointer-events:none;
   background:#000; opacity:0; transition:opacity .2s linear;
 }
+
+/* ---------- 13b. JAPANESE ORIGINALS ----------
+   Aozora texts: system Mincho faces (Yu Mincho ships with Windows 10+,
+   Hiragino with macOS). Ruby stays — it is part of how these texts read.
+   Paragraphs arrive without their leading ideographic space, so the indent
+   is CSS: one full em, as in a Japanese book. */
+#book:lang(ja), #book :lang(ja){
+  font-family:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Hiragino Mincho Pro",
+              "Noto Serif JP","Noto Serif CJK JP","BIZ UDPMincho","MS PMincho",serif;
+  font-size:.96em;
+  line-height:calc(var(--lh,1.72) + .18);
+  letter-spacing:.02em;
+  font-weight:500;
+  word-break:normal; line-break:strict; overflow-wrap:anywhere;
+  text-align:justify; hyphens:none; hanging-punctuation:allow-end;
+  font-variant-numeric:normal; font-synthesis:none;
+}
+#book:lang(ja) p + p{ text-indent:1em; }
+#book:lang(ja) em{ font-style:normal; text-emphasis:filled sesame; -webkit-text-emphasis:filled sesame; }
+#book ruby{ ruby-align:center; ruby-position:over; }
+#book ruby rt{ font-size:.5em; letter-spacing:-.02em; line-height:1; opacity:.8; ruby-align:center; }
+#book :lang(ko) ruby rt{ display:none; }
 
 /* ---------- 14. KOREAN / BILINGUAL ----------
    The Latin faces carry no Hangul, so the browser falls through per character:

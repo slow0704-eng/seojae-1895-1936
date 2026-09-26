@@ -112,6 +112,7 @@ def man(n):
     return ("%.1f만 자" % v).replace(".0만", "만") if v < 100 else "{:,}만 자".format(round(v))
 
 
+ORIG_KO = {"en": "영문", "ja": "일본어"}   # what the original-language button says
 FACET_KO = {"author": "작가", "decade": "연대", "form": "형식", "size": "분량",
             "state": "상태", "lang": "언어"}
 
@@ -136,7 +137,7 @@ def cover(w, i):
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">%(ko)s</p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
   <p class="cap"><span class="cap__pct"></span><span>%(chars)s</span><b>&middot;</b><span>%(time)s</span></p>
  </div>
@@ -148,6 +149,7 @@ def cover(w, i):
         "mark": mark(w["author"], "cover__mark"), "main": html.escape(main), "sub": subh,
         "auth": html.escape(w["authorEn"]), "authko": html.escape(w["authorKo"]),
         "form": FORM_KO.get(w.get("form", "novel"), "장편"), "chars": man(w["chars"]),
+        "origlab": ORIG_KO.get(w.get("orig", "en"), "원문"),
         "time": ("%d시간 %d분" % (mins // 60, mins % 60)) if mins >= 60 else ("%d분" % mins)}
 
 
@@ -191,7 +193,7 @@ READER_SHELL = """
     <div class="st-row"><span class="st-l">화면 어둡기</span><span class="st-c"><input type="range" data-k="dim" min="0" max="55" step="5"><span class="v" data-v="dim"></span></span></div>
     <div class="st-row"><span class="st-l">화면 켜두기</span><span class="st-c"><button class="st-tog" data-tog="wake"><i></i></button></span></div>
     <div class="st-grp">언어</div>
-    <div class="st-row"><span class="st-l">본문 언어</span><span class="st-c"><span class="st-seg" data-k="lang"><button data-seg="en">영문</button><button data-seg="ko">한글</button><button data-seg="both">대역</button></span></span></div>
+    <div class="st-row"><span class="st-l">본문 언어</span><span class="st-c"><span class="st-seg" data-k="lang"><button data-seg="en">원문</button><button data-seg="ko">한글</button><button data-seg="both">대역</button></span></span></div>
     <div class="st-row"><span class="st-l">대역 원문 크기</span><span class="st-c"><input type="range" data-k="trScale" min="70" max="100" step="5"><span class="v" data-v="trScale"></span></span></div>
     <div class="st-row"><span class="st-l">미번역 문단 표시</span><span class="st-c"><button class="st-tog" data-tog="markUntr"><i></i></button></span></div>
     <div class="st-grp">표시</div>
@@ -240,7 +242,8 @@ def index_page(cat, works):
 
     manifest = [dict({k: w[k] for k in ("id", "title", "titleKo", "author", "authorKo",
                                         "authorEn", "year", "chars", "minutes", "words")},
-                     titleOrig=w.get("titleOrig", ""), form=w.get("form", "novel"))
+                     titleOrig=w.get("titleOrig", ""), form=w.get("form", "novel"),
+                     orig=w.get("orig", "en"))
                 for w in works]
 
     # ---- facet chips -------------------------------------------------------
@@ -290,7 +293,7 @@ def index_page(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서재 1895—1936</title>
-<meta name="description" content="퍼블릭 도메인 영문 소설 %(n)d편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스.">
+<meta name="description" content="퍼블릭 도메인 소설 %(n)d편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -394,7 +397,11 @@ def main():
     for w in works:
         src = _os.path.join(ROOT, w["file"].replace("/", _os.sep))
         try:
-            r = bookparse.parse(src)
+            if w.get("orig") == "ja":
+                import aozora
+                r = aozora.parse(src)
+            else:
+                r = bookparse.parse(src)
             body, chapters = sectionise(prepare(r["html"], r["author"]).split("\n"))
             payload = {"id": w["id"], "sig": sig("%d:%s" % (len(chapters), body[:200] + body[-200:])),
                        "chapters": chapters, "html": body}

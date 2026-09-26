@@ -235,7 +235,7 @@ function openWork(id, opts) {
   loadBook(id, function (d) {
     loadKo(id, function (ko) {
       document.body.classList.remove("loading");
-      WORK = { id: w.id, title: w.title, titleKo: w.titleKo, author: w.author,
+      WORK = { id: w.id, title: w.title, titleKo: w.titleKo, author: w.author, orig: w.orig || "en",
                authorKo: w.authorKo, authorEn: w.authorEn, year: w.year, words: w.words,
                sig: d.sig, chars: 0, paras: 0, lang: ko ? S.lang : "en", ko: ko,
                chapters: (d.chapters || []).map(function (c) { return Object.assign({}, c); }) };
@@ -258,7 +258,10 @@ function relayout() {
   WORK.paras = paras.length;
   TINY = WORK.chars < 4000;
   buildChapterIndex();
-  $("#book").lang = WORK.lang === "en" ? "en" : "ko";
+  /* the book speaks its original language unless it is showing Korean only;
+     Korean paragraphs carry lang="ko" themselves in 대역 */
+  $("#book").lang = WORK.lang === "ko" ? "ko" : WORK.orig;
+  document.body.dataset.orig = WORK.orig;
   document.body.dataset.booklang = WORK.lang;
 }
 
@@ -333,6 +336,9 @@ function goWork(id, opts) {
 /* ---------- language ---------- */
 var LANG_ORDER = ["en", "ko", "both"];
 var LANG_KO = { en: "영문", ko: "한글", both: "대역" };
+var ORIG_KO = { en: "영문", ja: "일본어" };
+/* "en" is the original-language slot; what it is called depends on the book */
+function langLabel(k, orig) { return k === "en" ? (ORIG_KO[orig || (WORK && WORK.orig)] || "원문") : LANG_KO[k]; }
 var LANG_NOTE = { en: "원문으로 읽는 중", ko: "한글본으로 읽는 중", both: "원문과 번역을 나란히" };
 
 function chLabel(c) {
@@ -353,6 +359,7 @@ function updateLangBtn() {
   $$(".lseg").forEach(function (g) {
     g.classList.toggle("off", !info);
     $$("[data-lang]", g).forEach(function (x) {
+      if (x.dataset.lang === "en") x.textContent = langLabel("en");
       var on = x.dataset.lang === cur;
       x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false");
       x.disabled = !info && x.dataset.lang !== "en";
@@ -394,7 +401,7 @@ function setLang(mode) {
         function () { if (touched) flush(); updateHud(); });
     } else updateHud();
     updateLangBtn();
-    toast(LANG_KO[eff] + " · " + LANG_NOTE[eff]);
+    toast(langLabel(eff) + " · " + LANG_NOTE[eff]);
   });
 }
 function cycleLang() {

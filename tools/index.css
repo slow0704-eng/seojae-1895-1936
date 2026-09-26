@@ -40,6 +40,8 @@
 [data-author="machen"]     { --au:var(--author-machen) }
 [data-author="andreyev"]   { --au:var(--author-andreyev) }
 [data-author="jacobs"]     { --au:var(--author-jacobs) }
+[data-author="yumeno"]     { --au:var(--author-yumeno) }
+[data-author="akutagawa"]  { --au:var(--author-akutagawa) }
 
 /* ---------- sticky bar ---------- */
 .topbar{
@@ -257,6 +259,10 @@
 [data-author="andreyev"]   .rule{ height:1px; background:var(--ink-rule) }
 [data-author="jacobs"]     .rule{ height:3px; background:linear-gradient(
    var(--ink-rule) 0 .5px,transparent .5px 2.5px,var(--ink-rule) 2.5px 3px) }
+[data-author="yumeno"]     .rule{ height:4px; background:repeating-linear-gradient(90deg,
+   var(--ink-rule) 0 1px,transparent 1px 4px) }
+[data-author="akutagawa"]  .rule{ height:5px; background:linear-gradient(
+   var(--ink-rule) 0 2px,transparent 2px 4px,var(--ink-rule) 4px 5px) }
 .rule--head{ margin-top:3.2cqw }
 .rule--foot{ margin-bottom:3.2cqw; transform:scaleY(-1) }
 

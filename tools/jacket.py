@@ -37,6 +37,13 @@ MARKS = {
           '<path d="M9.6 14.6V6.1c0-1.2 1.6-1.2 1.6 0v6.2"/><path d="M11.2 12.3V4.4c0-1.2 1.6-1.2 1.6 0v7.9"/>'
           '<path d="M12.8 12.3V6.3c0-1.2 1.6-1.2 1.6 0v6"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
+ "yumeno": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">'
+          '<path d="M12 11.6c.6 0 .9.5.8 1-.2.8-1.2 1.1-1.9.7-1-.6-1.1-2-.4-2.9 1-1.2 2.9-1.2 4-.2 1.4 1.3 1.3 3.6-.1 4.9-1.7 1.6-4.5 1.5-6.1-.2-1.9-2-1.7-5.3.3-7.2 2.3-2.2 6.1-2 8.3.4"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
+ "akutagawa": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
+          '<path d="M3.4 6.2h17.2"/><path d="M4.8 9.6h14.4"/><path d="M5.2 14h13.6" opacity=".6"/>'
+          '<path d="M6.6 6.2v15.3"/><path d="M17.4 6.2v15.3"/><path d="M12 9.6v4.4"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
  "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
           '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',

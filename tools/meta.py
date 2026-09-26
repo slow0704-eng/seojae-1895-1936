@@ -51,6 +51,16 @@ AUTHORS = {
         "life": "1863–1943", "slug": "jacobs",
         "note": "템스강 부두의 익살꾼. 단 한 편의 괴담으로 세 가지 소원의 공포를 영원히 남긴 사람.",
     },
+    "유메노": {
+        "en": "Yumeno Kyūsaku", "ko": "유메노 규사쿠", "orig": "ja",
+        "life": "1889–1936", "slug": "yumeno",
+        "note": "『도구라 마구라』의 작가. 편지와 독백으로 광기를 받아 적은 일본 환상문학의 괴물.",
+    },
+    "아쿠타가와": {
+        "en": "Akutagawa Ryūnosuke", "ko": "아쿠타가와 류노스케", "orig": "ja",
+        "life": "1892–1927", "slug": "akutagawa",
+        "note": "옛이야기를 근대의 칼로 다시 벼린 단편의 명인. 서른다섯에 스스로 떠났다.",
+    },
 }
 
 KO_TITLES = {
@@ -135,6 +145,13 @@ KO_TITLES = {
     "The Seven Who Were Hanged": ("사형수 7인", "Рассказ о семи повешенных"),
     # Jacobs
     "The Monkey's Paw": ("원숭이 손", ""),
+    # Japanese originals (Aozora Bunko), keyed by the romanised file title
+    "Shojo Jigoku": ("소녀 지옥", "少女地獄"),
+    "Akuma Kitosho": ("악마 기도서", "悪魔祈祷書"),
+    "Masayume": ("정몽", "正夢"),
+    "Rashomon": ("라쇼몽", "羅生門"),
+    "Jigokuhen": ("지옥변", "地獄変"),
+    "Yabu no Naka": ("덤불 속", "藪の中"),
     "The Centaur": ("켄타우로스", ""),
 }
 
@@ -170,6 +187,12 @@ FORM = {
     "The White People": "novella",
     "The Seven Who Were Hanged": "novella",
     "The Monkey's Paw": "story",
+    "Shojo Jigoku": "collection",
+    "Akuma Kitosho": "story",
+    "Masayume": "story",
+    "Rashomon": "story",
+    "Jigokuhen": "story",
+    "Yabu no Naka": "story",
 }
 
 WPM = 240   # words per minute, unhurried literary reading
@@ -177,7 +200,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스", "유메노", "아쿠타가와"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder
@@ -189,14 +212,25 @@ def build():
             t = io.open(os.path.join(d, f), encoding="utf-8").read()
             words = len(re.findall(r"[A-Za-z\u2019'\u2010-\u2015]+", t))
             ko, orig = KO_TITLES.get(title, (title, ""))
+            ja = a.get("orig") == "ja"
+            slug_src = title
+            if ja:
+                # Japanese: the shelf shows the Japanese title; the id stays romanised.
+                # No words to count, so 2.5 characters stand in for an English word
+                # and pages and reading time come out on the same scale.
+                import aozora
+                body = re.sub(r"<rt>.*?</rt>|<[^>]+>", "", aozora.parse(os.path.join(d, f))["html"])
+                t, words = body, int(len(body) / 2.5)
+                title, orig = orig or title, title
             out["works"].append({
-                "id": "%s-%s" % (a["slug"], re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")),
+                "id": "%s-%s" % (a["slug"], re.sub(r"[^a-z0-9]+", "-", slug_src.lower()).strip("-")),
                 "file": folder + "/" + f,
                 "author": a["slug"], "authorKo": a["ko"], "authorEn": a["en"],
                 "year": int(year), "title": title, "titleKo": ko, "titleOrig": orig,
                 "chars": len(t), "words": words,
                 "minutes": int(round(words / float(WPM))),
-                "form": FORM.get(title, "novel"),
+                "form": FORM.get(slug_src, "novel"),
+                "orig": a.get("orig", "en"),
             })
     out["works"].sort(key=lambda w: (w["author"], w["year"], w["title"]))
     return out
