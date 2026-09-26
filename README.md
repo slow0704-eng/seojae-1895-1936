@@ -7,7 +7,7 @@
 | 현관 | https://slow0704-eng.github.io/seojae-1895-1936/ |
 | 서재 (바로 읽기) | [slow0704-eng.github.io/seojae-1895-1936/서재/](https://slow0704-eng.github.io/seojae-1895-1936/%EC%84%9C%EC%9E%AC/) |
 | 저장소 | https://github.com/slow0704-eng/seojae-1895-1936 |
-| 수록 | 소설 79편 · 1895–1936 · 작가 11명 · 한국어판 37편 완역 |
+| 수록 | 소설 79편 · 1895–1936 · 작가 11명 · 한국어판 38편 완역 |
 | 요구 사항 | 최신 브라우저 하나. 설치·로그인·서버 없음. 받아서 `index.html`을 열면 오프라인으로도 읽힘 |
 | 배포 | GitHub Pages — `main` 브랜치 루트. **`main`에 push하면 1–2분 뒤 자동 반영** |
 | 빌드 | Python 3 표준 라이브러리만. `cd tools && python build.py && python verify.py` |
