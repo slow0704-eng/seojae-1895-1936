@@ -33,7 +33,7 @@ function save(k, v) {
 var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
-  dim: 0, wake: false, showRemaining: true, showSession: true,
+  dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
   lang: "en", trScale: 85, markUntr: true,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };
@@ -53,6 +53,7 @@ function applySettings() {
   r.dataset.indent = S.indent ? "on" : "off";
   r.dataset.lang = S.lang;
   r.dataset.untr = S.markUntr ? "on" : "off";
+  r.dataset.folio = S.showFolio ? "on" : "off";
   r.style.setProperty("--tr-scale", (S.trScale / 100).toFixed(2));
   var d = document.getElementById("dimmer");
   if (d) d.style.opacity = (S.dim / 100);
@@ -235,7 +236,7 @@ function openWork(id, opts) {
     loadKo(id, function (ko) {
       document.body.classList.remove("loading");
       WORK = { id: w.id, title: w.title, titleKo: w.titleKo, author: w.author,
-               authorKo: w.authorKo, authorEn: w.authorEn, year: w.year,
+               authorKo: w.authorKo, authorEn: w.authorEn, year: w.year, words: w.words,
                sig: d.sig, chars: 0, paras: 0, lang: ko ? S.lang : "en", ko: ko,
                chapters: (d.chapters || []).map(function (c) { return Object.assign({}, c); }) };
       PROG_KEY = "rdr/v1/prog/" + WORK.id;
@@ -456,6 +457,14 @@ function resyncByFraction(frac) {
 }
 
 /* ---------- progress ---------- */
+/* Pages are printed-book pages — 250 words of the English original — not
+   screenfuls, so "p. 120 of 480" survives a font change, a resize or a switch
+   to the Korean text. Position comes from frac, which is language-neutral. */
+var WORDS_PER_PAGE = 250;
+function folioOf(frac) {
+  var n = Math.max(1, Math.round((WORK.words || WORK.chars / 5.5) / WORDS_PER_PAGE));
+  return { n: n, p: frac >= 0.999 ? n : Math.min(n, Math.floor(frac * n) + 1) };
+}
 function chapterOf(pIdx) {
   var cs = WORK.chapters, r = 0;
   for (var i = 0; i < cs.length; i++) if (cs[i].firstP <= pIdx) r = i; else break;
@@ -526,7 +535,7 @@ function buildHud() {
   hud.top = $("#hud-top"); hud.bot = $("#hud-bot"); hud.bar = $("#hairline");
   hud.title = $(".h-title"); hud.ch = $(".h-ch");
   hud.pct = $(".h-pct"); hud.rem = $(".h-rem"); hud.sess = $(".h-sess");
-  hud.fill = $("#hair-fill");
+  hud.fill = $("#hair-fill"); hud.folio = $("#folio");
 
   hud.top.addEventListener("click", function (e) {
     var b = e.target.closest("[data-act]"); if (!b) return;
@@ -549,11 +558,14 @@ function updateHud() {
   var a = captureAnchor(); if (!a) return;
   var chars = cum[a.p] + a.o, frac = Math.min(1, chars / WORK.chars);
   hud.fill.style.transform = "scaleX(" + frac + ")";
+  var f = folioOf(frac), pg = f.p.toLocaleString() + " / " + f.n.toLocaleString() + "쪽";
+  hud.folio.innerHTML = "<b>" + f.p.toLocaleString() + "</b> / " + f.n.toLocaleString() + "쪽" +
+    (TINY ? "" : "<i>·</i>" + Math.floor(frac * 100) + "%");
   if (TINY) {
     hud.pct.textContent = "약 " + Math.max(1, Math.round(WORK.chars / 5.5 / S.wpm)) + "분";
     hud.rem.textContent = ""; hud.ch.textContent = "";
   } else {
-    hud.pct.textContent = Math.floor(frac * 100) + "%";
+    hud.pct.textContent = pg + " · " + Math.floor(frac * 100) + "%";
     if (S.showRemaining) {
       if (hud.rem.dataset.hover) {
         var ci = chapterOf(a.p);

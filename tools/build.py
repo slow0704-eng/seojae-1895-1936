@@ -163,6 +163,7 @@ READER_SHELL = """
     </span>
   </div>
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
+  <div id="folio" aria-hidden="true"></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
 </div>
@@ -194,6 +195,7 @@ READER_SHELL = """
     <div class="st-grp">표시</div>
     <div class="st-row"><span class="st-l">남은 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showRemaining"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">세션 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showSession"><i></i></button></span></div>
+    <div class="st-row"><span class="st-l">쪽수 항상 표시</span><span class="st-c"><button class="st-tog" data-tog="showFolio"><i></i></button></span></div>
     <div class="st-grp">자료</div>
     <div class="st-row"><span class="st-l">읽기 속도</span><span class="st-c"><span class="v" data-v="wpm"></span><button class="mini" data-do="wpmreset">초기화</button></span></div>
     <div class="st-row"><span class="st-l">내보내기</span><span class="st-c"><button class="mini" data-do="export">저장</button></span></div>

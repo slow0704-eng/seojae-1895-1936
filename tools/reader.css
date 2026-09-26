@@ -312,6 +312,26 @@ body.hud-on #hairline{ height:6px; cursor:pointer; }
 #hair-ticks .tk-ch{ background:color-mix(in srgb, var(--fg-muted) 55%, transparent); }
 #hair-ticks .tk-bm{ width:3px; background:var(--accent); }
 
+/* ---------- 7b. FOLIO ----------
+   Always there, never in the way: the bottom-right corner, UI face at 12px,
+   muted, clicks pass through. On a wide screen it sits in the
+   margin; on a narrow one its own page-coloured chip keeps it off the words,
+   and paging overlaps two lines so nothing under it is ever skipped.
+   When the HUD is up it steps aside — the bar below says the same thing. */
+#folio{
+  position:fixed; z-index:39; pointer-events:none; user-select:none;
+  right:max(10px, env(safe-area-inset-right)); bottom:calc(8px + env(safe-area-inset-bottom));
+  padding:1px 6px; border-radius:3px; background:var(--bg);
+  font:400 12px/1.5 var(--ff-ui); letter-spacing:0;
+  font-variant-numeric:lining-nums tabular-nums; white-space:nowrap;
+  color:var(--fg-muted); opacity:.85;
+  transition:opacity .2s ease-out;
+}
+#folio b{ font-weight:500; color:var(--fg); opacity:.8; }
+#folio i{ font-style:normal; margin:0 .4em; opacity:.6; }
+#folio:empty, body.hud-on #folio, [data-folio="off"] #folio{ opacity:0; }
+@media (max-width:660px){ #folio{ font-size:11px; opacity:.75; } }
+
 /* ---------- 8. HUD BARS ---------- */
 .hud{
   position:fixed; left:0; right:0; z-index:45;

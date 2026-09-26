@@ -322,6 +322,26 @@ body.hud-on #hairline{ height:6px; cursor:pointer; }
 #hair-ticks .tk-ch{ background:color-mix(in srgb, var(--fg-muted) 55%, transparent); }
 #hair-ticks .tk-bm{ width:3px; background:var(--accent); }
 
+/* ---------- 7b. FOLIO ----------
+   Always there, never in the way: the bottom-right corner, UI face at 12px,
+   muted, clicks pass through. On a wide screen it sits in the
+   margin; on a narrow one its own page-coloured chip keeps it off the words,
+   and paging overlaps two lines so nothing under it is ever skipped.
+   When the HUD is up it steps aside — the bar below says the same thing. */
+#folio{
+  position:fixed; z-index:39; pointer-events:none; user-select:none;
+  right:max(10px, env(safe-area-inset-right)); bottom:calc(8px + env(safe-area-inset-bottom));
+  padding:1px 6px; border-radius:3px; background:var(--bg);
+  font:400 12px/1.5 var(--ff-ui); letter-spacing:0;
+  font-variant-numeric:lining-nums tabular-nums; white-space:nowrap;
+  color:var(--fg-muted); opacity:.85;
+  transition:opacity .2s ease-out;
+}
+#folio b{ font-weight:500; color:var(--fg); opacity:.8; }
+#folio i{ font-style:normal; margin:0 .4em; opacity:.6; }
+#folio:empty, body.hud-on #folio, [data-folio="off"] #folio{ opacity:0; }
+@media (max-width:660px){ #folio{ font-size:11px; opacity:.75; } }
+
 /* ---------- 8. HUD BARS ---------- */
 .hud{
   position:fixed; left:0; right:0; z-index:45;
@@ -2958,6 +2978,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     </span>
   </div>
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
+  <div id="folio" aria-hidden="true"></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
 </div>
@@ -2989,6 +3010,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <div class="st-grp">표시</div>
     <div class="st-row"><span class="st-l">남은 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showRemaining"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">세션 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showSession"><i></i></button></span></div>
+    <div class="st-row"><span class="st-l">쪽수 항상 표시</span><span class="st-c"><button class="st-tog" data-tog="showFolio"><i></i></button></span></div>
     <div class="st-grp">자료</div>
     <div class="st-row"><span class="st-l">읽기 속도</span><span class="st-c"><span class="v" data-v="wpm"></span><button class="mini" data-do="wpmreset">초기화</button></span></div>
     <div class="st-row"><span class="st-l">내보내기</span><span class="st-c"><button class="mini" data-do="export">저장</button></span></div>
@@ -3037,7 +3059,7 @@ function save(k, v) {
 var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
-  dim: 0, wake: false, showRemaining: true, showSession: true,
+  dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
   lang: "en", trScale: 85, markUntr: true,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };
@@ -3057,6 +3079,7 @@ function applySettings() {
   r.dataset.indent = S.indent ? "on" : "off";
   r.dataset.lang = S.lang;
   r.dataset.untr = S.markUntr ? "on" : "off";
+  r.dataset.folio = S.showFolio ? "on" : "off";
   r.style.setProperty("--tr-scale", (S.trScale / 100).toFixed(2));
   var d = document.getElementById("dimmer");
   if (d) d.style.opacity = (S.dim / 100);
@@ -3239,7 +3262,7 @@ function openWork(id, opts) {
     loadKo(id, function (ko) {
       document.body.classList.remove("loading");
       WORK = { id: w.id, title: w.title, titleKo: w.titleKo, author: w.author,
-               authorKo: w.authorKo, authorEn: w.authorEn, year: w.year,
+               authorKo: w.authorKo, authorEn: w.authorEn, year: w.year, words: w.words,
                sig: d.sig, chars: 0, paras: 0, lang: ko ? S.lang : "en", ko: ko,
                chapters: (d.chapters || []).map(function (c) { return Object.assign({}, c); }) };
       PROG_KEY = "rdr/v1/prog/" + WORK.id;
@@ -3460,6 +3483,14 @@ function resyncByFraction(frac) {
 }
 
 /* ---------- progress ---------- */
+/* Pages are printed-book pages — 250 words of the English original — not
+   screenfuls, so "p. 120 of 480" survives a font change, a resize or a switch
+   to the Korean text. Position comes from frac, which is language-neutral. */
+var WORDS_PER_PAGE = 250;
+function folioOf(frac) {
+  var n = Math.max(1, Math.round((WORK.words || WORK.chars / 5.5) / WORDS_PER_PAGE));
+  return { n: n, p: frac >= 0.999 ? n : Math.min(n, Math.floor(frac * n) + 1) };
+}
 function chapterOf(pIdx) {
   var cs = WORK.chapters, r = 0;
   for (var i = 0; i < cs.length; i++) if (cs[i].firstP <= pIdx) r = i; else break;
@@ -3530,7 +3561,7 @@ function buildHud() {
   hud.top = $("#hud-top"); hud.bot = $("#hud-bot"); hud.bar = $("#hairline");
   hud.title = $(".h-title"); hud.ch = $(".h-ch");
   hud.pct = $(".h-pct"); hud.rem = $(".h-rem"); hud.sess = $(".h-sess");
-  hud.fill = $("#hair-fill");
+  hud.fill = $("#hair-fill"); hud.folio = $("#folio");
 
   hud.top.addEventListener("click", function (e) {
     var b = e.target.closest("[data-act]"); if (!b) return;
@@ -3553,11 +3584,14 @@ function updateHud() {
   var a = captureAnchor(); if (!a) return;
   var chars = cum[a.p] + a.o, frac = Math.min(1, chars / WORK.chars);
   hud.fill.style.transform = "scaleX(" + frac + ")";
+  var f = folioOf(frac), pg = f.p.toLocaleString() + " / " + f.n.toLocaleString() + "쪽";
+  hud.folio.innerHTML = "<b>" + f.p.toLocaleString() + "</b> / " + f.n.toLocaleString() + "쪽" +
+    (TINY ? "" : "<i>·</i>" + Math.floor(frac * 100) + "%");
   if (TINY) {
     hud.pct.textContent = "약 " + Math.max(1, Math.round(WORK.chars / 5.5 / S.wpm)) + "분";
     hud.rem.textContent = ""; hud.ch.textContent = "";
   } else {
-    hud.pct.textContent = Math.floor(frac * 100) + "%";
+    hud.pct.textContent = pg + " · " + Math.floor(frac * 100) + "%";
     if (S.showRemaining) {
       if (hud.rem.dataset.hover) {
         var ci = chapterOf(a.p);
