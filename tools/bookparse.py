@@ -415,6 +415,7 @@ AUTHOR_BY_FOLDER = {
     "블랙우드": "Algernon Blackwood",
     "체임버스": "Robert W. Chambers",
     "마켄": "Arthur Machen",
+    "안드레예프": "Leonid Andreyev",
 }
 
 

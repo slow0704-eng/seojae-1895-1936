@@ -41,6 +41,11 @@ AUTHORS = {
         "life": "1863–1947", "slug": "machen",
         "note": "웨일스 언덕의 옛 신들을 불러낸 신비주의자. 괴기소설을 경이의 문학으로 쓴 사람.",
     },
+    "안드레예프": {
+        "en": "Leonid Andreyev", "ko": "레오니트 안드레예프",
+        "life": "1871–1919", "slug": "andreyev",
+        "note": "톨스토이 다음가는 재능이라 불린 러시아 작가. 죽음 앞의 인간을 끝까지 들여다본 사람.",
+    },
 }
 
 KO_TITLES = {
@@ -121,6 +126,8 @@ KO_TITLES = {
     "The Slayer of Souls": ("영혼을 죽이는 자", ""),
     # Machen
     "The White People": ("백색 사람들", ""),
+    # Andreyev — Herman Bernstein's authorised translation, 1909
+    "The Seven Who Were Hanged": ("사형수 7인", "Рассказ о семи повешенных"),
     "The Centaur": ("켄타우로스", ""),
 }
 
@@ -154,6 +161,7 @@ FORM = {
     "The King in Yellow": "collection",
     "The Mystery of Choice": "collection",
     "The White People": "novella",
+    "The Seven Who Were Hanged": "novella",
 }
 
 WPM = 240   # words per minute, unhurried literary reading
@@ -161,7 +169,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder

@@ -38,6 +38,7 @@
 [data-author="blackwood"]  { --au:var(--author-blackwood) }
 [data-author="chambers"]   { --au:var(--author-chambers) }
 [data-author="machen"]     { --au:var(--author-machen) }
+[data-author="andreyev"]   { --au:var(--author-andreyev) }
 
 /* ---------- sticky bar ---------- */
 .topbar{
@@ -252,6 +253,7 @@
    var(--ink-rule) 0 2px,transparent 2px 5px) }
 [data-author="machen"]     .rule{ height:3px; background:repeating-linear-gradient(90deg,
    var(--ink-rule) 0 10px,transparent 10px 13px,var(--ink-rule) 13px 15px,transparent 15px 18px) }
+[data-author="andreyev"]   .rule{ height:1px; background:var(--ink-rule) }
 .rule--head{ margin-top:3.2cqw }
 .rule--foot{ margin-bottom:3.2cqw; transform:scaleY(-1) }
 

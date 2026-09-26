@@ -82,6 +82,9 @@ u"체임버스": [
     (18668,1904, "In Search of the Unknown"),
     (36281,1920, "The Slayer of Souls"),
 ],
+u"안드레예프": [
+    (6722, 1908, "The Seven Who Were Hanged"),
+],
 }
 
 START = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)

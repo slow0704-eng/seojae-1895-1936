@@ -28,6 +28,10 @@ MARKS = {
           '<path d="M9.6 17.6V6.4c0-2.2 4.8-2.2 4.8 0v11.2"/>'
           '<path d="M2.8 21.5c3.6-3.9 14.8-3.9 18.4 0" opacity=".45"/></g>'
           '<circle cx="12" cy="9.4" r=".8" fill="currentColor"/>',
+ "andreyev": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
+          '<path d="M6.5 21.5V3.2h10.4"/><path d="M6.5 7.4 10.7 3.2" opacity=".6"/>'
+          '<path d="M16.9 3.2v5.3"/><circle cx="16.9" cy="10.4" r="1.9"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
  "harbou": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
           '<path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/>'
           '<path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g>',
