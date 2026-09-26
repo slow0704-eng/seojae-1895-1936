@@ -380,6 +380,14 @@
 .aub__mark{ width:14px; height:14px; color:var(--au); }
 .aub.on .aub__mark{ color:currentColor; }
 .aub__n{ font-size:.82em; opacity:.65; font-variant-numeric:tabular-nums; }
+/* 열기 영문/한글/대역 — under a card that has a Korean edition */
+.openas{ display:flex; align-items:center; gap:4px; margin:6px 0 2px; font-size:11.5px; }
+.openas[hidden]{ display:none; }
+.openas__l{ color:var(--fg-muted); font-size:10.5px; letter-spacing:.08em; margin-right:2px; }
+.openas [data-open]{ padding:.26em .7em; border:1px solid var(--border); border-radius:999px;
+  color:var(--fg); background:var(--bg); transition:color .1s, background-color .1s, border-color .1s; }
+.openas [data-open]:hover{ border-color:var(--accent); color:var(--accent); }
+.openas [data-open].on{ border-color:var(--accent); color:var(--accent); font-weight:600; }
 .facet__clear{ all:unset; cursor:pointer; justify-self:start; font-size:11px;
   color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); }
 .facet__clear:hover{ color:var(--accent); border-bottom-color:var(--accent); }

@@ -136,6 +136,7 @@ def cover(w, i):
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">%(ko)s</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
   <p class="cap"><span class="cap__pct"></span><span>%(chars)s</span><b>&middot;</b><span>%(time)s</span></p>
  </div>
@@ -156,7 +157,7 @@ READER_SHELL = """
     <button class="hbtn" data-act="lib">&lsaquo; 서재</button>
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
-      <button class="hbtn hbtn--lang" data-act="lang" title="한/영 전환 (l)"><span class="lang-cur">영문</span></button>
+      <span class="lseg lseg--hud" data-act="lang" role="group" aria-label="본문 언어 (l)"><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></span>
       <button class="hbtn" data-act="toc">목차</button>
       <button class="hbtn" data-act="bm">책갈피</button>
       <button class="hbtn" data-act="set">설정</button>
@@ -164,6 +165,7 @@ READER_SHELL = """
   </div>
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
   <div id="folio" aria-hidden="true"></div>
+  <div id="langsw" class="lseg lseg--float" role="group" aria-label="본문 언어" hidden><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
 </div>

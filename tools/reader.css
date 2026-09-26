@@ -653,10 +653,27 @@ body.pal-on #palette{ display:flex; }
   color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   border-radius:2px; padding:.05em .3em; }
 
-.hbtn--lang{ font-variant-numeric:tabular-nums; }
-.hbtn--lang .lang-cur{ color:var(--accent); }
-.hbtn--lang.off{ opacity:.45; }
-.hbtn--lang.off .lang-cur{ color:inherit; }
+/* language switch: all three choices visible, current one lit */
+.lseg{ display:inline-flex; align-items:center; gap:0; flex:none;
+  border:1px solid var(--border); border-radius:999px; padding:2px;
+  background:var(--bg-panel); font-family:var(--ff-ui); }
+.lseg button{ all:unset; cursor:pointer; font-size:12px; line-height:1; padding:5px 10px;
+  border-radius:999px; color:var(--fg-muted); white-space:nowrap;
+  transition:color .1s, background-color .1s; }
+.lseg button:hover{ color:var(--fg); }
+.lseg button.on{ color:var(--bg); background:var(--accent); }
+.lseg button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+.lseg button:disabled{ opacity:.35; cursor:default; }
+.lseg.off{ opacity:.6; }
+/* the corner copy: same place and manners as the folio, mirrored to the left.
+   Clicks land on it (it is a control), everything else about it is quiet. */
+#langsw{ position:fixed; z-index:39; left:max(10px, env(safe-area-inset-left));
+  bottom:calc(6px + env(safe-area-inset-bottom));
+  opacity:.9; box-shadow:0 1px 6px -2px rgba(0,0,0,.18);
+  transition:opacity .2s ease-out; }
+#langsw[hidden], body.hud-on #langsw{ opacity:0; pointer-events:none; }
+#langsw:hover{ opacity:1; }
+@media (max-width:660px){ .lseg button{ font-size:11.5px; padding:5px 9px; } }
 
 .titlepage .tp-note{
   margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;

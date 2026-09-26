@@ -345,14 +345,22 @@ function paintHudTitle() {
     esc(WORK.authorKo) + "</i>";
   document.title = (ko ? WORK.titleKo : WORK.title) + " · 서재";
 }
+/* Both switches — the one in the top bar and the one that stays in the
+   bottom-left corner — show all three languages with the current one lit, so
+   what is on offer is visible, not hidden behind a cycling button. */
 function updateLangBtn() {
-  var b = $('[data-act="lang"]'); if (!b) return;
-  var info = WORK ? koInfo(WORK.id) : null;
-  b.classList.toggle("off", !info);
-  $(".lang-cur", b).textContent = LANG_KO[WORK ? WORK.lang : S.lang];
-  b.title = info
-    ? "한/영 전환 (l) · 번역 " + Math.floor(info.cov * 100) + "%"
-    : "이 작품은 아직 번역 준비 중입니다";
+  var info = WORK ? koInfo(WORK.id) : null, cur = WORK ? WORK.lang : S.lang;
+  $$(".lseg").forEach(function (g) {
+    g.classList.toggle("off", !info);
+    $$("[data-lang]", g).forEach(function (x) {
+      var on = x.dataset.lang === cur;
+      x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false");
+      x.disabled = !info && x.dataset.lang !== "en";
+    });
+    g.title = info ? "본문 언어 (l) · 번역 " + Math.floor(info.cov * 100) + "%"
+                   : "이 작품은 아직 번역 준비 중입니다";
+  });
+  var sw = $("#langsw"); if (sw) sw.hidden = !(WORK && info);   /* lives inside #reader */
 }
 
 /* Rebuild the book in another language, keeping the reader on the same
@@ -537,7 +545,14 @@ function buildHud() {
   hud.pct = $(".h-pct"); hud.rem = $(".h-rem"); hud.sess = $(".h-sess");
   hud.fill = $("#hair-fill"); hud.folio = $("#folio");
 
+  var sw = $("#langsw");
+  if (sw) sw.addEventListener("click", function (e) {
+    var x = e.target.closest("[data-lang]");
+    if (x && !x.disabled) { e.stopPropagation(); setLang(x.dataset.lang); }
+  });
   hud.top.addEventListener("click", function (e) {
+    var lb = e.target.closest("[data-lang]");
+    if (lb) { setLang(lb.dataset.lang); revealHud(); return; }
     var b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "lib") goLibrary();
     if (b.dataset.act === "lang") { cycleLang(); revealHud(); }
@@ -1102,9 +1117,12 @@ function paintCards() {
         kb.hidden = false;
         kb.textContent = full ? "한글본" : "한글본 " + pc + "%";
         kb.classList.toggle("part", !full);
+        var oa = $(".openas", c);
+        if (oa) { oa.hidden = false;
+          $$("[data-open]", oa).forEach(function (x) { x.classList.toggle("on", x.dataset.open === S.lang); }); }
         kb.title = (full ? "완역" : "부분 번역 " + pc + "%") + " · 눌러서 한글본으로 엽니다";
         c.dataset.koed = full ? "full" : "part";
-      } else { kb.hidden = true; delete c.dataset.koed; }
+      } else { kb.hidden = true; delete c.dataset.koed; var oa2 = $(".openas", c); if (oa2) oa2.hidden = true; }
     }
     var t = $(".cover__title", c);
     if (t && !t.dataset.en) t.dataset.en = t.innerHTML;
@@ -1499,6 +1517,9 @@ document.addEventListener("click", function (e) {
      clicking it opens 한글 and keeps that as the reading language, the same
      way switching in the reader does. */
   if (m && e.target.closest(".cover__ko") && S.lang === "en") setLang("ko");
+  /* the 열기 row under a translated card opens the book in that language */
+  var op = e.target.closest("[data-open]");
+  if (m && op) setLang(op.dataset.open);
   if (m) goWork(decodeURIComponent(m[1]));
   else goLibrary();
 });

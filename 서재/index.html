@@ -663,10 +663,27 @@ body.pal-on #palette{ display:flex; }
   color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   border-radius:2px; padding:.05em .3em; }
 
-.hbtn--lang{ font-variant-numeric:tabular-nums; }
-.hbtn--lang .lang-cur{ color:var(--accent); }
-.hbtn--lang.off{ opacity:.45; }
-.hbtn--lang.off .lang-cur{ color:inherit; }
+/* language switch: all three choices visible, current one lit */
+.lseg{ display:inline-flex; align-items:center; gap:0; flex:none;
+  border:1px solid var(--border); border-radius:999px; padding:2px;
+  background:var(--bg-panel); font-family:var(--ff-ui); }
+.lseg button{ all:unset; cursor:pointer; font-size:12px; line-height:1; padding:5px 10px;
+  border-radius:999px; color:var(--fg-muted); white-space:nowrap;
+  transition:color .1s, background-color .1s; }
+.lseg button:hover{ color:var(--fg); }
+.lseg button.on{ color:var(--bg); background:var(--accent); }
+.lseg button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+.lseg button:disabled{ opacity:.35; cursor:default; }
+.lseg.off{ opacity:.6; }
+/* the corner copy: same place and manners as the folio, mirrored to the left.
+   Clicks land on it (it is a control), everything else about it is quiet. */
+#langsw{ position:fixed; z-index:39; left:max(10px, env(safe-area-inset-left));
+  bottom:calc(6px + env(safe-area-inset-bottom));
+  opacity:.9; box-shadow:0 1px 6px -2px rgba(0,0,0,.18);
+  transition:opacity .2s ease-out; }
+#langsw[hidden], body.hud-on #langsw{ opacity:0; pointer-events:none; }
+#langsw:hover{ opacity:1; }
+@media (max-width:660px){ .lseg button{ font-size:11.5px; padding:5px 9px; } }
 
 .titlepage .tp-note{
   margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;
@@ -1074,6 +1091,14 @@ body.pal-on #palette{ display:flex; }
 .aub__mark{ width:14px; height:14px; color:var(--au); }
 .aub.on .aub__mark{ color:currentColor; }
 .aub__n{ font-size:.82em; opacity:.65; font-variant-numeric:tabular-nums; }
+/* 열기 영문/한글/대역 — under a card that has a Korean edition */
+.openas{ display:flex; align-items:center; gap:4px; margin:6px 0 2px; font-size:11.5px; }
+.openas[hidden]{ display:none; }
+.openas__l{ color:var(--fg-muted); font-size:10.5px; letter-spacing:.08em; margin-right:2px; }
+.openas [data-open]{ padding:.26em .7em; border:1px solid var(--border); border-radius:999px;
+  color:var(--fg); background:var(--bg); transition:color .1s, background-color .1s, border-color .1s; }
+.openas [data-open]:hover{ border-color:var(--accent); color:var(--accent); }
+.openas [data-open].on{ border-color:var(--accent); color:var(--accent); font-weight:600; }
 .facet__clear{ all:unset; cursor:pointer; justify-self:start; font-size:11px;
   color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); }
 .facet__clear:hover{ color:var(--accent); border-bottom-color:var(--accent); }
@@ -1206,6 +1231,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">삼촌과 나눈 대화 몇 토막</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.5만 자</span><b>&middot;</b><span>1시간 19분</span></p>
  </div>
@@ -1221,6 +1247,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">도난당한 세균 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>31.3만 자</span><b>&middot;</b><span>3시간 55분</span></p>
  </div>
@@ -1236,6 +1263,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">타임머신</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>18만 자</span><b>&middot;</b><span>2시간 16분</span></p>
  </div>
@@ -1251,6 +1279,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">놀라운 방문</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>22만 자</span><b>&middot;</b><span>2시간 42분</span></p>
  </div>
@@ -1266,6 +1295,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">노란 옷의 왕</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.3만 자</span><b>&middot;</b><span>5시간 2분</span></p>
  </div>
@@ -1281,6 +1311,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">모로 박사의 섬</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>24.1만 자</span><b>&middot;</b><span>3시간 4분</span></p>
  </div>
@@ -1296,6 +1327,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">붉은 방</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
  </div>
@@ -1311,6 +1343,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">우연의 수레바퀴</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>32만 자</span><b>&middot;</b><span>3시간 54분</span></p>
  </div>
@@ -1326,6 +1359,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">투명인간</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>27.3만 자</span><b>&middot;</b><span>3시간 24분</span></p>
  </div>
@@ -1341,6 +1375,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">플래트너 이야기 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>44.3만 자</span><b>&middot;</b><span>5시간 30분</span></p>
  </div>
@@ -1356,6 +1391,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">별</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2.5만 자</span><b>&middot;</b><span>18분</span></p>
  </div>
@@ -1371,6 +1407,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">기묘한 이야기 서른 편</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>65.4만 자</span><b>&middot;</b><span>8시간 7분</span></p>
  </div>
@@ -1386,6 +1423,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">선택의 수수께끼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>32.5만 자</span><b>&middot;</b><span>4시간 4분</span></p>
  </div>
@@ -1401,6 +1439,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">우주 전쟁</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>33.7만 자</span><b>&middot;</b><span>4시간 12분</span></p>
  </div>
@@ -1416,6 +1455,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">공간과 시간의 이야기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>41.2만 자</span><b>&middot;</b><span>5시간 7분</span></p>
  </div>
@@ -1431,6 +1471,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">잠자는 자가 깨어날 때</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>47.2만 자</span><b>&middot;</b><span>5시간 45분</span></p>
  </div>
@@ -1447,6 +1488,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">사랑과 루이셤 씨</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 35분</span></p>
  </div>
@@ -1462,6 +1504,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">달 세계 최초의 인간</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 47분</span></p>
  </div>
@@ -1477,6 +1520,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">카디건</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>103만 자</span><b>&middot;</b><span>12시간 52분</span></p>
  </div>
@@ -1492,6 +1536,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">바다 아가씨</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>22.9만 자</span><b>&middot;</b><span>2시간 48분</span></p>
  </div>
@@ -1507,6 +1552,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">열두 편의 이야기와 꿈 하나</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.4만 자</span><b>&middot;</b><span>5시간 9분</span></p>
  </div>
@@ -1522,6 +1568,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">백색 사람들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>아서 마켄</span></p>
   <p class="cap"><span class="cap__pct"></span><span>8.9만 자</span><b>&middot;</b><span>1시간 14분</span></p>
  </div>
@@ -1537,6 +1584,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">신들의 양식</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>42.6만 자</span><b>&middot;</b><span>5시간 14분</span></p>
  </div>
@@ -1552,6 +1600,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">미지를 찾아서</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.8만 자</span><b>&middot;</b><span>5시간 4분</span></p>
  </div>
@@ -1567,6 +1616,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">현대의 유토피아</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">사변소설</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>54만 자</span><b>&middot;</b><span>6시간 31분</span></p>
  </div>
@@ -1582,6 +1632,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">킵스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>63.1만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
@@ -1597,6 +1648,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">빈집 외 유령 이야기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
  </div>
@@ -1612,6 +1664,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">혜성의 날들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>45.5만 자</span><b>&middot;</b><span>5시간 38분</span></p>
  </div>
@@ -1627,6 +1680,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">버드나무</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
  </div>
@@ -1642,6 +1696,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">특별한 의사 존 사일런스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
  </div>
@@ -1657,6 +1712,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">공중전</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>56만 자</span><b>&middot;</b><span>6시간 51분</span></p>
  </div>
@@ -1672,6 +1728,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">사형수 7인</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>레오니트 안드레예프</span></p>
   <p class="cap"><span class="cap__pct"></span><span>17만 자</span><b>&middot;</b><span>2시간 5분</span></p>
  </div>
@@ -1687,6 +1744,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">앤 베로니카</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>54.8만 자</span><b>&middot;</b><span>6시간 47분</span></p>
  </div>
@@ -1702,6 +1760,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">토노번게이</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>75.2만 자</span><b>&middot;</b><span>9시간 22분</span></p>
  </div>
@@ -1718,6 +1777,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">웬디고</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
  </div>
@@ -1733,6 +1793,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">폴리 씨의 일대기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>39.3만 자</span><b>&middot;</b><span>4시간 49분</span></p>
  </div>
@@ -1748,6 +1809,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">잠든 자 깨어나다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>43.7만 자</span><b>&middot;</b><span>5시간 20분</span></p>
  </div>
@@ -1763,6 +1825,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">켄타우로스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
  </div>
@@ -1778,6 +1841,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">눈먼 자들의 나라 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>89.8만 자</span><b>&middot;</b><span>11시간 18분</span></p>
  </div>
@@ -1793,6 +1857,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">담장 속의 문 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>23.6만 자</span><b>&middot;</b><span>3시간 1분</span></p>
  </div>
@@ -1808,6 +1873,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">새로운 마키아벨리</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>83.2만 자</span><b>&middot;</b><span>10시간 9분</span></p>
  </div>
@@ -1823,6 +1889,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">결혼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>85.8만 자</span><b>&middot;</b><span>10시간 23분</span></p>
  </div>
@@ -1838,6 +1905,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">열정적인 친구들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 19분</span></p>
  </div>
@@ -1853,6 +1921,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">아이작 하먼 경의 아내</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>74.4만 자</span><b>&middot;</b><span>9시간 0분</span></p>
  </div>
@@ -1868,6 +1937,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">해방된 세계</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.6만 자</span><b>&middot;</b><span>4시간 35분</span></p>
  </div>
@@ -1883,6 +1953,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">변신</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>11.8만 자</span><b>&middot;</b><span>1시간 32분</span></p>
  </div>
@@ -1898,6 +1969,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">빌비</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>39.7만 자</span><b>&middot;</b><span>4시간 48분</span></p>
  </div>
@@ -1913,6 +1985,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">분</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">잡문집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>28만 자</span><b>&middot;</b><span>3시간 21분</span></p>
  </div>
@@ -1928,6 +2001,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">위대한 탐구</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>63.3만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
@@ -1943,6 +2017,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">브리틀링 씨, 끝까지 지켜보다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>79.8만 자</span><b>&middot;</b><span>9시간 48분</span></p>
  </div>
@@ -1958,6 +2033,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">주교의 영혼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>44.8만 자</span><b>&middot;</b><span>5시간 33분</span></p>
  </div>
@@ -1973,6 +2049,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">조앤과 피터</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>121만 자</span><b>&middot;</b><span>14시간 43분</span></p>
  </div>
@@ -1988,6 +2065,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">꺼지지 않는 불</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>26.2만 자</span><b>&middot;</b><span>3시간 15분</span></p>
  </div>
@@ -2004,6 +2082,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">말괄량이와 철학자들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>34.8만 자</span><b>&middot;</b><span>4시간 18분</span></p>
  </div>
@@ -2019,6 +2098,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">낙원의 이쪽</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>52만 자</span><b>&middot;</b><span>5시간 40분</span></p>
  </div>
@@ -2034,6 +2114,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">영혼을 죽이는 자</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.3만 자</span><b>&middot;</b><span>4시간 19분</span></p>
  </div>
@@ -2049,6 +2130,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">재즈 시대의 이야기들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>49.7만 자</span><b>&middot;</b><span>6시간 8분</span></p>
  </div>
@@ -2064,6 +2146,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">아름답고 저주받은 사람들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>72.2만 자</span><b>&middot;</b><span>8시간 45분</span></p>
  </div>
@@ -2079,6 +2162,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">뜻밖의 이야기들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>47.5만 자</span><b>&middot;</b><span>6시간 3분</span></p>
  </div>
@@ -2094,6 +2178,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">마음의 은밀한 곳</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.9만 자</span><b>&middot;</b><span>4시간 28분</span></p>
  </div>
@@ -2109,6 +2194,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">채소 — 대통령에서 집배원으로</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">희곡</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>15.9만 자</span><b>&middot;</b><span>1시간 53분</span></p>
  </div>
@@ -2124,6 +2210,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">꿈</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>46.9만 자</span><b>&middot;</b><span>5시간 59분</span></p>
  </div>
@@ -2139,6 +2226,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">위대한 개츠비</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>27.1만 자</span><b>&middot;</b><span>3시간 22분</span></p>
  </div>
@@ -2154,6 +2242,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">소송</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>45만 자</span><b>&middot;</b><span>5시간 51분</span></p>
  </div>
@@ -2169,6 +2258,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">크리스티나 앨버타의 아버지</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>67.8만 자</span><b>&middot;</b><span>8시간 24분</span></p>
  </div>
@@ -2184,6 +2274,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">모든 슬픈 젊은이들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.8만 자</span><b>&middot;</b><span>4시간 29분</span></p>
  </div>
@@ -2199,6 +2290,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">성</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>53.3만 자</span><b>&middot;</b><span>6시간 47분</span></p>
  </div>
@@ -2214,6 +2306,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">메트로폴리스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>테아 폰 하르부</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.7만 자</span><b>&middot;</b><span>5시간 0분</span></p>
  </div>
@@ -2230,6 +2323,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">저택 대문을 두드리다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2,934자</span><b>&middot;</b><span>2분</span></p>
  </div>
@@ -2245,6 +2339,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">단념해라!</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>680자</span><b>&middot;</b><span>1분</span></p>
  </div>
@@ -2260,6 +2355,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">포세이돈</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2,468자</span><b>&middot;</b><span>2분</span></p>
  </div>
@@ -2275,6 +2371,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">키잡이</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>1,166자</span><b>&middot;</b><span>1분</span></p>
  </div>
@@ -2291,6 +2388,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">변신</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>11.8만 자</span><b>&middot;</b><span>1시간 32분</span></p>
  </div>
@@ -2306,6 +2404,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">소송</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>45만 자</span><b>&middot;</b><span>5시간 51분</span></p>
  </div>
@@ -2321,6 +2420,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">성</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>53.3만 자</span><b>&middot;</b><span>6시간 47분</span></p>
  </div>
@@ -2336,6 +2436,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">저택 대문을 두드리다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2,934자</span><b>&middot;</b><span>2분</span></p>
  </div>
@@ -2351,6 +2452,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">단념해라!</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>680자</span><b>&middot;</b><span>1분</span></p>
  </div>
@@ -2366,6 +2468,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">포세이돈</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2,468자</span><b>&middot;</b><span>2분</span></p>
  </div>
@@ -2381,6 +2484,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">키잡이</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
   <p class="cap"><span class="cap__pct"></span><span>1,166자</span><b>&middot;</b><span>1분</span></p>
  </div>
@@ -2397,6 +2501,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">삼촌과 나눈 대화 몇 토막</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.5만 자</span><b>&middot;</b><span>1시간 19분</span></p>
  </div>
@@ -2412,6 +2517,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">도난당한 세균 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>31.3만 자</span><b>&middot;</b><span>3시간 55분</span></p>
  </div>
@@ -2427,6 +2533,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">타임머신</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>18만 자</span><b>&middot;</b><span>2시간 16분</span></p>
  </div>
@@ -2442,6 +2549,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">놀라운 방문</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>22만 자</span><b>&middot;</b><span>2시간 42분</span></p>
  </div>
@@ -2457,6 +2565,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">모로 박사의 섬</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>24.1만 자</span><b>&middot;</b><span>3시간 4분</span></p>
  </div>
@@ -2472,6 +2581,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">붉은 방</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
  </div>
@@ -2487,6 +2597,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">우연의 수레바퀴</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>32만 자</span><b>&middot;</b><span>3시간 54분</span></p>
  </div>
@@ -2502,6 +2613,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">투명인간</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>27.3만 자</span><b>&middot;</b><span>3시간 24분</span></p>
  </div>
@@ -2517,6 +2629,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">플래트너 이야기 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>44.3만 자</span><b>&middot;</b><span>5시간 30분</span></p>
  </div>
@@ -2532,6 +2645,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">별</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>2.5만 자</span><b>&middot;</b><span>18분</span></p>
  </div>
@@ -2547,6 +2661,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">기묘한 이야기 서른 편</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>65.4만 자</span><b>&middot;</b><span>8시간 7분</span></p>
  </div>
@@ -2562,6 +2677,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">우주 전쟁</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>33.7만 자</span><b>&middot;</b><span>4시간 12분</span></p>
  </div>
@@ -2577,6 +2693,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">공간과 시간의 이야기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>41.2만 자</span><b>&middot;</b><span>5시간 7분</span></p>
  </div>
@@ -2592,6 +2709,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">잠자는 자가 깨어날 때</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>47.2만 자</span><b>&middot;</b><span>5시간 45분</span></p>
  </div>
@@ -2607,6 +2725,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">사랑과 루이셤 씨</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 35분</span></p>
  </div>
@@ -2622,6 +2741,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">달 세계 최초의 인간</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 47분</span></p>
  </div>
@@ -2637,6 +2757,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">바다 아가씨</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>22.9만 자</span><b>&middot;</b><span>2시간 48분</span></p>
  </div>
@@ -2652,6 +2773,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">열두 편의 이야기와 꿈 하나</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.4만 자</span><b>&middot;</b><span>5시간 9분</span></p>
  </div>
@@ -2667,6 +2789,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">신들의 양식</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>42.6만 자</span><b>&middot;</b><span>5시간 14분</span></p>
  </div>
@@ -2682,6 +2805,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">현대의 유토피아</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">사변소설</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>54만 자</span><b>&middot;</b><span>6시간 31분</span></p>
  </div>
@@ -2697,6 +2821,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">킵스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>63.1만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
@@ -2712,6 +2837,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">혜성의 날들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>45.5만 자</span><b>&middot;</b><span>5시간 38분</span></p>
  </div>
@@ -2727,6 +2853,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">공중전</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>56만 자</span><b>&middot;</b><span>6시간 51분</span></p>
  </div>
@@ -2742,6 +2869,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">앤 베로니카</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>54.8만 자</span><b>&middot;</b><span>6시간 47분</span></p>
  </div>
@@ -2757,6 +2885,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">토노번게이</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>75.2만 자</span><b>&middot;</b><span>9시간 22분</span></p>
  </div>
@@ -2772,6 +2901,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">폴리 씨의 일대기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>39.3만 자</span><b>&middot;</b><span>4시간 49분</span></p>
  </div>
@@ -2787,6 +2917,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">잠든 자 깨어나다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>43.7만 자</span><b>&middot;</b><span>5시간 20분</span></p>
  </div>
@@ -2802,6 +2933,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">눈먼 자들의 나라 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>89.8만 자</span><b>&middot;</b><span>11시간 18분</span></p>
  </div>
@@ -2817,6 +2949,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">담장 속의 문 외</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>23.6만 자</span><b>&middot;</b><span>3시간 1분</span></p>
  </div>
@@ -2832,6 +2965,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">새로운 마키아벨리</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>83.2만 자</span><b>&middot;</b><span>10시간 9분</span></p>
  </div>
@@ -2847,6 +2981,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">결혼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>85.8만 자</span><b>&middot;</b><span>10시간 23분</span></p>
  </div>
@@ -2862,6 +2997,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">열정적인 친구들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 19분</span></p>
  </div>
@@ -2877,6 +3013,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">아이작 하먼 경의 아내</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>74.4만 자</span><b>&middot;</b><span>9시간 0분</span></p>
  </div>
@@ -2892,6 +3029,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">해방된 세계</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37.6만 자</span><b>&middot;</b><span>4시간 35분</span></p>
  </div>
@@ -2907,6 +3045,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">빌비</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>39.7만 자</span><b>&middot;</b><span>4시간 48분</span></p>
  </div>
@@ -2922,6 +3061,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">분</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">잡문집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>28만 자</span><b>&middot;</b><span>3시간 21분</span></p>
  </div>
@@ -2937,6 +3077,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">위대한 탐구</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>63.3만 자</span><b>&middot;</b><span>7시간 46분</span></p>
  </div>
@@ -2952,6 +3093,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">브리틀링 씨, 끝까지 지켜보다</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>79.8만 자</span><b>&middot;</b><span>9시간 48분</span></p>
  </div>
@@ -2967,6 +3109,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">주교의 영혼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>44.8만 자</span><b>&middot;</b><span>5시간 33분</span></p>
  </div>
@@ -2982,6 +3125,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">조앤과 피터</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>121만 자</span><b>&middot;</b><span>14시간 43분</span></p>
  </div>
@@ -2997,6 +3141,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">꺼지지 않는 불</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>26.2만 자</span><b>&middot;</b><span>3시간 15분</span></p>
  </div>
@@ -3012,6 +3157,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">뜻밖의 이야기들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>47.5만 자</span><b>&middot;</b><span>6시간 3분</span></p>
  </div>
@@ -3027,6 +3173,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">마음의 은밀한 곳</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.9만 자</span><b>&middot;</b><span>4시간 28분</span></p>
  </div>
@@ -3042,6 +3189,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">꿈</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>46.9만 자</span><b>&middot;</b><span>5시간 59분</span></p>
  </div>
@@ -3057,6 +3205,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">크리스티나 앨버타의 아버지</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>67.8만 자</span><b>&middot;</b><span>8시간 24분</span></p>
  </div>
@@ -3073,6 +3222,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">말괄량이와 철학자들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>34.8만 자</span><b>&middot;</b><span>4시간 18분</span></p>
  </div>
@@ -3088,6 +3238,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">낙원의 이쪽</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>52만 자</span><b>&middot;</b><span>5시간 40분</span></p>
  </div>
@@ -3103,6 +3254,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">재즈 시대의 이야기들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>49.7만 자</span><b>&middot;</b><span>6시간 8분</span></p>
  </div>
@@ -3118,6 +3270,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">아름답고 저주받은 사람들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>72.2만 자</span><b>&middot;</b><span>8시간 45분</span></p>
  </div>
@@ -3133,6 +3286,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">채소 — 대통령에서 집배원으로</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">희곡</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>15.9만 자</span><b>&middot;</b><span>1시간 53분</span></p>
  </div>
@@ -3148,6 +3302,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">위대한 개츠비</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>27.1만 자</span><b>&middot;</b><span>3시간 22분</span></p>
  </div>
@@ -3163,6 +3318,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">모든 슬픈 젊은이들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.8만 자</span><b>&middot;</b><span>4시간 29분</span></p>
  </div>
@@ -3179,6 +3335,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">메트로폴리스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>테아 폰 하르부</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.7만 자</span><b>&middot;</b><span>5시간 0분</span></p>
  </div>
@@ -3196,6 +3353,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">빈집 외 유령 이야기</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
  </div>
@@ -3211,6 +3369,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">버드나무</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
  </div>
@@ -3226,6 +3385,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">특별한 의사 존 사일런스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
  </div>
@@ -3241,6 +3401,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">웬디고</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
  </div>
@@ -3256,6 +3417,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">켄타우로스</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
   <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
  </div>
@@ -3272,6 +3434,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">노란 옷의 왕</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.3만 자</span><b>&middot;</b><span>5시간 2분</span></p>
  </div>
@@ -3287,6 +3450,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">선택의 수수께끼</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>32.5만 자</span><b>&middot;</b><span>4시간 4분</span></p>
  </div>
@@ -3302,6 +3466,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">카디건</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>103만 자</span><b>&middot;</b><span>12시간 52분</span></p>
  </div>
@@ -3317,6 +3482,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">미지를 찾아서</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>40.8만 자</span><b>&middot;</b><span>5시간 4분</span></p>
  </div>
@@ -3332,6 +3498,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">영혼을 죽이는 자</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
   <p class="cap"><span class="cap__pct"></span><span>35.3만 자</span><b>&middot;</b><span>4시간 19분</span></p>
  </div>
@@ -3348,6 +3515,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">백색 사람들</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>아서 마켄</span></p>
   <p class="cap"><span class="cap__pct"></span><span>8.9만 자</span><b>&middot;</b><span>1시간 14분</span></p>
  </div>
@@ -3364,6 +3532,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">사형수 7인</p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">중편</span><span>레오니트 안드레예프</span></p>
   <p class="cap"><span class="cap__pct"></span><span>17만 자</span><b>&middot;</b><span>2시간 5분</span></p>
  </div>
@@ -3381,7 +3550,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <button class="hbtn" data-act="lib">&lsaquo; 서재</button>
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
-      <button class="hbtn hbtn--lang" data-act="lang" title="한/영 전환 (l)"><span class="lang-cur">영문</span></button>
+      <span class="lseg lseg--hud" data-act="lang" role="group" aria-label="본문 언어 (l)"><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></span>
       <button class="hbtn" data-act="toc">목차</button>
       <button class="hbtn" data-act="bm">책갈피</button>
       <button class="hbtn" data-act="set">설정</button>
@@ -3389,6 +3558,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   </div>
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
   <div id="folio" aria-hidden="true"></div>
+  <div id="langsw" class="lseg lseg--float" role="group" aria-label="본문 언어" hidden><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
 </div>
@@ -3781,14 +3951,22 @@ function paintHudTitle() {
     esc(WORK.authorKo) + "</i>";
   document.title = (ko ? WORK.titleKo : WORK.title) + " · 서재";
 }
+/* Both switches — the one in the top bar and the one that stays in the
+   bottom-left corner — show all three languages with the current one lit, so
+   what is on offer is visible, not hidden behind a cycling button. */
 function updateLangBtn() {
-  var b = $('[data-act="lang"]'); if (!b) return;
-  var info = WORK ? koInfo(WORK.id) : null;
-  b.classList.toggle("off", !info);
-  $(".lang-cur", b).textContent = LANG_KO[WORK ? WORK.lang : S.lang];
-  b.title = info
-    ? "한/영 전환 (l) · 번역 " + Math.floor(info.cov * 100) + "%"
-    : "이 작품은 아직 번역 준비 중입니다";
+  var info = WORK ? koInfo(WORK.id) : null, cur = WORK ? WORK.lang : S.lang;
+  $$(".lseg").forEach(function (g) {
+    g.classList.toggle("off", !info);
+    $$("[data-lang]", g).forEach(function (x) {
+      var on = x.dataset.lang === cur;
+      x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false");
+      x.disabled = !info && x.dataset.lang !== "en";
+    });
+    g.title = info ? "본문 언어 (l) · 번역 " + Math.floor(info.cov * 100) + "%"
+                   : "이 작품은 아직 번역 준비 중입니다";
+  });
+  var sw = $("#langsw"); if (sw) sw.hidden = !(WORK && info);   /* lives inside #reader */
 }
 
 /* Rebuild the book in another language, keeping the reader on the same
@@ -3973,7 +4151,14 @@ function buildHud() {
   hud.pct = $(".h-pct"); hud.rem = $(".h-rem"); hud.sess = $(".h-sess");
   hud.fill = $("#hair-fill"); hud.folio = $("#folio");
 
+  var sw = $("#langsw");
+  if (sw) sw.addEventListener("click", function (e) {
+    var x = e.target.closest("[data-lang]");
+    if (x && !x.disabled) { e.stopPropagation(); setLang(x.dataset.lang); }
+  });
   hud.top.addEventListener("click", function (e) {
+    var lb = e.target.closest("[data-lang]");
+    if (lb) { setLang(lb.dataset.lang); revealHud(); return; }
     var b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "lib") goLibrary();
     if (b.dataset.act === "lang") { cycleLang(); revealHud(); }
@@ -4538,9 +4723,12 @@ function paintCards() {
         kb.hidden = false;
         kb.textContent = full ? "한글본" : "한글본 " + pc + "%";
         kb.classList.toggle("part", !full);
+        var oa = $(".openas", c);
+        if (oa) { oa.hidden = false;
+          $$("[data-open]", oa).forEach(function (x) { x.classList.toggle("on", x.dataset.open === S.lang); }); }
         kb.title = (full ? "완역" : "부분 번역 " + pc + "%") + " · 눌러서 한글본으로 엽니다";
         c.dataset.koed = full ? "full" : "part";
-      } else { kb.hidden = true; delete c.dataset.koed; }
+      } else { kb.hidden = true; delete c.dataset.koed; var oa2 = $(".openas", c); if (oa2) oa2.hidden = true; }
     }
     var t = $(".cover__title", c);
     if (t && !t.dataset.en) t.dataset.en = t.innerHTML;
@@ -4935,6 +5123,9 @@ document.addEventListener("click", function (e) {
      clicking it opens 한글 and keeps that as the reading language, the same
      way switching in the reader does. */
   if (m && e.target.closest(".cover__ko") && S.lang === "en") setLang("ko");
+  /* the 열기 row under a translated card opens the book in that language */
+  var op = e.target.closest("[data-open]");
+  if (m && op) setLang(op.dataset.open);
   if (m) goWork(decodeURIComponent(m[1]));
   else goLibrary();
 });
