@@ -147,8 +147,10 @@ def verify_ko(MAN):
         if d["of"] != len(pn) + len(hn): bad.append("total drifted from source")
         markup = [k for k, v in list(d["p"].items())[:4000] if KO_TAG.search(v)]
         if markup: bad.append("stray markup %s" % markup[:3])
+        orig = next((w.get("orig", "en") for w in MAN if w["id"] == bid), "en")
         latin = [k for k, v in d["p"].items()
-                 if v and not re.search(r"[가-힣]", v) and len(re.sub(r"[^A-Za-z]", "", v)) > 12]
+                 if orig == "en" and v and not re.search(r"[가-힣]", v)
+                 and len(re.sub(r"[^A-Za-z]", "", v)) > 12]
         if latin: bad.append("untranslated %s" % latin[:3])
         if bid not in index: bad.append("absent from index.js")
         elif index[bid]["n"] != d["n"]: bad.append("index.js out of date")

@@ -183,7 +183,10 @@ def check(job, got):
             continue
         # a "Korean" paragraph with no Hangul at all is almost always untouched
         s = re.sub(r"<[^>]+>", "", v)
-        if not HANGUL.search(s) and len(re.sub(r"[^A-Za-z]", "", s)) > 12:
+        # (only for English originals: in a Japanese book a line that is already
+        #  in Roman letters — a book title, a sign — is kept as it stands)
+        if (not HANGUL.search(s) and len(re.sub(r"[^A-Za-z]", "", s)) > 12
+                and metaof(job.get("book", "")).get("orig", "en") == "en"):
             prob.append("looks untranslated: " + k)
             continue
         clean[k] = v
