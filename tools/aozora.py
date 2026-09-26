@@ -63,9 +63,30 @@ def fetch():
 
 # ------------------------------------------------------------------ parse
 RUBY_BAR = re.compile(r"｜([^《｜\n]+)《([^》\n]+)》")
-KANJI = r"[々〆一-鿿豈-﫿㐀-䶿仝〆〇ヶ]"
+KANJI = r"[\u3005\u3006\u4e00-\u9fff\uf900-\ufaff\u3400-\u4dbf\U00020000-\U0003134F仝〆〇ヶ]"
 RUBY_AUTO = re.compile(r"(%s+)《([^》\n]+)》" % KANJI)
-RUBY_ANY = re.compile(r"([^\s《》]{1,12}?)《([^》\n]+)》")
+# a reading after non-kanji belongs to one katakana/latin word or one character,
+# never to a whole run of text (the regex engine would otherwise start as far left as it can)
+RUBY_ANY = re.compile(r"([\u30a1-\u30fa\u30fc]+|[A-Za-z0-9\uff10-\uff19\uff21-\uff3a\uff41-\uff5a]+|[^\s《》])《([^》\n]+)》")
+JIS_POS = re.compile(r"第[34]水準(\d)-(\d+)-(\d+)")
+UCODE = re.compile(r"U\+([0-9A-Fa-f]{4,5})")
+
+
+def _gaiji(desc):
+    """※［＃「目＋匡」、第3水準1-88-81］ -> the character itself (JIS X 0213 or U+XXXX).
+    Without it, the reading that follows latches onto the text before it."""
+    m = UCODE.search(desc)
+    if m:
+        return chr(int(m.group(1), 16))
+    m = JIS_POS.search(desc)
+    if m:
+        plane, row, cell = (int(x) for x in m.groups())
+        b = bytes([0xA0 + row, 0xA0 + cell])
+        try:
+            return ((b"\x8f" + b) if plane == 2 else b).decode("euc_jis_2004")
+        except UnicodeDecodeError:
+            pass
+    return "〓"                          # the conventional geta mark: not representable
 NOTE = re.compile(r"［＃([^］]*)］")
 GAIJI = re.compile(r"※［＃([^］]*)］")
 HEAD = re.compile(r"［＃「([^」]+)」は(大|中|小)見出し］")
@@ -103,7 +124,8 @@ def _inline(s):
                 continue
             line = before[:k] + "\x01" + target + "\x02" + before[k + len(target):] + line[m.end():]
     s = emph(s)
-    s = GAIJI.sub(lambda m: (re.search(r"「(.)」", m.group(1)) or [None, ""])[1] if False else "", s)
+    s = GAIJI.sub(lambda m: _gaiji(m.group(1)), s)
+    s = s.replace("／″＼", "〴〵").replace("／＼", "〳〵")   # kunojiten repeat marks
     s = NOTE.sub("", s)
     s = _h.escape(s, quote=False)
     s = RUBY_BAR.sub(lambda m: "\x03%s\x04%s\x05" % (m.group(1), m.group(2)), s)
