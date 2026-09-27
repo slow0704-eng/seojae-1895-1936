@@ -68,3 +68,12 @@ super-consciousness 초의식 · threshold 문턱 · extension of personality �
 ## 원문 쪽 주의
 - 대문자 강조어(Reason, Nature, Today, Civilization, Garden, GOD 등)는 태그 없이, 어순으로 무게만. - 원문 오타는 뜻대로: gong→going, It Vas→It was, vans→was, vast thou→wast thou, riot→not, gathered ill→in, <em>Of course&gt;</em>→“물론”. 거꾸로 된 홑따옴표(’piece’, ‘If for no other,‘ 등 다수)는 ‘…’로 바로잡는다.
 - (파서 수정 완료: p:124 이후 문단 전체를 감싸던 이탤릭 누수는 없어졌다. 원문 강조만 옮긴다.)
+
+## 번역 후 확정
+- 장 제목 `1`–`46`. 제사 출전 줄은 원문 마크업 그대로(smallcaps는 원문에 있을 때만), 이니셜은 붙여 씀(F.H. 브래들리, F.W.H. 마이어스).
+- 줄표는 앞뒤 띄우지 않는다(`거의—빠져나갈 뻔했네—`). 시의 행 구분 ` / `만 띄움. 말줄임은 원문대로 `…` 하나.
+- 따옴표는 원문을 따른다: “ ”는 “ ”, ‘ ’는 ‘ ’(뒤집힌 홑따옴표는 바로잡음). 한자 병기 괄호(과(科) 등)는 쓰지 않는다.
+- 말투 확정: 나↔오맬리 해체(하게체 의문형 –나?/–ㄴ가? 금지) · 슈탈 하게체(해체 어미로 새지 않게) · 오맬리→슈탈·러시아인·선장 해요체, 자기는 “저/제” · 로스톰 하오체 · 미국인 기사 해요체 · 끝의 의사↔나 하십시오체 · 히스 부인 “–나요?”.
+- 대지(the Earth)는 “그녀”로 받지 않고 대지/어머니/그 영혼으로(시 인용과 원문이 her—the Earth로 쓴 곳만 예외). 페히너 “the Earth was the body…”도 대지.
+- 어휘: rhododendron 만병초 · azalea 철쭉 · steamer 기선 · Turkish/Turkey 터키(시대 표기) · chimney-stacks 굴뚝 기둥 · akin(슈탈) “닮은/닮았다” · 유모의 “wupsey-up” “영차 올라가, 영차 내려가”.
+- en passant·en route 등 외국어 구절과 méchant 등 로스톰의 프랑스어는 한국어로 옮겨 <em>. 원문 대문자 강조는 태그 없음.
