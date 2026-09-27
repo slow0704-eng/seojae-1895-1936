@@ -89,6 +89,9 @@ FRONT_DROP_RX = [
     re.compile(r"^\s*COPYRIGHT[,.]?\s", re.I),
     re.compile(r"^\s*Copyright\s+(?:19|18)\d\d\b"),
     re.compile(r"^\s*_?All rights reserved_?\.?\s*$", re.I),
+    # A. L. Burt reprint imprint (The Passionate Friends)
+    re.compile(r"^\s*\d+[-–]\d+ East Twenty-third Street\b"),
+    re.compile(r"^\s*PUBLISHED BY ARRANGEMENT WITH\b", re.I),
     re.compile(r"^\s*Printed in the United States", re.I),
     re.compile(r"^\s*Published\s+[A-Z][a-z]+,?\s*(?:19|18)\d\d", re.I),
     re.compile(r"^\s*_?Published\s+[A-Z][a-z]+,?\s*(?:19|18)\d\d_?", re.I),
@@ -116,6 +119,7 @@ BACK_MATTER_RX = [
     # the novels list after the text (Soul of a Bishop); the italic front-page
     # form in The Undying Fire is left alone, its translation keys depend on it
     re.compile(r"^\s*(?:¶\s*)?MR\.? WELLS has also written the following novels:\s*$", re.I),
+    re.compile(r"^\s*Popular Copyright Novels\s*$", re.I),   # A. L. Burt's list
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
