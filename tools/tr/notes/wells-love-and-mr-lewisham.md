@@ -55,3 +55,12 @@
 - red tie “빨간 넥타이” · waterproof collar “방수 칼라” · ’ologies and ’ographies “무슨무슨 학이니 무슨무슨 지(誌)니” · séance “강령회”(<em> 유지) · Medium “영매” · manifestations “현현” · raps “두드림 소리” · pneumatic glove “공기 장갑” · thought-reading “독심술” · psychic “영능자” · Friends of Progress “진보의 벗들” · Debating Society “토론회” · swat/mugger “공부벌레/암기벌레” · crib “일자리” · scholastic agent “교사 소개소” · resident/non-resident “입주/통근” · the Book “출석부” · Forbes medal “포브스 메달”.
 - We two “우리 둘” · Fighting the World “세상과 싸운다” · I won’t stand it “참지 않겠어” · It settles things/That settles everything “이걸로 정리가 돼”(29장 파국과 32장 화해에서 같은 말) · We’re all in the same boat “다 한배를 탔어” · You’re a Trump “당신 정말 최고야” · Penny “무슨 생각해요—1페니 줄게요” · Dillywings “딜리윙스”(“여보 마누라” 등 다른 애칭은 뜻대로) · Play “장난” · the end of adolescence “소년기의 끝” · knaves and fools “악당과 바보” · Crab “크랩”.
 - 돈·단위 원문대로(guinea “기니”, sovereign “소버린”, florin “플로린”, 파운드·실링·펜스, 마일·야드). 라틴어(Urit me Glycerae nitor, Mater saeva cupidinum, Magna est veritas et prevalebit, inter alia, in toto, à deux, per thou, a priori, Imitatio Christi)는 원어, 풀이 없음 — 인용 뒤 원문의 영어 풀이(“The untamable mother of desires”)만 한국어로.
+
+## 번역 후 확정
+- 루이셤 → 에설: 1–18장 해요체(2–4장의 하십시오체를 해요체로 바로잡음). 19장 청혼 p:849부터는 해체이고 2인칭은 “당신”(“너/네” 쓰지 않음). 에설의 Dear는 19장 전에는 “그대”, 뒤에는 “여보”.
+- 루이셤 → 채퍼리: p:958부터 하오체(해요체로 샌 곳 바로잡음). 채퍼리의 편지와 말은 하게체. 보노버 → 루이셤은 하오체로 통일. 루이셤 ↔ 헤이딩어 양은 끝까지 해요체(31장 이별 장면에서 1인칭 “나”).
+- You’re a Trump: 루이셤이 하면 “당신 정말 최고야”(p:1211), 에설이 하면 “당신 정말 최고예요”(p:1569). 에설 → 엄마도 해요체(p:1709).
+- 찬송 p:117–120은 원문의 “…”를 살림(“믿음은 사 … 라져 눈 … 앞에 보이고”). 원문의 뒤집힌 닫는 따옴표(p:29·120·751·1090·1356)는 ”로 바로잡음.
+- 제목: 원문이 이탤릭이면 `<em>『…』</em>`, 이탤릭이 없으면 『…』만. 시·노래·그림 제목은 「…」(「영매 슬러지」 「리스트라의 희생」).
+- 24장 가계부: By X “…에”, By missing “행방불명”, Mr. L./Mrs. L. “루이셤 씨/루이셤 부인”. cig-/arettes “궐련 두 갑에”, elope-/ment “결혼과 사랑의 도피에”는 앞 키에 붙이고 뒤 키에는 숫자만.
+- chops “갈비”, 등기관 “감독 등기관”, Damn you “제기랄”, the Bar “법조계”, uncle “삼촌”.
