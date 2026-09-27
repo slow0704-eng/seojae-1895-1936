@@ -162,6 +162,15 @@ BAD_TAG = re.compile(r'<(?!/?em>|span class="smallcaps">|/span>)[^>]+>')
 HANGUL = re.compile(r"[가-힣]")
 
 
+ENGLISH_WORD = re.compile(r"\b(?:the|and|of|to|is|you|that|with|was|his|her|it|in|for)\b", re.I)
+
+
+def foreign_verbatim(src, v):
+    """A Latin or French line kept as written is not an untranslated one."""
+    plain = lambda t: re.sub(r"[\s“”‘’\"]+", " ", re.sub(r"<[^>]+>", "", str(t))).strip()
+    return plain(src) == plain(v) and not ENGLISH_WORD.search(plain(src))
+
+
 def check(job, got):
     """A job's output must cover exactly its keys. Returns (clean, problems)."""
     src = {it["k"]: it["t"] for it in job["items"]}
@@ -186,7 +195,8 @@ def check(job, got):
         # (only for English originals: in a Japanese book a line that is already
         #  in Roman letters — a book title, a sign — is kept as it stands)
         if (not HANGUL.search(s) and len(re.sub(r"[^A-Za-z]", "", s)) > 12
-                and metaof(job.get("book", "")).get("orig", "en") == "en"):
+                and metaof(job.get("book", "")).get("orig", "en") == "en"
+                and not foreign_verbatim(src[k], v)):
             prob.append("looks untranslated: " + k)
             continue
         clean[k] = v

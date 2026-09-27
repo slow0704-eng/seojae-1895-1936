@@ -1276,6 +1276,10 @@ class Emitter:
     def p(self, text, cls=None, verse=False):
         self._keep(text)
         h, self.carry = inline(text, self.curly, self.smallcaps, self.carry)
+        # an epigraph's attribution ("--NOVALIS, _Flower Pollen, …") that
+        # forgets to close its title must not italicise the chapter after it
+        if re.match(r"\s*(?:—|--)\s*[A-Z]", text):
+            self.carry = False
         self.pcount += 1
         c = ' class="%s"' % cls if cls else ""
         self.out.append('<p%s data-p="%d">%s</p>' % (c, self.pcount, h))
