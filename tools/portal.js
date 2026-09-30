@@ -704,10 +704,24 @@ function stopAutoScroll(quiet) {
   if (!quiet) toast("자동 스크롤 멈춤");
 }
 function toggleAutoScroll() { AS.on ? stopAutoScroll() : startAutoScroll(); }
-function autoSpeed(d) {
+function autoSpeed(d, quiet) {
   S.asLpm = Math.max(2, Math.min(60, S.asLpm + d));
   syncSettings(); saveSettingsSoon();
-  toast("자동 스크롤 · 분당 " + S.asLpm + "줄", 900);
+  if (!quiet) toast("자동 스크롤 · 분당 " + S.asLpm + "줄", 900);
+}
+/* the on-screen speed bar — a phone has no ↑ ↓. Holding a button repeats. */
+function buildAutoCtl() {
+  var el = $("#asctl"); if (!el) return;
+  var rep = null, stopRep = function () { clearTimeout(rep); rep = null; };
+  el.addEventListener("pointerdown", function (e) {
+    var b = e.target.closest("[data-as]"); if (!b) return;
+    e.preventDefault(); stopRep();
+    if (b.dataset.as === "stop") { stopAutoScroll(); return; }
+    var d = +b.dataset.as;
+    autoSpeed(d, true);
+    (function again(ms) { rep = setTimeout(function () { autoSpeed(d, true); again(90); }, ms); })(450);
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) { el.addEventListener(t, stopRep); });
 }
 function paintAutoBtn() {
   var b = $('[data-act="auto"]'); if (!b) return;
@@ -886,6 +900,7 @@ function buildSettings() {
   if (!("wakeLock" in navigator)) { var r = setEl.querySelector('[data-tog="wake"]'); if (r) r.closest(".st-row").hidden = true; }
 }
 function syncSettings() {
+  var av = $("#asctl .as-v"); if (av) av.textContent = "분당 " + S.asLpm + "줄";
   if (!setEl) return;
   ["fs", "lh", "measure", "dim", "trScale", "asLpm"].forEach(function (k) { var i = setEl.querySelector('[data-k="' + k + '"]'); if (i) i.value = S[k]; });
   var u = { fs: S.fs + "px", lh: S.lh.toFixed(2), measure: S.measure + "자", dim: S.dim + "%",
@@ -1552,6 +1567,8 @@ function bindPointer() {
   addEventListener("touchstart", function (e) {
     lastActive = Date.now();
     if (view !== "reader" || anyOverlay()) return;
+    /* a tap on a control is not a page turn, and must not hold the scroll */
+    if (e.target.closest && e.target.closest("#asctl, .hud, button, a, input")) return;
     if (AS.on) AS.hold = true;
     var x = e.touches[0].clientX / innerWidth, y = e.touches[0].clientY / innerHeight;
     if (x > 0.2 && x < 0.8 && y > 0.2 && y < 0.8) { hudOn ? hideHud() : revealHud(); }
@@ -1601,7 +1618,7 @@ document.addEventListener("click", function (e) {
 });
 
 /* ---------- go ---------- */
-buildHud(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
+buildHud(); buildAutoCtl(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
 buildFacets(); buildAuthNav();
 $("#theme").addEventListener("change", function () { S.theme = this.value; applySettings(); saveSettingsSoon(); });
 $$(".ctl__sort button").forEach(function (b) { b.addEventListener("click", function () { setLibView(b.dataset.sort); }); });

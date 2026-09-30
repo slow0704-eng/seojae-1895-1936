@@ -168,6 +168,7 @@ READER_SHELL = """
   </div>
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
   <div id="folio" aria-hidden="true"></div>
+  <div id="asctl" role="group" aria-label="자동 스크롤 속도"><button data-as="-1" aria-label="느리게">&minus;</button><span class="as-v"></span><button data-as="1" aria-label="빠르게">+</button><button data-as="stop" class="as-stop" aria-label="자동 스크롤 멈춤">&#9632;</button></div>
   <div id="langsw" class="lseg lseg--float" role="group" aria-label="본문 언어" hidden><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>

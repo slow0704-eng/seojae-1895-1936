@@ -709,14 +709,33 @@ body.pal-on #palette{ display:flex; }
 #langsw:hover{ opacity:1; }
 @media (max-width:660px){ .lseg button{ font-size:11.5px; padding:5px 9px; } }
 
-/* auto-scroll: the HUD button lights up, and a dot (bottom-left, clear of the
-   folio) keeps saying so after the HUD has hidden itself */
+/* auto-scroll: the HUD button lights up, and a small speed bar sits at the
+   bottom-left, stacked above the language switch (#langsw) and clear of the
+   folio, for as long as the page is moving. It stays faint so it does not
+   compete with the text, and firms up under a pointer. */
 .hbtn--auto.on{ color:var(--accent); }
-body.autoscroll[data-view="reader"]::after{
-  content:""; position:fixed; left:max(14px, env(safe-area-inset-left)); bottom:calc(14px + env(safe-area-inset-bottom)); z-index:40;
-  width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.55;
-  pointer-events:none;
+#asctl{
+  position:fixed; z-index:46; display:none; align-items:center; gap:2px;
+  left:max(10px, env(safe-area-inset-left)); bottom:calc(42px + env(safe-area-inset-bottom));
+  padding:3px; border:1px solid var(--ink-hair); border-radius:999px;
+  background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  font:400 12px/1 var(--ff-ui); color:var(--fg-muted);
+  opacity:.5; transition:opacity .2s ease-out, bottom .2s ease-out;
+  touch-action:manipulation; user-select:none; -webkit-user-select:none;
 }
+body.autoscroll[data-view="reader"] #asctl{ display:flex; }
+#asctl:hover, #asctl:active, body.hud-on #asctl{ opacity:1; }
+body.hud-on #asctl{ bottom:calc(58px + env(safe-area-inset-bottom)); }
+#asctl button{
+  all:unset; cursor:pointer; min-width:30px; height:30px; border-radius:999px;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:16px; color:var(--fg);
+}
+#asctl button:hover{ background:var(--bg-control); }
+#asctl button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+#asctl .as-stop{ font-size:10px; color:var(--accent); }
+#asctl .as-v{ min-width:5.2em; text-align:center; font-variant-numeric:tabular-nums; }
 
 .titlepage .tp-note{
   margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;
@@ -739,5 +758,5 @@ body.autoscroll[data-view="reader"]::after{
   #book{ max-width:none; color:#000; font-size:11pt; }
   #book .ch{ content-visibility:visible; }
   #book h2.chapter{ break-before:page; }
-  .hud,#hairline,#drawer,#settings,#scrim,#toast,#resume,#dimmer,#palette,#help,#nostore{ display:none !important; }
+  .hud,#hairline,#drawer,#settings,#scrim,#toast,#resume,#dimmer,#palette,#help,#nostore,#asctl{ display:none !important; }
 }
