@@ -4442,11 +4442,11 @@ function buildHud() {
 
   var sw = $("#langsw");
   if (sw) sw.addEventListener("click", function (e) {
-    var x = e.target.closest("[data-lang]");
+    var x = e.target.closest("button[data-lang]");
     if (x && !x.disabled) { e.stopPropagation(); setLang(x.dataset.lang); }
   });
   hud.top.addEventListener("click", function (e) {
-    var lb = e.target.closest("[data-lang]");
+    var lb = e.target.closest("button[data-lang]");  /* <html> carries data-lang too */
     if (lb) { setLang(lb.dataset.lang); revealHud(); return; }
     var b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "lib") goLibrary();
