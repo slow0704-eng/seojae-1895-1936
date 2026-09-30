@@ -160,6 +160,7 @@ READER_SHELL = """
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
       <span class="lseg lseg--hud" data-act="lang" role="group" aria-label="본문 언어 (l)"><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></span>
+      <button class="hbtn hbtn--auto" data-act="auto" title="자동 스크롤 (a)">자동</button>
       <button class="hbtn" data-act="toc">목차</button>
       <button class="hbtn" data-act="bm">책갈피</button>
       <button class="hbtn" data-act="set">설정</button>
@@ -191,6 +192,7 @@ READER_SHELL = """
     <div class="st-grp">화면</div>
     <div class="st-row"><span class="st-l">테마</span><span class="st-c"><span class="st-seg" data-k="theme"><button data-seg="light">종이</button><button data-seg="sepia">세피아</button><button data-seg="dark">야간</button><button data-seg="night">심야</button></span></span></div>
     <div class="st-row"><span class="st-l">화면 어둡기</span><span class="st-c"><input type="range" data-k="dim" min="0" max="55" step="5"><span class="v" data-v="dim"></span></span></div>
+    <div class="st-row"><span class="st-l">자동 스크롤 속도</span><span class="st-c"><input type="range" data-k="asLpm" min="2" max="60" step="1"><span class="v" data-v="asLpm"></span></span></div>
     <div class="st-row"><span class="st-l">화면 켜두기</span><span class="st-c"><button class="st-tog" data-tog="wake"><i></i></button></span></div>
     <div class="st-grp">언어</div>
     <div class="st-row"><span class="st-l">본문 언어</span><span class="st-c"><span class="st-seg" data-k="lang"><button data-seg="en">원문</button><button data-seg="ko">한글</button><button data-seg="both">대역</button></span></span></div>

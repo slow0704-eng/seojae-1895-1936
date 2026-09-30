@@ -349,7 +349,7 @@ body.hud-on #hairline{ height:6px; cursor:pointer; }
 }
 #hud-top{ top:0; height:54px; border-bottom:1px solid var(--ink-hair); transform:translateY(-100%); }
 #hud-bot{ bottom:0; height:42px; border-top:1px solid var(--ink-hair); transform:translateY(100%); }
-body.hud-on .hud{ opacity:1; pointer-events:auto; transform:none; }
+body.hud-on .hud,body.hud-on #hud-top,body.hud-on #hud-bot{ opacity:1; pointer-events:auto; transform:none; }
 body.hud-on #hud-bot{ bottom:6px; }
 
 .hbtn{
@@ -368,6 +368,14 @@ body.hud-on #hud-bot{ bottom:6px; }
 .h-pct{ font-variant-numeric:tabular-nums; color:var(--accent); }
 .h-rem{ cursor:default; }
 .h-sess{ margin-left:auto; }
+/* a phone cannot hold the title and five buttons in one row — the nowrap title
+   used to spill over the buttons. The page itself already names the book. */
+@media (max-width:620px){
+  .h-title,.h-ch{ display:none; }
+  #hud-top{ gap:0; }
+  .h-right{ gap:0; }
+  .hbtn{ padding:8px 7px; font-size:13px; }
+}
 
 /* ---------- 9. SCRIM + DRAWERS ---------- */
 #scrim{
@@ -700,6 +708,15 @@ body.pal-on #palette{ display:flex; }
 #langsw[hidden], body.hud-on #langsw{ opacity:0; pointer-events:none; }
 #langsw:hover{ opacity:1; }
 @media (max-width:660px){ .lseg button{ font-size:11.5px; padding:5px 9px; } }
+
+/* auto-scroll: the HUD button lights up, and a dot (bottom-left, clear of the
+   folio) keeps saying so after the HUD has hidden itself */
+.hbtn--auto.on{ color:var(--accent); }
+body.autoscroll[data-view="reader"]::after{
+  content:""; position:fixed; left:max(14px, env(safe-area-inset-left)); bottom:calc(14px + env(safe-area-inset-bottom)); z-index:40;
+  width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.55;
+  pointer-events:none;
+}
 
 .titlepage .tp-note{
   margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;

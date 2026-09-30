@@ -34,7 +34,7 @@ var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
   dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
-  lang: "en", trScale: 85, markUntr: true,
+  lang: "en", trScale: 85, markUntr: true, asLpm: 16,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };
 var S = Object.assign({}, DEFAULTS, load("rdr/v1/settings", {}));
@@ -310,6 +310,7 @@ function mount(opts) {
 }
 
 function unmount() {
+  stopAutoScroll(true);
   if (WORK) flush(true);
   closeOverlays(); hideHud();
   $("#book").innerHTML = "";
@@ -563,6 +564,7 @@ function buildHud() {
     var b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "lib") goLibrary();
     if (b.dataset.act === "lang") { cycleLang(); revealHud(); }
+    if (b.dataset.act === "auto") { toggleAutoScroll(); revealHud(); }
     if (b.dataset.act === "toc") openDrawer("toc");
     if (b.dataset.act === "bm") toggleBookmark();
     if (b.dataset.act === "set") openSettings();
@@ -661,6 +663,58 @@ function popUndo() {
   if (!u || Date.now() - u.t > 30000) { toast("되돌릴 이동이 없습니다"); return; }
   restoreAnchor(u.a, function () { flush(); toast("이동을 취소했습니다"); });
 }
+/* ---------- auto-scroll ----------
+   Speed is kept in lines per minute, not pixels, so it survives font-size and
+   line-height changes: 16 줄/분 ≈ 200 wpm at the default 68-character measure.
+   The loop yields to anything that owns the page — an open panel, a finger on
+   the glass, an anchor restore in progress — and resumes on its own. */
+var AS = { on: false, raf: 0, last: 0, pos: -1, hold: false };
+function asPxPerSec() { return S.asLpm * S.fs * S.lh / 60; }
+function asFrame(t) {
+  AS.raf = 0;
+  if (!AS.on || view !== "reader") return;
+  var dt = AS.last ? Math.min(100, t - AS.last) : 0;
+  AS.last = t;
+  if (!AS.hold && !restoring && !document.hidden && !anyOverlay() && !$("#help")) {
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) {
+      stopAutoScroll(); toast("작품 끝에 닿아 자동 스크롤을 멈췄습니다", 2500); return;
+    }
+    /* Mobile Chrome drops sub-pixel scrollBy steps, so a slow speed never
+       moved at all. Keep the exact position here and scroll to it in whole
+       pixels; if the reader dragged or jumped, pick up from where they are. */
+    if (AS.pos < 0 || Math.abs(scrollY - AS.pos) > 3) AS.pos = scrollY;
+    AS.pos += asPxPerSec() * dt / 1000;
+    if (Math.round(AS.pos) !== Math.round(scrollY)) scrollTo(0, Math.round(AS.pos));
+  }
+  AS.raf = requestAnimationFrame(asFrame);
+}
+function startAutoScroll() {
+  if (view !== "reader" || AS.on) return;
+  AS.on = true; AS.last = 0; AS.pos = -1; touched = true;
+  document.body.classList.add("autoscroll"); paintAutoBtn(); setWake();
+  AS.raf = requestAnimationFrame(asFrame);
+  toast("자동 스크롤 · 분당 " + S.asLpm + "줄   ↑ ↓ 속도   a 멈춤", 2200);
+}
+function stopAutoScroll(quiet) {
+  if (!AS.on) return;
+  AS.on = false; AS.hold = false;
+  if (AS.raf) cancelAnimationFrame(AS.raf); AS.raf = 0;
+  document.body.classList.remove("autoscroll"); paintAutoBtn(); setWake();
+  flush();
+  if (!quiet) toast("자동 스크롤 멈춤");
+}
+function toggleAutoScroll() { AS.on ? stopAutoScroll() : startAutoScroll(); }
+function autoSpeed(d) {
+  S.asLpm = Math.max(2, Math.min(60, S.asLpm + d));
+  syncSettings(); saveSettingsSoon();
+  toast("자동 스크롤 · 분당 " + S.asLpm + "줄", 900);
+}
+function paintAutoBtn() {
+  var b = $('[data-act="auto"]'); if (!b) return;
+  b.classList.toggle("on", AS.on);
+  b.title = AS.on ? "자동 스크롤 멈춤 (a)" : "자동 스크롤 (a)";
+}
+
 function siblingWork(d) {
   var same = MANIFEST.filter(function (w) { return w.author === WORK.author; })
     .sort(function (a, b) { return a.year - b.year || a.title.localeCompare(b.title); });
@@ -833,9 +887,9 @@ function buildSettings() {
 }
 function syncSettings() {
   if (!setEl) return;
-  ["fs", "lh", "measure", "dim", "trScale"].forEach(function (k) { var i = setEl.querySelector('[data-k="' + k + '"]'); if (i) i.value = S[k]; });
+  ["fs", "lh", "measure", "dim", "trScale", "asLpm"].forEach(function (k) { var i = setEl.querySelector('[data-k="' + k + '"]'); if (i) i.value = S[k]; });
   var u = { fs: S.fs + "px", lh: S.lh.toFixed(2), measure: S.measure + "자", dim: S.dim + "%",
-            trScale: S.trScale + "%", wpm: "분당 " + S.wpm + "단어" };
+            trScale: S.trScale + "%", wpm: "분당 " + S.wpm + "단어", asLpm: "분당 " + S.asLpm + "줄" };
   Object.keys(u).forEach(function (k) { var e = setEl.querySelector('[data-v="' + k + '"]'); if (e) e.textContent = u[k]; });
   $$(".st-seg", setEl).forEach(function (sg) {
     $$("[data-seg]", sg).forEach(function (b) { b.classList.toggle("on", S[sg.dataset.k] === b.dataset.seg); });
@@ -848,12 +902,17 @@ function syncSettings() {
 function openSettings() { document.body.classList.add("set-on"); if (view === "reader") revealHud(); syncSettings(); }
 
 var wakeRef = null;
+/* auto-scroll holds the screen on too — a page that moves by itself must not go dark */
 function setWake() {
-  if (S.wake && "wakeLock" in navigator) navigator.wakeLock.request("screen").then(function (w) { wakeRef = w; }).catch(function () {});
-  else if (wakeRef) { wakeRef.release(); wakeRef = null; }
+  var want = S.wake || AS.on;
+  if (want && "wakeLock" in navigator) {
+    if (wakeRef && !wakeRef.released) return;
+    navigator.wakeLock.request("screen").then(function (w) { wakeRef = w; }).catch(function () {});
+  }
+  else if (!want && wakeRef) { wakeRef.release(); wakeRef = null; }
 }
 addEventListener("visibilitychange", function () {
-  if (!document.hidden && S.wake) setWake();
+  if (!document.hidden && (S.wake || AS.on)) setWake();
   if (document.hidden) flush();
 });
 
@@ -1406,6 +1465,11 @@ function bindKeys() {
     }
 
     /* reader */
+    if (e.key === "a") { e.preventDefault(); toggleAutoScroll(); return; }
+    /* while auto-scrolling, the small-step keys steer the speed instead */
+    if (AS.on && /^(ArrowDown|ArrowUp|j|k)$/.test(e.key)) {
+      e.preventDefault(); autoSpeed(e.key === "ArrowDown" || e.key === "j" ? 1 : -1); return;
+    }
     switch (e.key) {
       case " ": case "PageDown": e.preventDefault(); pageBy(e.shiftKey ? -1 : 1); return;
       case "PageUp": e.preventDefault(); pageBy(-1); return;
@@ -1447,7 +1511,8 @@ function showHelp() {
     ["서재", [["/", "찾기"], ["1"], ["Enter", "이어읽기"], ["클릭", "작품 열기"]]],
     ["이동", [["Space", "다음 화면"], ["Shift+Space", "이전 화면"], ["↓ / j", "조금 아래로"], ["↑ / k", "조금 위로"],
       ["→ / n", "다음 장"], ["← / p", "이전 장"], ["]", "같은 작가 다음 작품"], ["[", "같은 작가 이전 작품"],
-      ["Home / End", "작품 처음 / 끝"], ["Enter", "저장된 위치로"], ["Ctrl+Z", "이동 취소"], ["Backspace", "서재로"]]],
+      ["Home / End", "작품 처음 / 끝"], ["Enter", "저장된 위치로"], ["Ctrl+Z", "이동 취소"], ["Backspace", "서재로"],
+      ["a", "자동 스크롤 켜기/끄기"], ["↓ ↑ (자동 중)", "빠르게 / 느리게"]]],
     ["패널", [["t", "목차"], ["b", "책갈피 추가·삭제"], ["B", "책갈피 목록"], [",", "설정"], ["w", "작품 전환"],
       ["Esc", "닫기"], ["?", "단축키"]]],
     ["표시", [["+ / -", "글자 크게 / 작게"], ["0", "기본값"], ["> / <", "본문 넓게 / 좁게"], ["d", "테마 전환"],
@@ -1481,9 +1546,13 @@ function bindPointer() {
       if (e.clientY < 72 || e.clientY > innerHeight - 72) revealHud();
     } else document.documentElement.style.cursor = "";
   }, { passive: true });
+  /* a finger on the page holds auto-scroll still, so it can be read or dragged */
+  addEventListener("touchend", function () { AS.hold = false; AS.last = 0; AS.pos = -1; }, { passive: true });
+  addEventListener("touchcancel", function () { AS.hold = false; AS.last = 0; AS.pos = -1; }, { passive: true });
   addEventListener("touchstart", function (e) {
     lastActive = Date.now();
     if (view !== "reader" || anyOverlay()) return;
+    if (AS.on) AS.hold = true;
     var x = e.touches[0].clientX / innerWidth, y = e.touches[0].clientY / innerHeight;
     if (x > 0.2 && x < 0.8 && y > 0.2 && y < 0.8) { hudOn ? hideHud() : revealHud(); }
     else if (x <= 0.18) pageBy(-1);
@@ -1497,7 +1566,7 @@ addEventListener("scroll", function () {
   if (!restoring) touched = true;
   flushSoon(); updateHud();
   var d = scrollY - lastY; lastY = scrollY;
-  if (d > 0) hideHud();
+  if (d > 0 && !AS.on) hideHud();
 }, { passive: true });
 addEventListener("resize", throttle(function () { if (view === "reader") { var a = captureAnchor(); if (a) restoreAnchor(a); } }, 200));
 addEventListener("pagehide", function () { flush(); });
