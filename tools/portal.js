@@ -35,6 +35,8 @@ var DEFAULTS = {
   theme: null, font: "1", justify: false, indent: true,
   dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
   lang: "en", trScale: 85, markUntr: true, asLpm: 16,
+  nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko",
+  nrVoiceKo: "__VKO__", nrVoiceEn: "__VEN__", nrVoiceJa: "__VJA__", nrGot: false, nrGpuFail: 0,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };
 var S = Object.assign({}, DEFAULTS, load("rdr/v1/settings", {}));
@@ -310,6 +312,7 @@ function mount(opts) {
 }
 
 function unmount() {
+  nrStop(true);
   stopAutoScroll(true);
   if (WORK) flush(true);
   closeOverlays(); hideHud();
@@ -388,7 +391,7 @@ function setLang(mode) {
     if (eff === WORK.lang) { updateLangBtn(); return; }
     var a = captureAnchor();
     var oldLen = (a && paras[a.p]) ? paras[a.p].textContent.length : 1;
-    var wasTouched = touched, d = CACHE.get(WORK.id), w = byId[WORK.id];
+    var wasTouched = touched, d = CACHE.get(WORK.id), w = byId[WORK.id], nrWas = nrBeforeRebuild();
     WORK.ko = ko; WORK.lang = eff;
     $("#book").innerHTML = titlePage(w, eff) + composeHtml(d.html, ko, eff) + endMatter(w);
     relayout();
@@ -399,8 +402,8 @@ function setLang(mode) {
       var el = document.querySelector('[data-p="' + a.p + '"]');
       var nl = el ? el.textContent.length : oldLen;
       restoreAnchor({ p: a.p, o: Math.round((a.o || 0) * (nl / Math.max(1, oldLen))) },
-        function () { if (touched) flush(); updateHud(); });
-    } else updateHud();
+        function () { if (touched) flush(); updateHud(); nrAfterRebuild(nrWas); });
+    } else { updateHud(); nrAfterRebuild(nrWas); }
     updateLangBtn();
     toast(langLabel(eff) + " · " + LANG_NOTE[eff]);
   });
@@ -565,6 +568,7 @@ function buildHud() {
     if (b.dataset.act === "lib") goLibrary();
     if (b.dataset.act === "lang") { cycleLang(); revealHud(); }
     if (b.dataset.act === "auto") { toggleAutoScroll(); revealHud(); }
+    if (b.dataset.act === "read") { nrToggle(); revealHud(); }
     if (b.dataset.act === "toc") openDrawer("toc");
     if (b.dataset.act === "bm") toggleBookmark();
     if (b.dataset.act === "set") openSettings();
@@ -690,6 +694,7 @@ function asFrame(t) {
 }
 function startAutoScroll() {
   if (view !== "reader" || AS.on) return;
+  if (NR.state !== "off") nrStop(true);
   AS.on = true; AS.last = 0; AS.pos = -1; touched = true;
   document.body.classList.add("autoscroll"); paintAutoBtn(); setWake();
   AS.raf = requestAnimationFrame(asFrame);
@@ -869,6 +874,10 @@ function buildSettings() {
   setEl = $("#settings");
   setEl.addEventListener("input", function (e) {
     var k = e.target.dataset.k;
+    if (k && k.indexOf("nr") === 0) {
+      S[k] = e.target.type === "range" ? parseFloat(e.target.value) : e.target.value;
+      syncSettings(); saveSettingsSoon(); nrSettingChanged(k); return;
+    }
     if (k) {
       var val = e.target.type === "range" ? parseFloat(e.target.value) : e.target.value;
       withPin(function () { S[k] = val; applySettings(); });
@@ -878,14 +887,19 @@ function buildSettings() {
   });
   setEl.addEventListener("click", function (e) {
     if (e.target.closest(".st-x")) return closeOverlays();
+    var d0 = e.target.dataset.do;
     var sg = e.target.closest("[data-seg]");
     if (sg) {
       var k = sg.parentNode.dataset.k;
       if (k === "lang") { setLang(sg.dataset.seg); return; }
+      if (k === "nrRate") { S.nrRate = +sg.dataset.seg; syncSettings(); saveSettingsSoon(); nrRateChanged(); return; }
+      if (k && k.indexOf("nr") === 0) { S[k] = sg.dataset.seg; syncSettings(); saveSettingsSoon(); nrSettingChanged(k); return; }
       withPin(function () { S[k] = sg.dataset.seg; applySettings(); }); syncSettings(); saveSettingsSoon(); return;
     }
     var tg = e.target.closest("[data-tog]");
-    if (tg) { var k2 = tg.dataset.tog; withPin(function () { S[k2] = !S[k2]; applySettings(); }); syncSettings(); saveSettingsSoon(); updateHud(); if (k2 === "wake") setWake(); return; }
+    if (tg) { var k2 = tg.dataset.tog; withPin(function () { S[k2] = !S[k2]; applySettings(); }); syncSettings(); saveSettingsSoon(); updateHud(); if (k2 === "wake") setWake(); if (k2.indexOf("nr") === 0) nrSettingChanged(k2); return; }
+    if (d0 === "nrpreview") { nrPreview(); return; }
+    if (d0 === "nrclear") { nrClearModel(); return; }
     var d = e.target.dataset.do;
     if (d === "wpmreset") { S.wpm = 200; S.wpmSamples = 0; saveSettingsSoon(); syncSettings(); updateHud(); }
     if (d === "export") doExport();
@@ -902,12 +916,13 @@ function buildSettings() {
 function syncSettings() {
   var av = $("#asctl .as-v"); if (av) av.textContent = "분당 " + S.asLpm + "줄";
   if (!setEl) return;
-  ["fs", "lh", "measure", "dim", "trScale", "asLpm"].forEach(function (k) { var i = setEl.querySelector('[data-k="' + k + '"]'); if (i) i.value = S[k]; });
+  ["fs", "lh", "measure", "dim", "trScale", "asLpm", "nrVol", "nrAmbVol", "nrVoiceKo", "nrVoiceEn", "nrVoiceJa"].forEach(function (k) { var i = setEl.querySelector('[data-k="' + k + '"]'); if (i) i.value = S[k]; });
   var u = { fs: S.fs + "px", lh: S.lh.toFixed(2), measure: S.measure + "자", dim: S.dim + "%",
-            trScale: S.trScale + "%", wpm: "분당 " + S.wpm + "단어", asLpm: "분당 " + S.asLpm + "줄" };
+            trScale: S.trScale + "%", wpm: "분당 " + S.wpm + "단어", asLpm: "분당 " + S.asLpm + "줄",
+            nrVol: S.nrVol + "%", nrAmbVol: (S.nrAmbVol + 40) * 2.5 + "%", nrRate: "×" + S.nrRate };
   Object.keys(u).forEach(function (k) { var e = setEl.querySelector('[data-v="' + k + '"]'); if (e) e.textContent = u[k]; });
   $$(".st-seg", setEl).forEach(function (sg) {
-    $$("[data-seg]", sg).forEach(function (b) { b.classList.toggle("on", S[sg.dataset.k] === b.dataset.seg); });
+    $$("[data-seg]", sg).forEach(function (b) { b.classList.toggle("on", String(S[sg.dataset.k]) === b.dataset.seg); });
   });
   $$(".st-tog", setEl).forEach(function (b) { b.classList.toggle("on", !!S[b.dataset.tog]); });
   var th = $("#theme"); if (th) th.value = S.theme;
@@ -1481,6 +1496,18 @@ function bindKeys() {
 
     /* reader */
     if (e.key === "a") { e.preventDefault(); toggleAutoScroll(); return; }
+    if (e.key === "r") { e.preventDefault(); nrToggle(); return; }
+    if (e.key === "R") { e.preventDefault(); nrStop(); return; }
+    if (NR.state !== "off" && e.shiftKey && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+      e.preventDefault(); nrSkip(e.key === "ArrowRight" ? 1 : -1, "s"); return;
+    }
+    if (NR.state !== "off" && e.altKey && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+      e.preventDefault(); nrSkip(e.key === "ArrowRight" ? 1 : -1, "p"); return;
+    }
+    if (NR.state !== "off" && (e.key === "{" || e.key === "}")) {
+      e.preventDefault(); var R = NR_CFG.rates, ri = R.indexOf(S.nrRate);
+      S.nrRate = R[Math.max(0, Math.min(R.length - 1, (ri < 0 ? 2 : ri) + (e.key === "}" ? 1 : -1)))]; saveSettingsSoon(); nrRateChanged(); return;
+    }
     /* while auto-scrolling, the small-step keys steer the speed instead */
     if (AS.on && /^(ArrowDown|ArrowUp|j|k)$/.test(e.key)) {
       e.preventDefault(); autoSpeed(e.key === "ArrowDown" || e.key === "j" ? 1 : -1); return;
@@ -1528,6 +1555,8 @@ function showHelp() {
       ["→ / n", "다음 장"], ["← / p", "이전 장"], ["]", "같은 작가 다음 작품"], ["[", "같은 작가 이전 작품"],
       ["Home / End", "작품 처음 / 끝"], ["Enter", "저장된 위치로"], ["Ctrl+Z", "이동 취소"], ["Backspace", "서재로"],
       ["a", "자동 스크롤 켜기/끄기"], ["↓ ↑ (자동 중)", "빠르게 / 느리게"]]],
+    ["낭독", [["r", "듣기 / 일시정지"], ["R", "낭독 끝"], ["Shift+→ / ←", "다음 / 앞 문장"], ["Alt+→ / ←", "다음 / 앞 문단"],
+      ["{ / }", "느리게 / 빠르게"], ["더블클릭", "그 문장부터"]]],
     ["패널", [["t", "목차"], ["b", "책갈피 추가·삭제"], ["B", "책갈피 목록"], [",", "설정"], ["w", "작품 전환"],
       ["Esc", "닫기"], ["?", "단축키"]]],
     ["표시", [["+ / -", "글자 크게 / 작게"], ["0", "기본값"], ["> / <", "본문 넓게 / 좁게"], ["d", "테마 전환"],
@@ -1618,7 +1647,7 @@ document.addEventListener("click", function (e) {
 });
 
 /* ---------- go ---------- */
-buildHud(); buildAutoCtl(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
+buildHud(); buildAutoCtl(); nrBind(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
 buildFacets(); buildAuthNav();
 $("#theme").addEventListener("change", function () { S.theme = this.value; applySettings(); saveSettingsSoon(); });
 $$(".ctl__sort button").forEach(function (b) { b.addEventListener("click", function () { setLibView(b.dataset.sort); }); });

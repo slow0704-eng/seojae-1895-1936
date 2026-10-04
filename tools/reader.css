@@ -737,6 +737,72 @@ body.hud-on #asctl{ bottom:calc(58px + env(safe-area-inset-bottom)); }
 #asctl .as-stop{ font-size:10px; color:var(--accent); }
 #asctl .as-v{ min-width:5.2em; text-align:center; font-variant-numeric:tabular-nums; }
 
+/* ---------- 14b. 낭독 ---------- */
+/* 지금 읽는 문장: 형광펜이 아니라 종이에 스며든 듯한 옅은 바탕 + 밑줄 */
+::highlight(nr-cur){
+  background-color:color-mix(in srgb, var(--accent) 13%, transparent);
+  text-decoration:underline; text-decoration-color:color-mix(in srgb, var(--accent) 55%, transparent);
+  text-decoration-thickness:1.5px; text-underline-offset:.28em;
+}
+.hbtn--read.on{ color:var(--accent); }
+#nrbar{
+  position:fixed; z-index:47; left:50%; transform:translateX(-50%);
+  bottom:calc(14px + env(safe-area-inset-bottom));
+  display:flex; align-items:center; gap:2px; max-width:calc(100vw - 20px);
+  padding:4px 6px; border:1px solid var(--ink-hair); border-radius:999px;
+  background:color-mix(in srgb, var(--bg-panel) 94%, transparent);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 6px 24px -12px rgba(0,0,0,.35);
+  font:400 12px/1 var(--ff-ui); color:var(--fg-muted);
+  transition:bottom .2s ease-out, opacity .2s ease-out;
+  touch-action:manipulation; user-select:none; -webkit-user-select:none;
+}
+#nrbar[hidden]{ display:none; }
+body:not([data-view="reader"]) #nrbar{ display:none; }
+body.hud-on #nrbar{ bottom:calc(52px + env(safe-area-inset-bottom)); }
+#nrbar button{
+  all:unset; cursor:pointer; min-width:32px; height:32px; padding:0 4px; box-sizing:border-box;
+  border-radius:999px; display:inline-flex; align-items:center; justify-content:center; gap:3px;
+  color:var(--fg); font-size:12px; white-space:nowrap;
+}
+#nrbar button:hover{ background:var(--bg-control); }
+#nrbar button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+#nrbar .nr-play{ width:38px; height:38px; background:var(--accent); color:var(--bg); }
+#nrbar .nr-play:hover{ background:color-mix(in srgb, var(--accent) 85%, var(--fg)); }
+#nrbar .nr-st,#nrbar .nr-eng{ padding:0 4px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+#nrbar .nr-st:empty,#nrbar .nr-eng:empty{ display:none; }
+#nrbar .nr-follow{ color:var(--accent); padding:0 10px; border:1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+#nrbar .nr-rate{ min-width:40px; font-variant-numeric:tabular-nums; }
+#nrbar .nr-sleep i{ font-style:normal; font-size:11px; }
+#nrbar .nr-sleep.on{ color:var(--accent); }
+#nrbar .nr-stop{ font-size:10px; color:var(--accent); }
+body.narrating #asctl{ display:none; }
+@media (max-width:520px){ #nrbar .nr-eng{ display:none; } #nrbar{ gap:0; } }
+.st-row select{
+  font:inherit; font-size:12.5px; color:var(--fg); background:var(--bg-control);
+  border:1px solid var(--border); border-radius:3px; padding:4px 6px;
+}
+.st-seg--tight button{ padding-inline:7px; }
+#nr-ask{
+  position:fixed; inset:0; z-index:90; display:grid; place-items:center; padding:16px;
+  background:color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+}
+#nr-ask .nr-box{
+  max-width:400px; padding:22px 24px 18px; background:var(--bg-panel); color:var(--fg);
+  border:1px solid var(--border); box-shadow:0 18px 50px -20px rgba(0,0,0,.4);
+  font:400 14px/1.6 var(--ff-ui);
+}
+#nr-ask h4{ margin:0 0 8px; font:400 18px/1.3 var(--ff-display); color:var(--fg-heading); }
+#nr-ask p{ margin:0 0 16px; color:var(--fg-muted); font-size:13.5px; }
+#nr-ask .nr-btns{ display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+#nr-ask button{
+  all:unset; cursor:pointer; padding:8px 13px; border-radius:3px; font-size:13px;
+  border:1px solid var(--border); color:var(--fg);
+}
+#nr-ask button.pri{ background:var(--accent); border-color:var(--accent); color:var(--bg); }
+#nr-ask button:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
 .titlepage .tp-note{
   margin:1.4em 0 0; font-family:var(--ff-ui); font-size:.62em;
   letter-spacing:.04em; color:var(--fg-muted);
@@ -758,5 +824,5 @@ body.hud-on #asctl{ bottom:calc(58px + env(safe-area-inset-bottom)); }
   #book{ max-width:none; color:#000; font-size:11pt; }
   #book .ch{ content-visibility:visible; }
   #book h2.chapter{ break-before:page; }
-  .hud,#hairline,#drawer,#settings,#scrim,#toast,#resume,#dimmer,#palette,#help,#nostore,#asctl{ display:none !important; }
+  .hud,#hairline,#drawer,#settings,#scrim,#toast,#resume,#dimmer,#palette,#help,#nostore,#asctl,#nrbar,#nr-ask{ display:none !important; }
 }

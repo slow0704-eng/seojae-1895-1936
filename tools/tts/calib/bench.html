@@ -1,0 +1,41 @@
+<!doctype html><meta charset="utf-8"><title>bench</title><pre id=o></pre>
+<script type="module">
+const P = new URLSearchParams(location.search);
+const ep = P.get('ep')||'wasm', thr = +(P.get('thr')||1), ve = P.get('ve')||'mob', voc = P.get('voc')||'int8', steps=+(P.get('steps')||6);
+const ort = await import('https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/' + (ep==='webgpu'?'ort.webgpu.min.mjs':'ort.wasm.min.mjs'));
+ort.env.wasm.numThreads = thr; ort.env.wasm.wasmPaths='https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/';
+const T32_from = (t)=> new ort.Tensor(t.type, t.data, t.dims);
+const log = (...a)=>{ o.textContent += a.join(' ')+'\n'; };
+const M = '/m/';
+const F16 = P.get('f16')==='1', GB = P.get('gb')==='1';
+const h16 = (a)=>{ const o=new Uint16Array(a.length); const f=new Float32Array(1), u=new Uint32Array(f.buffer);
+  for(let i=0;i<a.length;i++){ f[0]=a[i]; const x=u[0], s=(x>>>16)&0x8000; let e=((x>>>23)&0xff)-127+15, m=x&0x7fffff;
+    if(e<=0){ o[i]=s; } else if(e>=31){ o[i]=s|0x7c00; } else { o[i]=s|(e<<10)|((m+0x1000)>>>13); } } return o; };
+const T32 = (d,dims)=> F16? new ort.Tensor('float16', h16(d), dims) : new ort.Tensor('float32', d, dims);
+const paths = F16 ? {dp:M+'f16/duration_predictor.onnx', te:M+'f16/text_encoder.onnx', ve:M+'f16/vector_estimator.onnx', voc:M+'f16/vocoder.onnx'} : {dp:M+'fp32/onnx/duration_predictor.onnx', te:M+'fp32/onnx/text_encoder.onnx',
+  ve: ve==='mob'?M+'mob/vector_estimator.int8.onnx': ve==='s8'?M+'int8/vector_estimator.int8.onnx':M+'fp32/onnx/vector_estimator.onnx',
+  voc: voc==='int8'?M+'int8/vocoder.int8.onnx':M+'fp32/onnx/vocoder.onnx'};
+const S={}; const t0=performance.now();
+for (const k in paths) S[k] = await ort.InferenceSession.create(paths[k], {executionProviders:[ep], graphOptimizationLevel:'all', preferredOutputLocation: (GB && (k==='ve'||k==='te')) ? 'gpu-buffer' : 'cpu'});
+log('load', ((performance.now()-t0)/1000).toFixed(1)+'s', 'coi', self.crossOriginIsolated, 'thr', ort.env.wasm.numThreads);
+const idx = await (await fetch(M+'fp32/onnx/unicode_indexer.json')).json();
+const st = await (await fetch(M+'fp32/voice_styles/F1.json')).json();
+const ttl = T32(Float32Array.from(st.style_ttl.data.flat(9)), [1,50,256]);
+const sdp = T32(Float32Array.from(st.style_dp.data.flat(9)), [1,8,16]);
+const text = '<ko>'+'그는 밤을 온통 그곳에서 보냈다. 얼마간은 선잠으로 보냈으나 배가 고파 자주 놀라 깨었고, 얼마간은 걱정과 막연한 희망 속에서 보냈다.'.normalize('NFKD')+'</ko>';
+const L=text.length, ids=new BigInt64Array(L); for(let i=0;i<L;i++) ids[i]=BigInt(idx[text.charCodeAt(i)]);
+const tid=new ort.Tensor('int64',ids,[1,L]), tm=T32(new Float32Array(L).fill(1),[1,1,L]);
+for (let rep=0; rep<3; rep++){
+  const T={}; let a=performance.now();
+  const dp = await S.dp.run({text_ids:tid, style_dp:sdp, text_mask:tm}); T.dp=performance.now()-a; a=performance.now();
+  const dur = F16 ? 11.84 : dp.duration.data[0]; const te = await S.te.run({text_ids:tid, style_ttl:ttl, text_mask:tm}); T.te=performance.now()-a;
+  const Tn=Math.ceil(dur*44100/3072), D=144; let xt=T32(new Float32Array(D*Tn).map(()=>Math.random()*2-1),[1,D,Tn]);
+  const lm=T32(new Float32Array(Tn).fill(1),[1,1,Tn]); a=performance.now();
+  for(let s=0;s<steps;s++){ const r=await S.ve.run({noisy_latent:xt, text_emb:te.text_emb, style_ttl:ttl, latent_mask:lm, text_mask:tm, current_step:T32(new Float32Array([s]),[1]), total_step:T32(new Float32Array([steps]),[1])}); xt = GB ? r.denoised_latent : T32_from(r.denoised_latent); }
+  T.ve=performance.now()-a; a=performance.now();
+  await S.voc.run({latent:xt}); T.voc=performance.now()-a;
+  const tot=T.dp+T.te+T.ve+T.voc;
+  log(`rep${rep} dur=${dur.toFixed(2)}s  dp=${T.dp.toFixed(0)} te=${T.te.toFixed(0)} ve=${T.ve.toFixed(0)} voc=${T.voc.toFixed(0)}  RTF=${(tot/1000/dur).toFixed(2)}`);
+}
+log('DONE');
+</script>

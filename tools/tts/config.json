@@ -1,0 +1,324 @@
+{
+ "ver": "1",
+ "base": "tts/",
+ "ortBase": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/",
+ "cacheName": "seojae-tts-1",
+ "steps": 8,
+ "minSteps": 4,
+ "maxWorkers": 2,
+ "aheadSec": 14,
+ "speedBase": {
+  "ko": 0.97,
+  "en": 0.92,
+  "ja": 0.97
+ },
+ "lufs": -21,
+ "roomWet": 0.12,
+ "pause": {
+  "comma": 0.15,
+  "sent": 0.45,
+  "q": 0.5,
+  "ellip": 0.65,
+  "para": 0.85,
+  "head": 1.2,
+  "chapter": 1.8,
+  "title": 1.3,
+  "turn": 0.12
+ },
+ "rates": [
+  0.8,
+  0.9,
+  1,
+  1.1,
+  1.25,
+  1.5,
+  1.75
+ ],
+ "eq": {
+  "hp": 70,
+  "mud": {
+   "f": 250,
+   "q": 1.0,
+   "g": -1.5
+  },
+  "pres": {
+   "f": 3200,
+   "q": 0.9,
+   "g": 1.5
+  },
+  "air": {
+   "f": 9000,
+   "g": 1.0
+  },
+  "ess": {
+   "f": 7200,
+   "q": 3.0,
+   "g": -1.5
+  },
+  "comp": {
+   "thr": -22,
+   "ratio": 2.2,
+   "knee": 8,
+   "att": 0.012,
+   "rel": 0.22,
+   "makeup": 1.5
+  }
+ },
+ "voices": {
+  "ko": "F2",
+  "en": "M1",
+  "ja": "M2"
+ },
+ "profiles": {
+  "gpu16": {
+   "ep": "webgpu",
+   "f16": true,
+   "label": "GPU · fp16",
+   "models": [
+    [
+     "likelion-axp/supertonic-3-fp16",
+     "d2f6d3e14332aa9af5aaa3c7a95b441808e289de",
+     "onnx/duration_predictor.onnx"
+    ],
+    [
+     "likelion-axp/supertonic-3-fp16",
+     "d2f6d3e14332aa9af5aaa3c7a95b441808e289de",
+     "onnx/text_encoder.onnx"
+    ],
+    [
+     "likelion-axp/supertonic-3-fp16",
+     "d2f6d3e14332aa9af5aaa3c7a95b441808e289de",
+     "onnx/vector_estimator.onnx"
+    ],
+    [
+     "likelion-axp/supertonic-3-fp16",
+     "d2f6d3e14332aa9af5aaa3c7a95b441808e289de",
+     "onnx/vocoder.onnx"
+    ]
+   ],
+   "files": [
+    {
+     "key": "dp",
+     "url": "https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/duration_predictor.onnx",
+     "size": 1970666
+    },
+    {
+     "key": "te",
+     "url": "https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/text_encoder.onnx",
+     "size": 18414166
+    },
+    {
+     "key": "ve",
+     "url": "https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vector_estimator.onnx",
+     "size": 128507879
+    },
+    {
+     "key": "voc",
+     "url": "https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vocoder.onnx",
+     "size": 50747299
+    }
+   ]
+  },
+  "gpu32": {
+   "ep": "webgpu",
+   "f16": false,
+   "label": "GPU",
+   "models": [
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/duration_predictor.onnx"
+    ],
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/text_encoder.onnx"
+    ],
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/vector_estimator.onnx"
+    ],
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/vocoder.onnx"
+    ]
+   ],
+   "files": [
+    {
+     "key": "dp",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx",
+     "size": 3700147
+    },
+    {
+     "key": "te",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx",
+     "size": 36416150
+    },
+    {
+     "key": "ve",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vector_estimator.onnx",
+     "size": 256534781
+    },
+    {
+     "key": "voc",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vocoder.onnx",
+     "size": 101424195
+    }
+   ]
+  },
+  "cpu8": {
+   "ep": "wasm",
+   "f16": false,
+   "label": "CPU · int8",
+   "models": [
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/duration_predictor.onnx"
+    ],
+    [
+     "Supertone/supertonic-3",
+     "3cadd1ee6394adea1bd021217a0e650ede09a323",
+     "onnx/text_encoder.onnx"
+    ],
+    [
+     "WilburDev/supertonic-3-mobile",
+     "2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5",
+     "vector_estimator.int8.onnx"
+    ],
+    [
+     "csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11",
+     "cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4",
+     "vocoder.int8.onnx"
+    ]
+   ],
+   "files": [
+    {
+     "key": "dp",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx",
+     "size": 3700147
+    },
+    {
+     "key": "te",
+     "url": "https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx",
+     "size": 36416150
+    },
+    {
+     "key": "ve",
+     "url": "https://huggingface.co/WilburDev/supertonic-3-mobile/resolve/2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5/vector_estimator.int8.onnx",
+     "size": 65967881
+    },
+    {
+     "key": "voc",
+     "url": "https://huggingface.co/csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11/resolve/cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4/vocoder.int8.onnx",
+     "size": 25991073
+    }
+   ]
+  }
+ },
+ "shared": [
+  {
+   "key": "cfg",
+   "url": "tts.json",
+   "size": 8253
+  },
+  {
+   "key": "idx",
+   "url": "indexer.bin",
+   "size": 131072
+  },
+  {
+   "key": "voices",
+   "url": "voices.bin",
+   "size": 517120
+  }
+ ],
+ "cpuSteps": 5,
+ "veq": {
+  "F1": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "F2": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "F3": [
+   -4.0,
+   -2.1,
+   0.0,
+   -5.6
+  ],
+  "F4": [
+   0.0,
+   0.0,
+   -1.1,
+   0.0
+  ],
+  "F5": [
+   -6.0,
+   -3.4,
+   -2.0,
+   -3.7
+  ],
+  "M1": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "M2": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "M3": [
+   -1.1,
+   0.0,
+   -1.7,
+   -2.1
+  ],
+  "M4": [
+   -1.7,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "M5": [
+   -2.8,
+   -1.2,
+   -1.2,
+   -2.2
+  ]
+ },
+ "loud": {
+  "voice": {
+   "F1": -25.51,
+   "F2": -25.64,
+   "F3": -24.76,
+   "F4": -25.0,
+   "F5": -25.07,
+   "M1": -25.38,
+   "M2": -23.98,
+   "M3": -24.54,
+   "M4": -25.44,
+   "M5": -25.26
+  },
+  "prof": {
+   "gpu16": 0.0,
+   "gpu32": 0.0,
+   "cpu8": -1.8
+  }
+ },
+ "modelSpeed": [
+  0.9,
+  1.2
+ ]
+}

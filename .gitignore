@@ -11,3 +11,6 @@ tools/catalog.json
 
 # ~15 MB of source OTFs; `python tools/fonts.py` subsets them into 서재/fonts/
 tools/fonts/src/
+
+# 브라우저 자동화(Playwright MCP) 스냅샷·스크린샷
+.playwright-mcp/

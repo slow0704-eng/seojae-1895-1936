@@ -22,6 +22,33 @@ CSS = io.open(_os.path.join(HERE, "reader.css"), encoding="utf-8").read()
 IDXCSS = io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read()
 JS = io.open(_os.path.join(HERE, "portal.js"), encoding="utf-8").read()
 
+# 낭독: 정규화·낭독 코드를 포털 IIFE 안에 넣고, 캘리브레이션 값(tools/tts/config.json)을 박습니다.
+TTS = _os.path.join(HERE, "tts")
+NR_CFG = json.load(io.open(_os.path.join(TTS, "config.json"), encoding="utf-8"))
+# 워커·정규화 코드가 바뀌면 주소가 바뀌어 브라우저 캐시가 옛 워커를 쥐고 있지 않게
+import hashlib as _hl
+NR_CFG["ver"] = _hl.sha1(b"".join(io.open(_os.path.join(TTS, f), "rb").read()
+                                  for f in ("worker.js", "normalize.js"))).hexdigest()[:10]
+_NARR = io.open(_os.path.join(HERE, "narrate.js"), encoding="utf-8").read().replace(
+    "__NR_CFG__", json.dumps(NR_CFG, ensure_ascii=False, separators=(",", ":")))
+_NORM = io.open(_os.path.join(TTS, "normalize.js"), encoding="utf-8").read()
+JS = JS.replace("/* ---------- go ---------- */",
+                _NORM + "\nvar TTSNorm = self.TTSNorm;\n" + _NARR + "\n/* ---------- go ---------- */", 1)
+for _k, _v in (("__VKO__", NR_CFG["voices"]["ko"]), ("__VEN__", NR_CFG["voices"]["en"]), ("__VJA__", NR_CFG["voices"]["ja"])):
+    JS = JS.replace(_k, _v)
+
+
+def write_tts():
+    """서재/tts/ — 워커와 작은 자산. 큰 ONNX 는 config 의 고정 리비전 URL 에서 받습니다."""
+    out = _os.path.join(SITE, "tts")
+    if not _os.path.isdir(out):
+        _os.makedirs(out)
+    w = io.open(_os.path.join(TTS, "worker.js"), encoding="utf-8").read()
+    w = w.replace('import "./normalize.js";', 'import "./normalize.js?v=%s";' % NR_CFG["ver"])
+    for name, body in (("worker.js", w), ("normalize.js", _NORM)):
+        with open(_os.path.join(out, name), "wb") as f:
+            f.write(body.encode("utf-8"))
+
 from jacket import mark, title_split, len_bucket, FORM_KO, roll
 import landing
 
@@ -160,6 +187,7 @@ READER_SHELL = """
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
       <span class="lseg lseg--hud" data-act="lang" role="group" aria-label="본문 언어 (l)"><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></span>
+      <button class="hbtn hbtn--read" data-act="read" title="낭독 (r)">듣기</button>
       <button class="hbtn hbtn--auto" data-act="auto" title="자동 스크롤 (a)">자동</button>
       <button class="hbtn" data-act="toc">목차</button>
       <button class="hbtn" data-act="bm">책갈피</button>
@@ -169,6 +197,17 @@ READER_SHELL = """
   <div id="hud-bot" class="hud"><span class="h-pct"></span><span class="h-rem"></span><span class="h-sess"></span></div>
   <div id="folio" aria-hidden="true"></div>
   <div id="asctl" role="group" aria-label="자동 스크롤 속도"><button data-as="-1" aria-label="느리게">&minus;</button><span class="as-v"></span><button data-as="1" aria-label="빠르게">+</button><button data-as="stop" class="as-stop" aria-label="자동 스크롤 멈춤">&#9632;</button></div>
+  <div id="nrbar" role="group" aria-label="낭독" hidden>
+    <button data-nr="prev" aria-label="앞 문장"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 4v12M16 4.5v11L7.5 10z" fill="currentColor" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <button data-nr="play" class="nr-play" aria-label="일시정지"></button>
+    <button data-nr="next" aria-label="다음 문장"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M15 4v12M4 4.5v11l8.5-5.5z" fill="currentColor" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <span class="nr-st" aria-live="polite"></span><span class="nr-eng"></span>
+    <button data-nr="follow" class="nr-follow" hidden>읽는 곳으로</button>
+    <button data-nr="rate" class="nr-rate" aria-label="낭독 속도">×1</button>
+    <button data-nr="sleep" class="nr-sleep" aria-label="잠자기 타이머"></button>
+    <button data-nr="more" aria-label="낭독 설정"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+    <button data-nr="stop" class="nr-stop" aria-label="낭독 끝">&#9632;</button>
+  </div>
   <div id="langsw" class="lseg lseg--float" role="group" aria-label="본문 언어" hidden><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
@@ -199,6 +238,19 @@ READER_SHELL = """
     <div class="st-row"><span class="st-l">본문 언어</span><span class="st-c"><span class="st-seg" data-k="lang"><button data-seg="en">원문</button><button data-seg="ko">한글</button><button data-seg="both">대역</button></span></span></div>
     <div class="st-row"><span class="st-l">대역 원문 크기</span><span class="st-c"><input type="range" data-k="trScale" min="70" max="100" step="5"><span class="v" data-v="trScale"></span></span></div>
     <div class="st-row"><span class="st-l">미번역 문단 표시</span><span class="st-c"><button class="st-tog" data-tog="markUntr"><i></i></button></span></div>
+    <div class="st-grp">낭독</div>
+    <div class="st-row"><span class="st-l">음성</span><span class="st-c"><span class="st-seg" data-k="nrEngine"><button data-seg="auto">고품질</button><button data-seg="system">기기 음성</button></span></span></div>
+    <div class="st-row"><span class="st-l">속도</span><span class="st-c"><span class="st-seg st-seg--tight" data-k="nrRate">%(rates)s</span></span></div>
+    <div class="st-row"><span class="st-l">한국어 목소리</span><span class="st-c"><select data-k="nrVoiceKo">%(vopts)s</select></span></div>
+    <div class="st-row"><span class="st-l">영어 목소리</span><span class="st-c"><select data-k="nrVoiceEn">%(vopts)s</select></span></div>
+    <div class="st-row"><span class="st-l">일본어 목소리</span><span class="st-c"><select data-k="nrVoiceJa">%(vopts)s</select></span></div>
+    <div class="st-row"><span class="st-l">미리 듣기</span><span class="st-c"><button class="mini" data-do="nrpreview">들어 보기</button></span></div>
+    <div class="st-row"><span class="st-l">음량</span><span class="st-c"><input type="range" data-k="nrVol" min="40" max="140" step="5"><span class="v" data-v="nrVol"></span></span></div>
+    <div class="st-row"><span class="st-l">방 울림</span><span class="st-c"><button class="st-tog" data-tog="nrRoom"><i></i></button></span></div>
+    <div class="st-row"><span class="st-l">배경 소리</span><span class="st-c"><span class="st-seg" data-k="nrAmb"><button data-seg="off">없음</button><button data-seg="rain">빗소리</button><button data-seg="fire">벽난로</button><button data-seg="room">서재</button></span></span></div>
+    <div class="st-row"><span class="st-l">배경 음량</span><span class="st-c"><input type="range" data-k="nrAmbVol" min="-40" max="-8" step="2"><span class="v" data-v="nrAmbVol"></span></span></div>
+    <div class="st-row"><span class="st-l">대역에서 읽을 말</span><span class="st-c"><span class="st-seg" data-k="nrBoth"><button data-seg="ko">한글</button><button data-seg="orig">원문</button></span></span></div>
+    <div class="st-row"><span class="st-l">음성 모델</span><span class="st-c"><button class="mini" data-do="nrclear">기기에서 지우기</button></span></div>
     <div class="st-grp">표시</div>
     <div class="st-row"><span class="st-l">남은 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showRemaining"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">세션 시간 표시</span><span class="st-c"><button class="st-tog" data-tog="showSession"><i></i></button></span></div>
@@ -213,6 +265,11 @@ READER_SHELL = """
 </aside>
 <div id="palette"><div class="pl-box"><input class="pl-q" placeholder="작품 또는 작가 검색"><div class="pl-list"></div></div></div>
 """
+READER_SHELL = READER_SHELL.replace("%(rates)s", "".join(
+    '<button data-seg="%g">%s</button>' % (r, ("%g" % r)) for r in NR_CFG["rates"])).replace("%(vopts)s", "".join(
+    '<option value="%s">%s</option>' % (v, ("여성 " if v[0] == "F" else "남성 ") + v[1]) for v in
+    ["F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5"]))
+
 
 
 def index_page(cat, works):
@@ -424,6 +481,7 @@ def main():
     translate.write_index()
     import fonts
     fonts.build()
+    write_tts()
 
     idx = index_page(cat, works)
     with open(_os.path.join(SITE, "index.html"), "wb") as f:
