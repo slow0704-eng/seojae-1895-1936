@@ -320,5 +320,132 @@
  "modelSpeed": [
   0.9,
   1.2
- ]
+ ],
+ "act": {
+  "_": "연기 대본(tools/act) 의 how·mood → 합성 매개변수. rate 말 빠르기 배율, pitch 반음, temp 억양 폭(흐름 정합 첫 잡음 크기), tilt 1.5kHz 위 dB, gain 라우드니스 dB, pause 뒤 쉼 배율. 감정 음성 연구의 대표 경향(분노·기쁨·공포 높고 빠르고 밝게, 슬픔·다정 낮고 느리고 어둡게)을 절반 세기로 잡은 귀대중 값 — 낭독은 배우보다 절제",
+  "how": {
+   "whisper": {
+    "rate": 0.95,
+    "pitch": -1.0,
+    "temp": 0.85,
+    "tilt": -4,
+    "gain": -7,
+    "pause": 1.1
+   },
+   "shout": {
+    "rate": 1.0,
+    "pitch": 2.5,
+    "temp": 1.15,
+    "tilt": 3,
+    "gain": 4,
+    "pause": 1.0
+   },
+   "sad": {
+    "rate": 0.9,
+    "pitch": -1.0,
+    "temp": 0.85,
+    "tilt": -2,
+    "gain": -2.5,
+    "pause": 1.25
+   },
+   "angry": {
+    "rate": 1.06,
+    "pitch": 1.0,
+    "temp": 1.1,
+    "tilt": 2,
+    "gain": 2.5,
+    "pause": 0.9
+   },
+   "fear": {
+    "rate": 1.08,
+    "pitch": 1.5,
+    "temp": 1.1,
+    "tilt": 0,
+    "gain": -1,
+    "pause": 0.9
+   },
+   "laugh": {
+    "rate": 1.05,
+    "pitch": 1.5,
+    "temp": 1.15,
+    "tilt": 1,
+    "gain": 1,
+    "pause": 1.0
+   },
+   "tense": {
+    "rate": 1.1,
+    "pitch": 0.7,
+    "temp": 1.05,
+    "tilt": 1,
+    "gain": 0,
+    "pause": 0.8
+   },
+   "calm": {
+    "rate": 0.94,
+    "pitch": -0.5,
+    "temp": 0.9,
+    "tilt": -1.5,
+    "gain": -1.5,
+    "pause": 1.15
+   }
+  },
+  "mood": {
+   "calm": {
+    "rate": 1,
+    "pitch": 0,
+    "temp": 1,
+    "tilt": 0,
+    "gain": 0,
+    "pause": 1
+   },
+   "warm": {
+    "rate": 0.98,
+    "pitch": -0.2,
+    "temp": 1,
+    "tilt": -0.5,
+    "gain": 0,
+    "pause": 1.05
+   },
+   "comic": {
+    "rate": 1.03,
+    "pitch": 0.2,
+    "temp": 1.05,
+    "tilt": 0,
+    "gain": 0,
+    "pause": 0.95
+   },
+   "tense": {
+    "rate": 1.04,
+    "pitch": 0,
+    "temp": 1,
+    "tilt": 0,
+    "gain": 0,
+    "pause": 0.9
+   },
+   "eerie": {
+    "rate": 0.96,
+    "pitch": -0.3,
+    "temp": 0.92,
+    "tilt": 0,
+    "gain": 0,
+    "pause": 1.12
+   },
+   "sad": {
+    "rate": 0.95,
+    "pitch": -0.3,
+    "temp": 1,
+    "tilt": 0,
+    "gain": 0,
+    "pause": 1.12
+   },
+   "grim": {
+    "rate": 0.97,
+    "pitch": -0.4,
+    "temp": 1,
+    "tilt": -0.5,
+    "gain": 0,
+    "pause": 1.08
+   }
+  }
+ }
 }

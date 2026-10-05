@@ -35,7 +35,7 @@ var DEFAULTS = {
   theme: null, font: "1", justify: false, indent: true,
   dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
   lang: "en", trScale: 85, markUntr: true, asLpm: 16,
-  nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko",
+  nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko", nrAct: true,
   nrVoiceKo: "__VKO__", nrVoiceEn: "__VEN__", nrVoiceJa: "__VJA__", nrGot: false, nrGpuFail: 0,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };

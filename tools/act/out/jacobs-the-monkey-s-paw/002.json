@@ -1,0 +1,234 @@
+{
+ "66": {
+  "mood": "calm"
+ },
+ "67": {
+  "q": [
+   {
+    "who": "mrs-white"
+   },
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "68": {
+  "q": [
+   {
+    "who": "herbert",
+    "n": "경박한 농담"
+   }
+  ]
+ },
+ "69": {
+  "q": [
+   {
+    "who": "mr-white"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "70": {
+  "q": [
+   {
+    "who": "herbert",
+    "n": "농담조"
+   },
+   {
+    "who": "herbert",
+    "n": "농담조"
+   }
+  ]
+ },
+ "72": {
+  "q": [
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "73": {
+  "q": [
+   {
+    "who": "mr-white"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "74": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "calm",
+    "n": "달래듯"
+   }
+  ]
+ },
+ "75": {
+  "q": [
+   {
+    "who": "mr-white"
+   },
+   {
+    "who": "mr-white",
+    "n": "말을 끊고 묻기"
+   }
+  ]
+ },
+ "76": {
+  "mood": "tense"
+ },
+ "78": {
+  "q": [
+   {
+    "who": "visitor",
+    "n": "머뭇거리며"
+   },
+   {
+    "who": "visitor"
+   }
+  ]
+ },
+ "79": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "tense",
+    "n": "숨 가쁘게"
+   },
+   {
+    "who": "mrs-white",
+    "how": "tense",
+    "n": "숨 가쁘게"
+   }
+  ]
+ },
+ "80": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "calm",
+    "n": "황급히 달램"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "81": {
+  "q": [
+   {
+    "who": "visitor",
+    "n": "말을 꺼내다 끊김"
+   }
+  ]
+ },
+ "82": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "fear",
+    "n": "정신없이"
+   }
+  ]
+ },
+ "83": {
+  "mood": "sad",
+  "q": [
+   {
+    "who": "visitor",
+    "how": "whisper",
+    "n": "조용히"
+   },
+   {
+    "who": "visitor",
+    "how": "whisper"
+   }
+  ]
+ },
+ "84": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "n": "안도"
+   },
+   {
+    "who": "mrs-white",
+    "n": "안도하다 끊김"
+   }
+  ]
+ },
+ "86": {
+  "q": [
+   {
+    "who": "visitor",
+    "how": "whisper",
+    "n": "낮은 목소리"
+   }
+  ]
+ },
+ "87": {
+  "q": [
+   {
+    "who": "mr-white",
+    "n": "멍하니 되뇜"
+   },
+   {
+    "who": "mr-white",
+    "n": "멍하니"
+   }
+  ]
+ },
+ "89": {
+  "q": [
+   {
+    "who": "mr-white",
+    "n": "다정하게"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "90": {
+  "q": [
+   {
+    "who": "visitor",
+    "n": "돌아보지 않고"
+   },
+   {
+    "who": "visitor"
+   }
+  ]
+ },
+ "92": {
+  "q": [
+   {
+    "who": "visitor"
+   },
+   {
+    "who": "visitor"
+   }
+  ]
+ },
+ "93": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "마른 입술로"
+   }
+  ]
+ },
+ "94": {
+  "q": [
+   {
+    "who": "visitor"
+   }
+  ]
+ }
+}

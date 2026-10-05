@@ -1,0 +1,107 @@
+{
+ "0": {
+  "mood": "eerie"
+ },
+ "1": {
+  "q": [
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   }
+  ]
+ },
+ "2": {
+  "q": [
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   }
+  ]
+ },
+ "3": {
+  "q": [
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   },
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   }
+  ]
+ },
+ "4": {
+  "q": [
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   },
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   }
+  ]
+ },
+ "5": {
+  "mood": "tense",
+  "q": [
+   {
+    "who": "narrator",
+    "n": "he thought — 생각"
+   }
+  ]
+ },
+ "6": {
+  "q": [
+   {
+    "who": "mother",
+    "n": "조심스러운 노크, 부드러운 목소리"
+   },
+   {
+    "who": "mother",
+    "n": "부드러운 목소리"
+   },
+   {
+    "who": "gregor",
+    "n": "찍찍거림 섞인 목소리"
+   },
+   {
+    "who": "father",
+    "n": "주먹으로 살살 두드림"
+   },
+   {
+    "who": "father"
+   },
+   {
+    "who": "father",
+    "n": "경고하듯 깊은 목소리"
+   },
+   {
+    "who": "grete",
+    "how": "sad",
+    "n": "plaintively 애처롭게"
+   },
+   {
+    "who": "gregor",
+    "n": "또박또박, 낱말 사이 긴 사이"
+   },
+   {
+    "who": "grete",
+    "how": "whisper",
+    "n": "whispered, 애원"
+   }
+  ]
+ },
+ "8": {
+  "q": [
+   {
+    "who": "gregor",
+    "n": "said to himself 혼잣말"
+   },
+   {
+    "who": "gregor",
+    "n": "혼잣말"
+   }
+  ]
+ }
+}

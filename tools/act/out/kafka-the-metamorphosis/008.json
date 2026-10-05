@@ -1,0 +1,28 @@
+{
+ "68": {"mood": "calm"},
+ "69": {"q": [
+  {"who": "gregor", "how": "tense", "n": "anxiously"},
+  {"who": "gregor", "how": "tense", "n": "anxiously"}]},
+ "70": {"q": [
+  {"who": "father", "n": "부엌에서 called out, 굽실거림"},
+  {"who": "lodger"},
+  {"who": "lodger"},
+  {"who": "father", "n": "called back, 과한 예의"}]},
+ "73": {"mood": "tense", "q": [
+  {"who": "lodger", "how": "shout", "n": "shouted"},
+  {"who": "lodger", "n": "천둥 같은 고함 뒤, 손을 들고 선언"},
+  {"who": "lodger"},
+  {"who": "lodger"},
+  {"who": "lodger", "n": "두 친구가 거듦"}]},
+ "75": {"mood": "grim", "q": [
+  {"who": "grete", "n": "탁자를 치며 말머리"},
+  {"who": "grete"}]},
+ "76": {"q": [
+  {"who": "father", "how": "whisper", "n": "to himself 혼잣말"}]},
+ "78": {"q": [
+  {"who": "grete", "n": "아버지에게만"},
+  {"who": "grete", "n": "말 끝에 울음 터뜨림"}]},
+ "79": {"q": [
+  {"who": "father", "n": "with sympathy 안쓰러움"},
+  {"who": "father", "n": "with sympathy 안쓰러움"}]}
+}

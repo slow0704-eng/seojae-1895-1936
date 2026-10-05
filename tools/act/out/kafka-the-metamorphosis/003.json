@@ -1,0 +1,34 @@
+{
+ "21": {"mood": "tense", "q": [
+  {"who": "clerk"},
+  {"who": "clerk"},
+  {"who": "mother", "how": "sad", "n": "already in tears"},
+  {"who": "mother", "how": "shout", "n": "she then cried, 비명"},
+  {"who": "grete", "n": "called from the other side"},
+  {"who": "mother"},
+  {"who": "clerk", "how": "calm", "n": "with a calmness"},
+  {"who": "father", "n": "called into the kitchen, 손뼉"},
+  {"who": "father"}
+ ]},
+ "23": {"q": [
+  {"who": "clerk"},
+  {"who": "clerk"},
+  {"who": "narrator", "n": "상상 속 부모의 외침"},
+  {"who": "narrator", "n": "상상 속 부모의 외침"},
+  {"who": "gregor", "n": "said to himself, 숨 고르며"}
+ ]},
+ "24": {"q": [
+  {"who": "clerk", "how": "shout", "n": "exclaim a loud"}
+ ]},
+ "26": {"q": [
+  {"who": "gregor", "n": "혼자 침착함을 지킴"},
+  {"who": "gregor"},
+  {"who": "gregor", "n": "지배인에게 애원"}
+ ]},
+ "28": {"q": [
+  {"who": "mother", "how": "shout", "n": "shouting, 팔 뻗고 벌떡"}
+ ]},
+ "29": {"mood": "grim", "q": [
+  {"who": "gregor", "how": "calm", "n": "gently"}
+ ]}
+}

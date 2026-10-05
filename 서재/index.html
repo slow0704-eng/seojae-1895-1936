@@ -3972,6 +3972,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <div class="st-row"><span class="st-l">한국어 목소리</span><span class="st-c"><select data-k="nrVoiceKo"><option value="F1">여성 1</option><option value="F2">여성 2</option><option value="F3">여성 3</option><option value="F4">여성 4</option><option value="F5">여성 5</option><option value="M1">남성 1</option><option value="M2">남성 2</option><option value="M3">남성 3</option><option value="M4">남성 4</option><option value="M5">남성 5</option></select></span></div>
     <div class="st-row"><span class="st-l">영어 목소리</span><span class="st-c"><select data-k="nrVoiceEn"><option value="F1">여성 1</option><option value="F2">여성 2</option><option value="F3">여성 3</option><option value="F4">여성 4</option><option value="F5">여성 5</option><option value="M1">남성 1</option><option value="M2">남성 2</option><option value="M3">남성 3</option><option value="M4">남성 4</option><option value="M5">남성 5</option></select></span></div>
     <div class="st-row"><span class="st-l">일본어 목소리</span><span class="st-c"><select data-k="nrVoiceJa"><option value="F1">여성 1</option><option value="F2">여성 2</option><option value="F3">여성 3</option><option value="F4">여성 4</option><option value="F5">여성 5</option><option value="M1">남성 1</option><option value="M2">남성 2</option><option value="M3">남성 3</option><option value="M4">남성 4</option><option value="M5">남성 5</option></select></span></div>
+    <div class="st-row"><span class="st-l">목소리 연기</span><span class="st-c"><button class="st-tog" data-tog="nrAct"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">미리 듣기</span><span class="st-c"><button class="mini" data-do="nrpreview">들어 보기</button></span></div>
     <div class="st-row"><span class="st-l">음량</span><span class="st-c"><input type="range" data-k="nrVol" min="40" max="140" step="5"><span class="v" data-v="nrVol"></span></span></div>
     <div class="st-row"><span class="st-l">방 울림</span><span class="st-c"><button class="st-tog" data-tog="nrRoom"><i></i></button></span></div>
@@ -4033,7 +4034,7 @@ var DEFAULTS = {
   theme: null, font: "1", justify: false, indent: true,
   dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
   lang: "en", trScale: 85, markUntr: true, asLpm: 16,
-  nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko",
+  nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko", nrAct: true,
   nrVoiceKo: "F2", nrVoiceEn: "M1", nrVoiceJa: "M2", nrGot: false, nrGpuFail: 0,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
 };
@@ -5863,6 +5864,61 @@ else root.TTSNorm = api;
 })(typeof self !== "undefined" ? self : this);
 
 var TTSNorm = self.TTSNorm;
+/* tools/act.py spans()·align() 의 JS 짝 (참조 구현 — 낭독 런타임 tools/tts/act.js 가 대본 순번을 셀 때 이것을 그대로 씀).
+   전 코퍼스(원문 79권 + 한국어판 63권 = 142 책·언어, 184,150 문단)에서 파이썬과 대사 수·cont 가 100% 같음.
+   대본 q 순번 = 이 함수가 돌려주는 구간 순번. 파이썬과 한 글자도 다르게 세면 안 됨. */
+var ACT_PAIR = { "“": "”", "‘": "’", "「": "」", "『": "』" };
+var ACT_NEST = { "「": 1, "『": 1 };
+var ACT_LET = /[\p{L}\p{N}_]/u;   /* 파이썬 re \w (유니코드) 와 같게 */
+function actIsOpen(t, i) { return t[i] !== "‘" || i === 0 || !ACT_LET.test(t[i - 1]); }
+function actIsClose(t, i) { return t[i] !== "’" || i + 1 >= t.length || !ACT_LET.test(t[i + 1]); }
+/* t: 문단 텍스트(<rt>/<rp> 내용·태그 지우고 문자 참조 푼 것), opens: "“" | "‘" | "「『",
+   carry: 앞 문단에서 열린 채 넘어온 여는 따옴표 또는 null.
+   돌려줌 {spans: [[시작, 끝, cont]], carry} — 위치는 UTF-16 단위(파이썬은 코드포인트; 보충 평면
+   글자가 없으면 같음. 순번만 쓰므로 수에는 영향 없음). */
+function actSpans(t, opens, carry) {
+  var out = [], i = 0, n = t.length, cur = null, depth = 0, start = 0, cont = false, k;
+  if (carry) {
+    var lead = t.length - t.replace(/^\s+/, "").length;
+    if (t.charAt(lead) === carry) cont = true;
+    else {
+      var cl = ACT_PAIR[carry], j = -1, o = -1;
+      for (k = 0; k < n; k++) if (t[k] === cl && actIsClose(t, k)) { j = k; break; }
+      for (k = 0; k < n; k++) if (opens.indexOf(t[k]) >= 0 && actIsOpen(t, k)) { o = k; break; }
+      if (j >= 0 && (o < 0 || j < o)) { out.push([0, j + 1, true]); i = j + 1; }
+    }
+  }
+  for (; i < n; i++) {
+    var c = t[i];
+    if (cur === null) {
+      if (opens.indexOf(c) >= 0 && actIsOpen(t, i)) { cur = c; depth = 1; start = i; }
+    } else if (c === cur && actIsOpen(t, i)) {
+      if (ACT_NEST[c]) depth++;
+      else { out.push([start, i, cont]); cont = false; start = i; }
+    } else if (c === ACT_PAIR[cur] && actIsClose(t, i)) {
+      if (--depth === 0) { out.push([start, i + 1, cont]); cont = false; cur = null; }
+    }
+  }
+  if (cur !== null) out.push([start, n, cont]);
+  return { spans: out, carry: cur };
+}
+/* 런타임 정렬: q = 대본의 그 문단 q 목록, nspans = 읽는 언어에서 센 수. */
+function actAlign(q, nspans, narrator) {
+  var i, r = [];
+  if (nspans === q.length) return { by: q.slice(), how: "exact" };
+  if (!q.length) { for (i = 0; i < nspans; i++) r.push(null); return { by: r, how: "fallback" }; }
+  var w = q[0].who, same = q.every(function (x) { return x.who === w; });
+  if (nspans === 0) return { by: [], how: same && w === narrator ? "same" : "fallback" };
+  if (same && w != null) {
+    var h = q[0].how || null, hs = q.every(function (x) { return (x.how || null) === h; });
+    for (i = 0; i < nspans; i++) r.push({ who: w, how: hs ? h : null });
+    return { by: r, how: "same" };
+  }
+  for (i = 0; i < nspans; i++) r.push(null);
+  return { by: r, how: "fallback" };
+}
+if (typeof module !== "undefined") module.exports = { actSpans: actSpans, actAlign: actAlign };
+
 /* ============================================================
    낭독 — 책 읽어주기
    ------------------------------------------------------------
@@ -5877,7 +5933,7 @@ var TTSNorm = self.TTSNorm;
    소리는 Web Audio 한 그래프 — 문장 사이 쉼은 구두점과 문단·장 경계에 따라
    정해진 길이만큼 실제 시계로 예약해서 끊김 없이 이어 붙입니다.
    ============================================================ */
-var NR_CFG = {"ver":"60f67bf7ca","base":"tts/","ortBase":"https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/","cacheName":"seojae-tts-1","steps":8,"minSteps":4,"maxWorkers":2,"aheadSec":14,"speedBase":{"ko":0.97,"en":0.92,"ja":0.97},"lufs":-21,"roomWet":0.12,"pause":{"comma":0.15,"sent":0.45,"q":0.5,"ellip":0.65,"para":0.85,"head":1.2,"chapter":1.8,"title":1.3,"turn":0.12},"rates":[0.8,0.9,1,1.1,1.25,1.5,1.75],"eq":{"hp":70,"mud":{"f":250,"q":1.0,"g":-1.5},"pres":{"f":3200,"q":0.9,"g":1.5},"air":{"f":9000,"g":1.0},"ess":{"f":7200,"q":3.0,"g":-1.5},"comp":{"thr":-22,"ratio":2.2,"knee":8,"att":0.012,"rel":0.22,"makeup":1.5}},"voices":{"ko":"F2","en":"M1","ja":"M2"},"profiles":{"gpu16":{"ep":"webgpu","f16":true,"label":"GPU · fp16","models":[["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/duration_predictor.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/text_encoder.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/vector_estimator.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/vocoder.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/duration_predictor.onnx","size":1970666},{"key":"te","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/text_encoder.onnx","size":18414166},{"key":"ve","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vector_estimator.onnx","size":128507879},{"key":"voc","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vocoder.onnx","size":50747299}]},"gpu32":{"ep":"webgpu","f16":false,"label":"GPU","models":[["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/duration_predictor.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/text_encoder.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/vector_estimator.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/vocoder.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx","size":3700147},{"key":"te","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx","size":36416150},{"key":"ve","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vector_estimator.onnx","size":256534781},{"key":"voc","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vocoder.onnx","size":101424195}]},"cpu8":{"ep":"wasm","f16":false,"label":"CPU · int8","models":[["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/duration_predictor.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/text_encoder.onnx"],["WilburDev/supertonic-3-mobile","2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5","vector_estimator.int8.onnx"],["csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11","cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4","vocoder.int8.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx","size":3700147},{"key":"te","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx","size":36416150},{"key":"ve","url":"https://huggingface.co/WilburDev/supertonic-3-mobile/resolve/2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5/vector_estimator.int8.onnx","size":65967881},{"key":"voc","url":"https://huggingface.co/csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11/resolve/cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4/vocoder.int8.onnx","size":25991073}]}},"shared":[{"key":"cfg","url":"tts.json","size":8253},{"key":"idx","url":"indexer.bin","size":131072},{"key":"voices","url":"voices.bin","size":517120}],"cpuSteps":5,"veq":{"F1":[0.0,0.0,0.0,0.0],"F2":[0.0,0.0,0.0,0.0],"F3":[-4.0,-2.1,0.0,-5.6],"F4":[0.0,0.0,-1.1,0.0],"F5":[-6.0,-3.4,-2.0,-3.7],"M1":[0.0,0.0,0.0,0.0],"M2":[0.0,0.0,0.0,0.0],"M3":[-1.1,0.0,-1.7,-2.1],"M4":[-1.7,0.0,0.0,0.0],"M5":[-2.8,-1.2,-1.2,-2.2]},"loud":{"voice":{"F1":-25.51,"F2":-25.64,"F3":-24.76,"F4":-25.0,"F5":-25.07,"M1":-25.38,"M2":-23.98,"M3":-24.54,"M4":-25.44,"M5":-25.26},"prof":{"gpu16":0.0,"gpu32":0.0,"cpu8":-1.8}},"modelSpeed":[0.9,1.2]};
+var NR_CFG = {"ver":"2717842408","base":"tts/","ortBase":"https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/","cacheName":"seojae-tts-1","steps":8,"minSteps":4,"maxWorkers":2,"aheadSec":14,"speedBase":{"ko":0.97,"en":0.92,"ja":0.97},"lufs":-21,"roomWet":0.12,"pause":{"comma":0.15,"sent":0.45,"q":0.5,"ellip":0.65,"para":0.85,"head":1.2,"chapter":1.8,"title":1.3,"turn":0.12},"rates":[0.8,0.9,1,1.1,1.25,1.5,1.75],"eq":{"hp":70,"mud":{"f":250,"q":1.0,"g":-1.5},"pres":{"f":3200,"q":0.9,"g":1.5},"air":{"f":9000,"g":1.0},"ess":{"f":7200,"q":3.0,"g":-1.5},"comp":{"thr":-22,"ratio":2.2,"knee":8,"att":0.012,"rel":0.22,"makeup":1.5}},"voices":{"ko":"F2","en":"M1","ja":"M2"},"profiles":{"gpu16":{"ep":"webgpu","f16":true,"label":"GPU · fp16","models":[["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/duration_predictor.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/text_encoder.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/vector_estimator.onnx"],["likelion-axp/supertonic-3-fp16","d2f6d3e14332aa9af5aaa3c7a95b441808e289de","onnx/vocoder.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/duration_predictor.onnx","size":1970666},{"key":"te","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/text_encoder.onnx","size":18414166},{"key":"ve","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vector_estimator.onnx","size":128507879},{"key":"voc","url":"https://huggingface.co/likelion-axp/supertonic-3-fp16/resolve/d2f6d3e14332aa9af5aaa3c7a95b441808e289de/onnx/vocoder.onnx","size":50747299}]},"gpu32":{"ep":"webgpu","f16":false,"label":"GPU","models":[["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/duration_predictor.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/text_encoder.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/vector_estimator.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/vocoder.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx","size":3700147},{"key":"te","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx","size":36416150},{"key":"ve","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vector_estimator.onnx","size":256534781},{"key":"voc","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/vocoder.onnx","size":101424195}]},"cpu8":{"ep":"wasm","f16":false,"label":"CPU · int8","models":[["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/duration_predictor.onnx"],["Supertone/supertonic-3","3cadd1ee6394adea1bd021217a0e650ede09a323","onnx/text_encoder.onnx"],["WilburDev/supertonic-3-mobile","2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5","vector_estimator.int8.onnx"],["csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11","cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4","vocoder.int8.onnx"]],"files":[{"key":"dp","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/duration_predictor.onnx","size":3700147},{"key":"te","url":"https://huggingface.co/Supertone/supertonic-3/resolve/3cadd1ee6394adea1bd021217a0e650ede09a323/onnx/text_encoder.onnx","size":36416150},{"key":"ve","url":"https://huggingface.co/WilburDev/supertonic-3-mobile/resolve/2d53d752a6e9a1db1bd0f63fe36806dc6d1a3ee5/vector_estimator.int8.onnx","size":65967881},{"key":"voc","url":"https://huggingface.co/csukuangfj2/sherpa-onnx-supertonic-3-tts-int8-2026-05-11/resolve/cca5a0e6c96e1d2c720986bf7e75fcc81dee3ae4/vocoder.int8.onnx","size":25991073}]}},"shared":[{"key":"cfg","url":"tts.json","size":8253},{"key":"idx","url":"indexer.bin","size":131072},{"key":"voices","url":"voices.bin","size":517120}],"cpuSteps":5,"veq":{"F1":[0.0,0.0,0.0,0.0],"F2":[0.0,0.0,0.0,0.0],"F3":[-4.0,-2.1,0.0,-5.6],"F4":[0.0,0.0,-1.1,0.0],"F5":[-6.0,-3.4,-2.0,-3.7],"M1":[0.0,0.0,0.0,0.0],"M2":[0.0,0.0,0.0,0.0],"M3":[-1.1,0.0,-1.7,-2.1],"M4":[-1.7,0.0,0.0,0.0],"M5":[-2.8,-1.2,-1.2,-2.2]},"loud":{"voice":{"F1":-25.51,"F2":-25.64,"F3":-24.76,"F4":-25.0,"F5":-25.07,"M1":-25.38,"M2":-23.98,"M3":-24.54,"M4":-25.44,"M5":-25.26},"prof":{"gpu16":0.0,"gpu32":0.0,"cpu8":-1.8}},"modelSpeed":[0.9,1.2],"act":{"_":"연기 대본(tools/act) 의 how·mood → 합성 매개변수. rate 말 빠르기 배율, pitch 반음, temp 억양 폭(흐름 정합 첫 잡음 크기), tilt 1.5kHz 위 dB, gain 라우드니스 dB, pause 뒤 쉼 배율. 감정 음성 연구의 대표 경향(분노·기쁨·공포 높고 빠르고 밝게, 슬픔·다정 낮고 느리고 어둡게)을 절반 세기로 잡은 귀대중 값 — 낭독은 배우보다 절제","how":{"whisper":{"rate":0.95,"pitch":-1.0,"temp":0.85,"tilt":-4,"gain":-7,"pause":1.1},"shout":{"rate":1.0,"pitch":2.5,"temp":1.15,"tilt":3,"gain":4,"pause":1.0},"sad":{"rate":0.9,"pitch":-1.0,"temp":0.85,"tilt":-2,"gain":-2.5,"pause":1.25},"angry":{"rate":1.06,"pitch":1.0,"temp":1.1,"tilt":2,"gain":2.5,"pause":0.9},"fear":{"rate":1.08,"pitch":1.5,"temp":1.1,"tilt":0,"gain":-1,"pause":0.9},"laugh":{"rate":1.05,"pitch":1.5,"temp":1.15,"tilt":1,"gain":1,"pause":1.0},"tense":{"rate":1.1,"pitch":0.7,"temp":1.05,"tilt":1,"gain":0,"pause":0.8},"calm":{"rate":0.94,"pitch":-0.5,"temp":0.9,"tilt":-1.5,"gain":-1.5,"pause":1.15}},"mood":{"calm":{"rate":1,"pitch":0,"temp":1,"tilt":0,"gain":0,"pause":1},"warm":{"rate":0.98,"pitch":-0.2,"temp":1,"tilt":-0.5,"gain":0,"pause":1.05},"comic":{"rate":1.03,"pitch":0.2,"temp":1.05,"tilt":0,"gain":0,"pause":0.95},"tense":{"rate":1.04,"pitch":0,"temp":1,"tilt":0,"gain":0,"pause":0.9},"eerie":{"rate":0.96,"pitch":-0.3,"temp":0.92,"tilt":0,"gain":0,"pause":1.12},"sad":{"rate":0.95,"pitch":-0.3,"temp":1,"tilt":0,"gain":0,"pause":1.12},"grim":{"rate":0.97,"pitch":-0.4,"temp":1,"tilt":-0.5,"gain":0,"pause":1.08}}}};
 var NR = {
   state: "off",            /* off | prep | play | pause */
   engine: null,            /* "neural" | "system" */
@@ -5908,6 +5964,113 @@ function nrLoadYomi(cb) {
     var cbs = NR_YOMI_WAIT[id] || []; delete NR_YOMI_WAIT[id]; NR_YOMI[id] = { p: {}, h: {} };
     cbs.forEach(function (c) { c(); });
   });
+}
+/* ---------------- 연기 대본 (tools/act) ----------------
+   대본이 있는 작품은 대사마다 배역의 목소리로, 지문(whispered, cried …)이 말하는 결로 읽습니다.
+   대본은 문단 번호 + '문단 안 n번째 대사'에 걸려 있어(tools/act/GUIDE.md) 원문·한국어판에
+   똑같이 맞습니다. 대사를 세는 법은 act/spans.js (act.py 와 한 글자도 다르지 않게).
+   대본 없는 작품·대사 수가 어긋난 문단·화자 미상은 지금처럼 서술 목소리 하나로. */
+var NR_ACT = {}, NR_ACTIDX = null, NR_ACT_WAIT = [];
+SJ.actIndex = function (d) { NR_ACTIDX = d || {}; nrActFire(); };
+SJ.receiveAct = function (d) { NR_ACT[d.id] = d; nrActFire(); };
+function nrActFire() { var w = NR_ACT_WAIT; NR_ACT_WAIT = []; w.forEach(function (f) { f(); }); }
+function nrLoadAct(cb) {
+  var id = WORK.id;
+  if (!S.nrAct || NR_ACT[id] !== undefined) return cb();
+  var again = function () { nrLoadAct(cb); };
+  if (NR_ACTIDX === null) {
+    NR_ACT_WAIT.push(again);
+    return inject("data/act/index.js", function () { NR_ACTIDX = {}; nrActFire(); });
+  }
+  if (!NR_ACTIDX[id]) { NR_ACT[id] = null; return cb(); }
+  NR_ACT_WAIT.push(again);
+  inject("data/act/" + encodeURIComponent(id) + ".js", function () { NR_ACT[id] = null; nrActFire(); });
+}
+/* 블록마다 대사 구간과 그 배역·말투. 앞 문단에서 열린 채 넘어온 따옴표(carry) 때문에
+   처음부터 차례로 셉니다 — 글자만 훑으므로 긴 책도 순간 */
+function nrActPlan() {
+  var A = S.nrAct && WORK && NR_ACT[WORK.id];
+  if (!A) return null;
+  var cast = {}; A.cast.forEach(function (c) { cast[c.id] = c; });
+  var plan = { A: A, cast: cast, b: [] }, nar = A.narrator, mood = null, carry = {};
+  NR.blocks.forEach(function (b, bi) {
+    if (b.kind === "h") { carry = {}; return; }
+    if (b.kind !== "p") return;
+    var e = A.p[b.p] || {};
+    if (e.nar && cast[e.nar]) nar = e.nar;
+    if (e.mood) mood = e.mood;
+    var opens = (A.qs || {})[b.lang] || (b.lang === "ja" ? "「『" : "“");
+    var r = actSpans(nrTokens(b.el).text, opens, carry[b.lang] || null);
+    carry[b.lang] = r.carry;
+    plan.b[bi] = { nar: nar, mood: mood, spans: r.spans, by: actAlign(e.q || [], r.spans.length, A.narrator).by };
+  });
+  return plan;
+}
+/* 배역 → 실제 목소리. 서술 목소리는 독자가 고른 것(설정)을 그대로 두고, 배역표에서
+   그 목소리를 쓰던 배역은 배역표 서술자 목소리와 맞바꿉니다 — 서술자와 겹치지 않게. */
+function nrCastVoice(id, lang) {
+  var P = NR.act, mine = nrVoiceFor(lang), c = P.cast[id];
+  if (id === P.A.narrator || !c) return { v: mine, mix: null, spd: 1 };
+  var vm = nrVoiceMap(lang), swap = vm.m, v = c.voice || {}, mix = null;
+  if (v.mix) { mix = {}; for (var k in v.mix) mix[swap[k] || k] = v.mix[k]; }
+  if (v.base === mine && vm.blend) { mix = mix || {}; mix[vm.blend] = (mix[vm.blend] || 0) + 0.45; }
+  return { v: swap[v.base] || v.base, mix: mix, spd: v.speed || 1 };
+}
+/* 맞바꿈 표: 독자 목소리 ↔ 배역표 서술자 목소리. 성별 계열(F/M)이 다르면 배역표에서 아무도
+   쓰지 않는 같은 계열 목소리로 — 도적이 여성 목소리를 얻지 않게. 같은 계열이 다 쓰였으면
+   목소리는 두고 같은 계열 단역의 목소리를 45% 섞어(blend) 서술자와 가르기 */
+var NR_ROLE_RANK = { narrator: 0, lead: 1, support: 2, minor: 3 };
+function nrVoiceMap(lang) {
+  var P = NR.act, mine = nrVoiceFor(lang);
+  P.vmap = P.vmap || {};
+  if (P.vmap[lang] && P.vmap[lang].mine === mine) return P.vmap[lang];
+  var cn = ((P.cast[P.A.narrator] || {}).voice || {}).base || mine, used = {}, m = {}, blend = null;
+  P.A.cast.forEach(function (c) {
+    var v = c.voice || {}; used[v.base] = 1;
+    for (var k in v.mix || {}) used[k] = 1;
+  });
+  var to = cn, g = mine.charAt(0);
+  if (cn.charAt(0) !== g) {
+    to = NR_VOICES.filter(function (x) { return x.charAt(0) === g && !used[x] && x !== mine; })[0] || null;
+    if (!to) {
+      var donor = P.A.cast.filter(function (c) { var b = (c.voice || {}).base; return b && b !== mine && b.charAt(0) === g; })
+        .sort(function (a, b) { return (NR_ROLE_RANK[b.role] || 0) - (NR_ROLE_RANK[a.role] || 0); })[0];
+      blend = donor ? donor.voice.base : null;
+    }
+  }
+  if (to && to !== mine) { m[mine] = to; if (to === cn) m[cn] = mine; }
+  return (P.vmap[lang] = { mine: mine, m: m, blend: blend });
+}
+/* how·mood → 합성 매개변수 (config.json act) */
+function nrDelivery(how, mood) {
+  var C = NR_CFG.act || {}, h = (C.how || {})[how] || {}, m = (C.mood || {})[mood] || {};
+  var g = function (o, k, d) { return o[k] != null ? o[k] : d; };
+  return { rate: g(h, "rate", 1) * g(m, "rate", 1), pitch: g(h, "pitch", 0) + g(m, "pitch", 0),
+           temp: g(h, "temp", 1) * g(m, "temp", 1), tilt: g(h, "tilt", 0) + g(m, "tilt", 0),
+           gain: g(h, "gain", 0) + g(m, "gain", 0), pause: g(h, "pause", 1) * g(m, "pause", 1) };
+}
+/* 문장 [a, z) 를 대사 경계에서 자르고 조각마다 누가·어떻게. 같은 목소리·말투가 이어지면 붙임 */
+function nrActCut(bi, a, z, lang) {
+  var pb = NR.act && NR.act.b[bi];
+  if (!pb) return null;
+  var cuts = [a], sp = pb.spans, out = [];
+  sp.forEach(function (s) { if (s[0] > a && s[0] < z) cuts.push(s[0]); if (s[1] > a && s[1] < z) cuts.push(s[1]); });
+  cuts.sort(function (x, y) { return x - y; }); cuts.push(z);
+  for (var i = 0; i + 1 < cuts.length; i++) {
+    var x = cuts[i], y = cuts[i + 1]; if (y <= x) continue;
+    var k = -1;
+    for (var j = 0; j < sp.length; j++) if (x >= sp[j][0] && x < sp[j][1]) { k = j; break; }
+    var by = k >= 0 ? pb.by[k] : null, who = by && by.who ? by.who : pb.nar;
+    var how = by && by.who ? by.how || null : null;
+    var cv = nrCastVoice(who, lang), d = nrDelivery(how, pb.mood);
+    d.rate *= cv.spd;
+    var act = { who: who, how: how, voice: cv.v, mix: cv.mix, d: d,
+                key: who + "/" + cv.v + "/" + (how || "") + "/" + (pb.mood || "") };
+    var last = out[out.length - 1];
+    if (last && last.act.key === act.key) last.z = y;
+    else out.push({ a: x, z: y, act: act });
+  }
+  return out;
 }
 function nrCanNeural() {
   return /^https?:$/.test(location.protocol) && typeof WebAssembly === "object" &&
@@ -5997,12 +6160,15 @@ function nrSegs(bi) {
     t0.s = y[2];
     for (k = 1; k < y[1]; k++) tk.toks[y[0] + k].s = "";
   });
-  var rs = TTSNorm.sentences(tk.text, b.lang);
-  var segs = rs.map(function (r, i) {
-    var sp = "";
-    for (var k = r[0]; k < r[1]; k++) sp += tk.toks[k].s;
-    return { b: bi, i: i, a: r[0], z: r[1], text: sp, lang: b.lang, last: i === rs.length - 1 };
-  }).filter(function (s) { return /[\p{L}\p{N}]/u.test(s.text); });
+  var rs = TTSNorm.sentences(tk.text, b.lang), segs = [];
+  var say = function (a, z) { var sp = ""; for (var k = a; k < z; k++) sp += tk.toks[k].s; return sp; };
+  rs.forEach(function (r) {
+    var parts = nrActCut(bi, r[0], r[1], b.lang);
+    if (!parts) return segs.push({ b: bi, a: r[0], z: r[1], text: say(r[0], r[1]), lang: b.lang });
+    /* 대사 경계에서 자른 조각 — mid: 문장이 아직 끝나지 않은 자리 */
+    parts.forEach(function (q) { segs.push({ b: bi, a: q.a, z: q.z, text: say(q.a, q.z), lang: b.lang, act: q.act, mid: q.z < r[1] }); });
+  });
+  segs = segs.filter(function (s) { return /[\p{L}\p{N}]/u.test(s.text); });
   segs.forEach(function (s, i) { s.i = i; s.last = i === segs.length - 1; });
   segs.nodes = tk.nodes;
   NR.segCache[bi] = segs;
@@ -6026,13 +6192,14 @@ function nrGap(seg, next) {
   var blk = NR.blocks[seg.b];
   if (!seg.last) {
     var tail = seg.text.replace(/[\s”’"'」』）)]+$/, "").slice(-1);
-    t = /[?？!！]/.test(tail) ? P.q : /[,，、;:]/.test(tail) ? P.comma : /…/.test(tail) ? P.ellip : P.sent;
+    t = /[?？!！]/.test(tail) ? P.q : /[,，、;:]/.test(tail) ? P.comma : /…/.test(tail) ? P.ellip : seg.mid ? P.comma : P.sent;
   } else if (blk.kind === "title" || blk.kind === "by") t = P.title;
   else if (blk.kind === "h") t = P.head;
   else if (next && NR.blocks[next.b] && NR.blocks[next.b].kind === "h") t = P.chapter;
   else t = P.para;
   /* 대사가 끝나거나 시작하는 자리(말하는 이가 바뀌는 자리)는 숨 한 번 더 */
   if (next && (/[”"」』]\s*$/.test(seg.text) || /^\s*[“"「『]/.test(next.text))) t += P.turn;
+  if (seg.act) t *= seg.act.d.pause;
   return t / Math.max(0.7, S.nrRate);
 }
 
@@ -6259,19 +6426,23 @@ function nrIsGpu() { return nrProfCfg().ep === "webgpu"; }
 function nrSynthReq(seg) {
   var id = ++NR.seq;
   var w = NR.workers.filter(function (x) { return x.ready; }).sort(function (a, b) { return a.busy - b.busy; })[0];
-  var job = { id: id, seg: seg, ready: false, gen: NR.gen, t0: performance.now(), voice: nrVoiceFor(seg.lang) };
+  var job = { id: id, seg: seg, ready: false, gen: NR.gen, t0: performance.now(), voice: nrSegVoice(seg) };
   NR.pend[id] = job;
   if (NR.engine !== "neural" || !w) { job.ready = true; return job; }
   var key = nrKey(seg), hit = NR.bufs[key];
   if (hit) { job.ready = true; job.buf = hit; job.key = key; return job; }
   job.key = key;
   w.busy++;
-  w.postMessage({ type: "synth", id: id, text: seg.text, lang: seg.lang, voice: nrVoiceFor(seg.lang),
-                  speed: NR_CFG.speedBase[seg.lang] * S.nrRate, steps: NR.steps, lufs: NR_CFG.lufs, expect: nrExpect(nrVoiceFor(seg.lang)) });
+  var A = seg.act, d = A ? A.d : null;
+  w.postMessage({ type: "synth", id: id, text: seg.text, lang: seg.lang, voice: job.voice, mix: A ? A.mix : null,
+                  speed: NR_CFG.speedBase[seg.lang] * S.nrRate * (d ? d.rate : 1), steps: NR.steps,
+                  lufs: NR_CFG.lufs + (d ? d.gain : 0), expect: nrExpect(job.voice),
+                  pitch: d ? d.pitch : 0, temp: d ? d.temp : 1, tilt: d ? d.tilt : 0 });
   return job;
 }
 /* 최근 문장 소리를 기억 — 일시정지·되감기가 즉시 */
-function nrKey(seg) { return seg.b + ":" + seg.i + ":" + nrVoiceFor(seg.lang) + ":" + S.nrRate + ":" + NR.steps; }
+function nrKey(seg) { return seg.b + ":" + seg.i + ":" + nrSegVoice(seg) + ":" + (seg.act ? seg.act.key : "") + ":" + S.nrRate + ":" + NR.steps; }
+function nrSegVoice(seg) { return seg.act ? seg.act.voice : nrVoiceFor(seg.lang); }
 function nrRemember(key, buf) {
   NR.bufs[key] = buf; NR.bufKeys.push(key);
   while (NR.bufKeys.length > 40) delete NR.bufs[NR.bufKeys.shift()];
@@ -6395,7 +6566,9 @@ function nrSysPump() {
   var u = new SpeechSynthesisUtterance(TTSNorm.normalize(j.seg.text, j.seg.lang));
   var v = nrSysVoice(j.seg.lang); if (v) u.voice = v;
   u.lang = v ? v.lang : (j.seg.lang === "ko" ? "ko-KR" : j.seg.lang === "ja" ? "ja-JP" : "en-GB");
-  u.rate = Math.max(0.5, Math.min(2, S.nrRate * (j.seg.lang === "ko" ? 1.05 : 1)));
+  var sd = j.seg.act ? j.seg.act.d : null;   /* 기기 음성은 목소리를 못 바꾸니 빠르기·높이만 */
+  u.rate = Math.max(0.5, Math.min(2, S.nrRate * (j.seg.lang === "ko" ? 1.05 : 1) * (sd ? sd.rate : 1)));
+  if (sd) u.pitch = Math.max(0.5, Math.min(2, Math.pow(2, sd.pitch / 12)));
   u.volume = Math.min(1, S.nrVol / 100);
   NR.sysBusy = true;
   var gen = NR.gen;
@@ -6460,8 +6633,10 @@ function nrToggle() {
 function nrStart(from) {
   if (view !== "reader") return;
   if (WORK.orig === "ja" && !NR_YOMI[WORK.id] && nrLangPick() === "ja") return nrLoadYomi(function () { nrStart(from); });
+  if (S.nrAct && NR_ACT[WORK.id] === undefined) return nrLoadAct(function () { nrStart(from); });
   stopAutoScroll(true);
   NR.blocks = nrBuildBlocks(); NR.segCache = {}; NR.bufs = {}; NR.bufKeys = [];
+  NR.act = nrActPlan();
   NR.cursor = from || nrStartFromView();
   NR.follow = true;
   var eng = S.nrEngine === "system" ? "system" : nrCanNeural() ? "neural" : nrCanSystem() ? "system" : null;
@@ -6736,7 +6911,7 @@ function nrSettingChanged(k) {
   if (/^nr(Vol|Room|Amb|AmbVol)$/.test(k)) { if (S.nrAmb !== "off" || NR.ctx) { nrAudio(); nrApplyMix(); } return; }
   if (NR.state === "off" || !NR.cur) return;
   if (/^nrVoice/.test(k)) { nrJump({ b: NR.cur.b, s: NR.cur.i }); return; }
-  if (k === "nrEngine" || k === "nrBoth") {
+  if (k === "nrEngine" || k === "nrBoth" || k === "nrAct") {
     var x = nrBeforeRebuild(); nrAfterRebuild(x);
   }
 }
@@ -6775,7 +6950,10 @@ function nrClearModel() {
     toast("음성 모델을 지웠습니다" + (mb ? " (" + mb + "MB)" : ""), 2400);
   });
 }
-if (/[?&]nrdebug\b/.test(location.search)) window.NR_DEBUG = { NR: NR, S: S, cfg: NR_CFG };
+if (/[?&]nrdebug\b/.test(location.search)) window.NR_DEBUG = { NR: NR, S: S, cfg: NR_CFG,
+  /* 연기 점검: 블록·대본을 세우고 블록 bi 의 조각(누가·어떻게)을 돌려줌 */
+  act: function (cb) { nrLoadAct(function () { NR.blocks = nrBuildBlocks(); NR.segCache = {}; NR.act = nrActPlan(); if (cb) cb(NR.act); }); },
+  segs: function (bi) { return nrSegs(bi).map(function (s) { return { t: s.text, who: s.act && s.act.who, how: s.act && s.act.how, v: nrSegVoice(s), mix: s.act && s.act.mix, d: s.act && s.act.d, mid: s.mid }; }); } };
 
 /* ---------- go ---------- */
 buildHud(); buildAutoCtl(); nrBind(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();

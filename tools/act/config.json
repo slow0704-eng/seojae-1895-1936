@@ -1,0 +1,30 @@
+{
+ "ver": 1,
+ "_": "연기 대본 어휘. how·mood 를 줄이거나 늘릴 때는 여기만 고친다. alias 는 옛 값 → 새 값(build 가 바꿔 씀), 없어진 값을 지우지 말고 alias 로 돌려 둘 것.",
+ "how": {
+  "whisper": "속삭임·낮춘 목소리 (whispered, murmured, under his breath, 소곤)",
+  "shout":   "외침·큰 소리 (cried out, shouted, screamed, 고함)",
+  "sad":     "슬픔·울먹임 (sobbed, brokenly, tearfully, 흐느끼며)",
+  "angry":   "화·짜증 (angrily, snapped, fiercely, 버럭)",
+  "fear":    "두려움·떨림 (trembling, in terror, faltered, 떨며)",
+  "laugh":   "웃음 섞인 말 (laughed, chuckled, jestingly, 웃으며)",
+  "tense":   "긴장·다급함 (urgently, hurriedly, breathlessly, 다급히)",
+  "calm":    "애써 차분함·위로 (soothingly, quietly, gently — 장면이 격할 때의 진정)"
+ },
+ "mood": {
+  "calm":  "평온한 일상",
+  "warm":  "다정함·가정의 온기",
+  "comic": "익살·가벼움",
+  "tense": "긴장·서스펜스",
+  "eerie": "불길함·괴기",
+  "sad":   "슬픔·애도",
+  "grim":  "참혹·냉혹"
+ },
+ "alias": {"cry": "sad", "scream": "shout", "murmur": "whisper", "mock": "laugh"},
+ "voices": ["F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5"],
+ "ages": ["child", "young", "adult", "old"],
+ "genders": ["f", "m", "x"],
+ "noteMax": 40,
+ "chunkChars": 8000,
+ "ctxChars": 700
+}

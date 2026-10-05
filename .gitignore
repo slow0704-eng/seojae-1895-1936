@@ -7,6 +7,8 @@ Thumbs.db
 tools/tr/jobs/
 tools/tr/todo.json
 tools/tr/remaining.json
+# `python tools/act.py plan <id>` 가 배역표와 data/*.js 로 다시 만듦
+tools/act/jobs/
 tools/catalog.json
 
 # ~15 MB of source OTFs; `python tools/fonts.py` subsets them into 서재/fonts/

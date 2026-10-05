@@ -44,6 +44,113 @@ function nrLoadYomi(cb) {
     cbs.forEach(function (c) { c(); });
   });
 }
+/* ---------------- 연기 대본 (tools/act) ----------------
+   대본이 있는 작품은 대사마다 배역의 목소리로, 지문(whispered, cried …)이 말하는 결로 읽습니다.
+   대본은 문단 번호 + '문단 안 n번째 대사'에 걸려 있어(tools/act/GUIDE.md) 원문·한국어판에
+   똑같이 맞습니다. 대사를 세는 법은 act/spans.js (act.py 와 한 글자도 다르지 않게).
+   대본 없는 작품·대사 수가 어긋난 문단·화자 미상은 지금처럼 서술 목소리 하나로. */
+var NR_ACT = {}, NR_ACTIDX = null, NR_ACT_WAIT = [];
+SJ.actIndex = function (d) { NR_ACTIDX = d || {}; nrActFire(); };
+SJ.receiveAct = function (d) { NR_ACT[d.id] = d; nrActFire(); };
+function nrActFire() { var w = NR_ACT_WAIT; NR_ACT_WAIT = []; w.forEach(function (f) { f(); }); }
+function nrLoadAct(cb) {
+  var id = WORK.id;
+  if (!S.nrAct || NR_ACT[id] !== undefined) return cb();
+  var again = function () { nrLoadAct(cb); };
+  if (NR_ACTIDX === null) {
+    NR_ACT_WAIT.push(again);
+    return inject("data/act/index.js", function () { NR_ACTIDX = {}; nrActFire(); });
+  }
+  if (!NR_ACTIDX[id]) { NR_ACT[id] = null; return cb(); }
+  NR_ACT_WAIT.push(again);
+  inject("data/act/" + encodeURIComponent(id) + ".js", function () { NR_ACT[id] = null; nrActFire(); });
+}
+/* 블록마다 대사 구간과 그 배역·말투. 앞 문단에서 열린 채 넘어온 따옴표(carry) 때문에
+   처음부터 차례로 셉니다 — 글자만 훑으므로 긴 책도 순간 */
+function nrActPlan() {
+  var A = S.nrAct && WORK && NR_ACT[WORK.id];
+  if (!A) return null;
+  var cast = {}; A.cast.forEach(function (c) { cast[c.id] = c; });
+  var plan = { A: A, cast: cast, b: [] }, nar = A.narrator, mood = null, carry = {};
+  NR.blocks.forEach(function (b, bi) {
+    if (b.kind === "h") { carry = {}; return; }
+    if (b.kind !== "p") return;
+    var e = A.p[b.p] || {};
+    if (e.nar && cast[e.nar]) nar = e.nar;
+    if (e.mood) mood = e.mood;
+    var opens = (A.qs || {})[b.lang] || (b.lang === "ja" ? "「『" : "“");
+    var r = actSpans(nrTokens(b.el).text, opens, carry[b.lang] || null);
+    carry[b.lang] = r.carry;
+    plan.b[bi] = { nar: nar, mood: mood, spans: r.spans, by: actAlign(e.q || [], r.spans.length, A.narrator).by };
+  });
+  return plan;
+}
+/* 배역 → 실제 목소리. 서술 목소리는 독자가 고른 것(설정)을 그대로 두고, 배역표에서
+   그 목소리를 쓰던 배역은 배역표 서술자 목소리와 맞바꿉니다 — 서술자와 겹치지 않게. */
+function nrCastVoice(id, lang) {
+  var P = NR.act, mine = nrVoiceFor(lang), c = P.cast[id];
+  if (id === P.A.narrator || !c) return { v: mine, mix: null, spd: 1 };
+  var vm = nrVoiceMap(lang), swap = vm.m, v = c.voice || {}, mix = null;
+  if (v.mix) { mix = {}; for (var k in v.mix) mix[swap[k] || k] = v.mix[k]; }
+  if (v.base === mine && vm.blend) { mix = mix || {}; mix[vm.blend] = (mix[vm.blend] || 0) + 0.45; }
+  return { v: swap[v.base] || v.base, mix: mix, spd: v.speed || 1 };
+}
+/* 맞바꿈 표: 독자 목소리 ↔ 배역표 서술자 목소리. 성별 계열(F/M)이 다르면 배역표에서 아무도
+   쓰지 않는 같은 계열 목소리로 — 도적이 여성 목소리를 얻지 않게. 같은 계열이 다 쓰였으면
+   목소리는 두고 같은 계열 단역의 목소리를 45% 섞어(blend) 서술자와 가르기 */
+var NR_ROLE_RANK = { narrator: 0, lead: 1, support: 2, minor: 3 };
+function nrVoiceMap(lang) {
+  var P = NR.act, mine = nrVoiceFor(lang);
+  P.vmap = P.vmap || {};
+  if (P.vmap[lang] && P.vmap[lang].mine === mine) return P.vmap[lang];
+  var cn = ((P.cast[P.A.narrator] || {}).voice || {}).base || mine, used = {}, m = {}, blend = null;
+  P.A.cast.forEach(function (c) {
+    var v = c.voice || {}; used[v.base] = 1;
+    for (var k in v.mix || {}) used[k] = 1;
+  });
+  var to = cn, g = mine.charAt(0);
+  if (cn.charAt(0) !== g) {
+    to = NR_VOICES.filter(function (x) { return x.charAt(0) === g && !used[x] && x !== mine; })[0] || null;
+    if (!to) {
+      var donor = P.A.cast.filter(function (c) { var b = (c.voice || {}).base; return b && b !== mine && b.charAt(0) === g; })
+        .sort(function (a, b) { return (NR_ROLE_RANK[b.role] || 0) - (NR_ROLE_RANK[a.role] || 0); })[0];
+      blend = donor ? donor.voice.base : null;
+    }
+  }
+  if (to && to !== mine) { m[mine] = to; if (to === cn) m[cn] = mine; }
+  return (P.vmap[lang] = { mine: mine, m: m, blend: blend });
+}
+/* how·mood → 합성 매개변수 (config.json act) */
+function nrDelivery(how, mood) {
+  var C = NR_CFG.act || {}, h = (C.how || {})[how] || {}, m = (C.mood || {})[mood] || {};
+  var g = function (o, k, d) { return o[k] != null ? o[k] : d; };
+  return { rate: g(h, "rate", 1) * g(m, "rate", 1), pitch: g(h, "pitch", 0) + g(m, "pitch", 0),
+           temp: g(h, "temp", 1) * g(m, "temp", 1), tilt: g(h, "tilt", 0) + g(m, "tilt", 0),
+           gain: g(h, "gain", 0) + g(m, "gain", 0), pause: g(h, "pause", 1) * g(m, "pause", 1) };
+}
+/* 문장 [a, z) 를 대사 경계에서 자르고 조각마다 누가·어떻게. 같은 목소리·말투가 이어지면 붙임 */
+function nrActCut(bi, a, z, lang) {
+  var pb = NR.act && NR.act.b[bi];
+  if (!pb) return null;
+  var cuts = [a], sp = pb.spans, out = [];
+  sp.forEach(function (s) { if (s[0] > a && s[0] < z) cuts.push(s[0]); if (s[1] > a && s[1] < z) cuts.push(s[1]); });
+  cuts.sort(function (x, y) { return x - y; }); cuts.push(z);
+  for (var i = 0; i + 1 < cuts.length; i++) {
+    var x = cuts[i], y = cuts[i + 1]; if (y <= x) continue;
+    var k = -1;
+    for (var j = 0; j < sp.length; j++) if (x >= sp[j][0] && x < sp[j][1]) { k = j; break; }
+    var by = k >= 0 ? pb.by[k] : null, who = by && by.who ? by.who : pb.nar;
+    var how = by && by.who ? by.how || null : null;
+    var cv = nrCastVoice(who, lang), d = nrDelivery(how, pb.mood);
+    d.rate *= cv.spd;
+    var act = { who: who, how: how, voice: cv.v, mix: cv.mix, d: d,
+                key: who + "/" + cv.v + "/" + (how || "") + "/" + (pb.mood || "") };
+    var last = out[out.length - 1];
+    if (last && last.act.key === act.key) last.z = y;
+    else out.push({ a: x, z: y, act: act });
+  }
+  return out;
+}
 function nrCanNeural() {
   return /^https?:$/.test(location.protocol) && typeof WebAssembly === "object" &&
          "caches" in window && typeof Worker === "function" && !!window.AudioContext &&
@@ -132,12 +239,15 @@ function nrSegs(bi) {
     t0.s = y[2];
     for (k = 1; k < y[1]; k++) tk.toks[y[0] + k].s = "";
   });
-  var rs = TTSNorm.sentences(tk.text, b.lang);
-  var segs = rs.map(function (r, i) {
-    var sp = "";
-    for (var k = r[0]; k < r[1]; k++) sp += tk.toks[k].s;
-    return { b: bi, i: i, a: r[0], z: r[1], text: sp, lang: b.lang, last: i === rs.length - 1 };
-  }).filter(function (s) { return /[\p{L}\p{N}]/u.test(s.text); });
+  var rs = TTSNorm.sentences(tk.text, b.lang), segs = [];
+  var say = function (a, z) { var sp = ""; for (var k = a; k < z; k++) sp += tk.toks[k].s; return sp; };
+  rs.forEach(function (r) {
+    var parts = nrActCut(bi, r[0], r[1], b.lang);
+    if (!parts) return segs.push({ b: bi, a: r[0], z: r[1], text: say(r[0], r[1]), lang: b.lang });
+    /* 대사 경계에서 자른 조각 — mid: 문장이 아직 끝나지 않은 자리 */
+    parts.forEach(function (q) { segs.push({ b: bi, a: q.a, z: q.z, text: say(q.a, q.z), lang: b.lang, act: q.act, mid: q.z < r[1] }); });
+  });
+  segs = segs.filter(function (s) { return /[\p{L}\p{N}]/u.test(s.text); });
   segs.forEach(function (s, i) { s.i = i; s.last = i === segs.length - 1; });
   segs.nodes = tk.nodes;
   NR.segCache[bi] = segs;
@@ -161,13 +271,14 @@ function nrGap(seg, next) {
   var blk = NR.blocks[seg.b];
   if (!seg.last) {
     var tail = seg.text.replace(/[\s”’"'」』）)]+$/, "").slice(-1);
-    t = /[?？!！]/.test(tail) ? P.q : /[,，、;:]/.test(tail) ? P.comma : /…/.test(tail) ? P.ellip : P.sent;
+    t = /[?？!！]/.test(tail) ? P.q : /[,，、;:]/.test(tail) ? P.comma : /…/.test(tail) ? P.ellip : seg.mid ? P.comma : P.sent;
   } else if (blk.kind === "title" || blk.kind === "by") t = P.title;
   else if (blk.kind === "h") t = P.head;
   else if (next && NR.blocks[next.b] && NR.blocks[next.b].kind === "h") t = P.chapter;
   else t = P.para;
   /* 대사가 끝나거나 시작하는 자리(말하는 이가 바뀌는 자리)는 숨 한 번 더 */
   if (next && (/[”"」』]\s*$/.test(seg.text) || /^\s*[“"「『]/.test(next.text))) t += P.turn;
+  if (seg.act) t *= seg.act.d.pause;
   return t / Math.max(0.7, S.nrRate);
 }
 
@@ -394,19 +505,23 @@ function nrIsGpu() { return nrProfCfg().ep === "webgpu"; }
 function nrSynthReq(seg) {
   var id = ++NR.seq;
   var w = NR.workers.filter(function (x) { return x.ready; }).sort(function (a, b) { return a.busy - b.busy; })[0];
-  var job = { id: id, seg: seg, ready: false, gen: NR.gen, t0: performance.now(), voice: nrVoiceFor(seg.lang) };
+  var job = { id: id, seg: seg, ready: false, gen: NR.gen, t0: performance.now(), voice: nrSegVoice(seg) };
   NR.pend[id] = job;
   if (NR.engine !== "neural" || !w) { job.ready = true; return job; }
   var key = nrKey(seg), hit = NR.bufs[key];
   if (hit) { job.ready = true; job.buf = hit; job.key = key; return job; }
   job.key = key;
   w.busy++;
-  w.postMessage({ type: "synth", id: id, text: seg.text, lang: seg.lang, voice: nrVoiceFor(seg.lang),
-                  speed: NR_CFG.speedBase[seg.lang] * S.nrRate, steps: NR.steps, lufs: NR_CFG.lufs, expect: nrExpect(nrVoiceFor(seg.lang)) });
+  var A = seg.act, d = A ? A.d : null;
+  w.postMessage({ type: "synth", id: id, text: seg.text, lang: seg.lang, voice: job.voice, mix: A ? A.mix : null,
+                  speed: NR_CFG.speedBase[seg.lang] * S.nrRate * (d ? d.rate : 1), steps: NR.steps,
+                  lufs: NR_CFG.lufs + (d ? d.gain : 0), expect: nrExpect(job.voice),
+                  pitch: d ? d.pitch : 0, temp: d ? d.temp : 1, tilt: d ? d.tilt : 0 });
   return job;
 }
 /* 최근 문장 소리를 기억 — 일시정지·되감기가 즉시 */
-function nrKey(seg) { return seg.b + ":" + seg.i + ":" + nrVoiceFor(seg.lang) + ":" + S.nrRate + ":" + NR.steps; }
+function nrKey(seg) { return seg.b + ":" + seg.i + ":" + nrSegVoice(seg) + ":" + (seg.act ? seg.act.key : "") + ":" + S.nrRate + ":" + NR.steps; }
+function nrSegVoice(seg) { return seg.act ? seg.act.voice : nrVoiceFor(seg.lang); }
 function nrRemember(key, buf) {
   NR.bufs[key] = buf; NR.bufKeys.push(key);
   while (NR.bufKeys.length > 40) delete NR.bufs[NR.bufKeys.shift()];
@@ -530,7 +645,9 @@ function nrSysPump() {
   var u = new SpeechSynthesisUtterance(TTSNorm.normalize(j.seg.text, j.seg.lang));
   var v = nrSysVoice(j.seg.lang); if (v) u.voice = v;
   u.lang = v ? v.lang : (j.seg.lang === "ko" ? "ko-KR" : j.seg.lang === "ja" ? "ja-JP" : "en-GB");
-  u.rate = Math.max(0.5, Math.min(2, S.nrRate * (j.seg.lang === "ko" ? 1.05 : 1)));
+  var sd = j.seg.act ? j.seg.act.d : null;   /* 기기 음성은 목소리를 못 바꾸니 빠르기·높이만 */
+  u.rate = Math.max(0.5, Math.min(2, S.nrRate * (j.seg.lang === "ko" ? 1.05 : 1) * (sd ? sd.rate : 1)));
+  if (sd) u.pitch = Math.max(0.5, Math.min(2, Math.pow(2, sd.pitch / 12)));
   u.volume = Math.min(1, S.nrVol / 100);
   NR.sysBusy = true;
   var gen = NR.gen;
@@ -595,8 +712,10 @@ function nrToggle() {
 function nrStart(from) {
   if (view !== "reader") return;
   if (WORK.orig === "ja" && !NR_YOMI[WORK.id] && nrLangPick() === "ja") return nrLoadYomi(function () { nrStart(from); });
+  if (S.nrAct && NR_ACT[WORK.id] === undefined) return nrLoadAct(function () { nrStart(from); });
   stopAutoScroll(true);
   NR.blocks = nrBuildBlocks(); NR.segCache = {}; NR.bufs = {}; NR.bufKeys = [];
+  NR.act = nrActPlan();
   NR.cursor = from || nrStartFromView();
   NR.follow = true;
   var eng = S.nrEngine === "system" ? "system" : nrCanNeural() ? "neural" : nrCanSystem() ? "system" : null;
@@ -871,7 +990,7 @@ function nrSettingChanged(k) {
   if (/^nr(Vol|Room|Amb|AmbVol)$/.test(k)) { if (S.nrAmb !== "off" || NR.ctx) { nrAudio(); nrApplyMix(); } return; }
   if (NR.state === "off" || !NR.cur) return;
   if (/^nrVoice/.test(k)) { nrJump({ b: NR.cur.b, s: NR.cur.i }); return; }
-  if (k === "nrEngine" || k === "nrBoth") {
+  if (k === "nrEngine" || k === "nrBoth" || k === "nrAct") {
     var x = nrBeforeRebuild(); nrAfterRebuild(x);
   }
 }
@@ -910,4 +1029,7 @@ function nrClearModel() {
     toast("음성 모델을 지웠습니다" + (mb ? " (" + mb + "MB)" : ""), 2400);
   });
 }
-if (/[?&]nrdebug\b/.test(location.search)) window.NR_DEBUG = { NR: NR, S: S, cfg: NR_CFG };
+if (/[?&]nrdebug\b/.test(location.search)) window.NR_DEBUG = { NR: NR, S: S, cfg: NR_CFG,
+  /* 연기 점검: 블록·대본을 세우고 블록 bi 의 조각(누가·어떻게)을 돌려줌 */
+  act: function (cb) { nrLoadAct(function () { NR.blocks = nrBuildBlocks(); NR.segCache = {}; NR.act = nrActPlan(); if (cb) cb(NR.act); }); },
+  segs: function (bi) { return nrSegs(bi).map(function (s) { return { t: s.text, who: s.act && s.act.who, how: s.act && s.act.how, v: nrSegVoice(s), mix: s.act && s.act.mix, d: s.act && s.act.d, mid: s.mid }; }); } };

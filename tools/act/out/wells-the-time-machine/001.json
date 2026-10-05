@@ -1,0 +1,409 @@
+{
+ "0": {
+  "mood": "calm"
+ },
+ "1": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "2": {
+  "q": [
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "3": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "4": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "5": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "6": {
+  "q": [
+   {
+    "who": "filby"
+   },
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "7": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "8": {
+  "q": [
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "9": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "10": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "11": {
+  "q": [
+   {
+    "who": "young-man",
+    "n": "시가에 불 붙이며 띄엄띄엄"
+   },
+   {
+    "who": "young-man",
+    "n": "말끝 흐림"
+   }
+  ]
+ },
+ "12": {
+  "q": [
+   {
+    "who": "traveller",
+    "n": "조금 흥이 오름"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "13": {
+  "q": [
+   {
+    "who": "mayor"
+   }
+  ]
+ },
+ "14": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "15": {
+  "q": [
+   {
+    "who": "mayor",
+    "how": "whisper",
+    "n": "murmured"
+   },
+   {
+    "who": "mayor",
+    "n": "잠깐 밝아짐"
+   }
+  ]
+ },
+ "16": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "17": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "18": {
+  "q": [
+   {
+    "who": "medical-man",
+    "n": "석탄을 뚫어지게 봄"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "19": {
+  "q": [
+   {
+    "who": "traveller",
+    "n": "미소"
+   }
+  ]
+ },
+ "20": {
+  "q": [
+   {
+    "who": "medical-man"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "21": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "22": {
+  "q": [
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "23": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "24": {
+  "q": [
+   {
+    "who": "medical-man",
+    "n": "지문 없음, 주고받음으로"
+   }
+  ]
+ },
+ "25": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "26": {
+  "q": [
+   {
+    "who": "psychologist",
+    "n": "끼어듦"
+   },
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "27": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "28": {
+  "q": [
+   {
+    "who": "filby"
+   },
+   {
+    "who": "filby",
+    "n": "말이 끊김"
+   }
+  ]
+ },
+ "29": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "30": {
+  "q": [
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "31": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "32": {
+  "q": [
+   {
+    "who": "filby"
+   },
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "33": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller",
+    "n": "말이 끊김"
+   }
+  ]
+ },
+ "34": {
+  "q": [
+   {
+    "who": "young-man",
+    "how": "shout",
+    "n": "exclaimed"
+   }
+  ]
+ },
+ "35": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "37": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "38": {
+  "q": [
+   {
+    "who": "psychologist"
+   },
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "39": {
+  "q": [
+   {
+    "who": "medical-man"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "40": {
+  "q": [
+   {
+    "who": "young-man"
+   }
+  ]
+ },
+ "41": {
+  "q": [
+   {
+    "who": "traveller",
+    "n": "지문 없음, 놀리는 응수"
+   }
+  ]
+ },
+ "42": {
+  "q": [
+   {
+    "who": "young-man"
+   },
+   {
+    "who": "young-man"
+   }
+  ]
+ },
+ "43": {
+  "q": [
+   {
+    "who": "guest"
+   },
+   {
+    "who": "guest"
+   }
+  ]
+ },
+ "44": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "45": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "46": {
+  "q": [
+   {
+    "who": "guest",
+    "how": "shout",
+    "n": "cried"
+   },
+   {
+    "who": "guest",
+    "how": "shout"
+   }
+  ]
+ },
+ "47": {
+  "q": [
+   {
+    "who": "filby",
+    "how": "shout",
+    "n": "cried, 머리가 지침"
+   }
+  ]
+ },
+ "48": {
+  "q": [
+   {
+    "who": "psychologist"
+   },
+   {
+    "who": "psychologist",
+    "n": "허풍이라 빈정"
+   }
+  ]
+ }
+}

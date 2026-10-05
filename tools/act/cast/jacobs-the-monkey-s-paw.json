@@ -1,0 +1,25 @@
+{
+ "id": "jacobs-the-monkey-s-paw",
+ "narrator": "narrator",
+ "src": "tools/tr/notes/jacobs-the-monkey-s-paw.md · 본문 p0–p143",
+ "cast": [
+  {"id": "narrator", "role": "narrator", "names": {"en": "Narrator", "ko": "서술자", "aliases": []},
+   "gender": "x", "age": "adult", "traits": "3인칭, 절제된 가정극 — 공포를 과장 없이 쌓음",
+   "voice": {"base": "M1"}},
+  {"id": "mr-white", "role": "lead", "names": {"en": "Mr. White", "ko": "화이트 씨", "aliases": ["the old man", "his father", "her husband", "father"]},
+   "gender": "m", "age": "old", "traits": "늙은 가장, 체스에 서툴고 호기심 많음, 뒤로 갈수록 겁에 질림",
+   "voice": {"base": "M4", "speed": 0.95}},
+  {"id": "mrs-white", "role": "lead", "names": {"en": "Mrs. White", "ko": "화이트 부인", "aliases": ["the old lady", "the old woman", "his wife", "mother"]},
+   "gender": "f", "age": "old", "traits": "조용히 뜨개질하던 늙은 어머니, 아들을 잃고 광기 어린 바람에 매달림",
+   "voice": {"base": "F4", "speed": 0.96}},
+  {"id": "herbert", "role": "lead", "names": {"en": "Herbert", "ko": "허버트", "aliases": ["the son", "his son"]},
+   "gender": "m", "age": "young", "traits": "농담 잘하는 아들, 소원을 비웃음",
+   "voice": {"base": "M3"}},
+  {"id": "morris", "role": "support", "names": {"en": "Sergeant-Major Morris", "ko": "모리스 상사", "aliases": ["the sergeant-major", "the soldier"]},
+   "gender": "m", "age": "adult", "traits": "인도에서 돌아온 퇴역 군인, 퉁명스럽고 원숭이 손을 꺼림",
+   "voice": {"base": "M5"}},
+  {"id": "visitor", "role": "support", "names": {"en": "the man from Maw and Meggins", "ko": "모 앤드 메긴스 사에서 온 사람", "aliases": ["the stranger", "the visitor"]},
+   "gender": "m", "age": "adult", "traits": "부고를 전하러 온 회사 사람, 머뭇거리는 정중함",
+   "voice": {"base": "M2"}}
+ ]
+}

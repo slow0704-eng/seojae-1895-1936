@@ -1,0 +1,16 @@
+{
+ "247": {"mood": "sad", "q": [{"who": "traveller"}]},
+ "248": {"q": [{"who": "traveller"}]},
+ "249": {"q": [{"who": "traveller"}]},
+ "250": {"q": [{"who": "traveller"}]},
+ "251": {"mood": "calm", "q": [{"who": "traveller"}]},
+ "252": {"q": [{"who": "traveller"}]},
+ "253": {"mood": "tense", "q": [{"who": "traveller"}]},
+ "254": {"q": [{"who": "traveller"}]},
+ "255": {"q": [{"who": "traveller"}]},
+ "256": {"q": [{"who": "traveller"}]},
+ "257": {"q": [{"who": "traveller", "n": "회상 속 낄낄 웃음, 말투 지문 아님"}]},
+ "258": {"q": [{"who": "traveller"}]},
+ "259": {"q": [{"who": "traveller"}]},
+ "260": {"q": [{"who": "traveller"}]}
+}

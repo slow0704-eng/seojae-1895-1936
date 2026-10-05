@@ -1,0 +1,16 @@
+{
+ "81": {"mood": "tense", "q": [{"who": "father", "n": "거의 묻듯이"}]},
+ "82": {"q": [{"who": "father", "n": "되풀이, 눈을 감고 체념"}, {"who": "father"}]},
+ "83": {"q": [{"who": "grete", "how": "shout", "n": "shouted"}, {"who": "grete", "how": "shout"}, {"who": "grete", "how": "shout", "n": "suddenly screamed"}]},
+ "85": {"mood": "sad", "q": [{"who": "narrator", "n": "그레고르의 생각(thought)"}]},
+ "86": {"q": [{"who": "grete", "how": "shout", "n": "said loudly"}]},
+ "87": {"q": [{"who": "narrator", "n": "스스로에게 물음(asked himself)"}]},
+ "88": {"mood": "grim", "q": [{"who": "charwoman", "how": "shout", "n": "shout loudly"}]},
+ "89": {"q": [{"who": "mother", "n": "캐묻듯"}, {"who": "charwoman"}, {"who": "father"}, {"who": "father"}, {"who": "grete", "n": "시체에서 눈을 떼지 않고"}]},
+ "90": {"q": [{"who": "mother", "n": "괴로운 미소"}]},
+ "91": {"q": [{"who": "lodger", "how": "angry", "n": "irritably"}]},
+ "93": {"q": [{"who": "father", "n": "문을 가리키며 단호히"}, {"who": "lodger", "n": "당황, 달콤한 웃음"}, {"who": "father"}, {"who": "lodger", "n": "갑자기 겸손해짐"}]},
+ "94": {"q": [{"who": "father", "n": "짜증스럽게 올려다봄"}, {"who": "mother"}, {"who": "charwoman", "how": "laugh", "n": "broke into a friendly laugh"}, {"who": "charwoman", "how": "laugh"}, {"who": "charwoman", "how": "angry", "n": "peeved, called out"}]},
+ "95": {"q": [{"who": "father"}, {"who": "father", "n": "called out, 다정하게 부름"}]},
+ "96": {"mood": "warm"}
+}

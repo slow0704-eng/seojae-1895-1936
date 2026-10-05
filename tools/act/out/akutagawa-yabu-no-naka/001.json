@@ -1,0 +1,20 @@
+{
+ "0": {"nar": "woodcutter", "mood": "grim"},
+ "3": {"nar": "monk"},
+ "5": {"nar": "houben"},
+ "7": {"nar": "old-woman"},
+ "11": {"nar": "tajomaru", "mood": "tense"},
+ "24": {"nar": "masago", "mood": "sad"},
+ "26": {"q": [{"who": "masago", "n": "一生懸命に — 필사적으로 남편에게"}]},
+ "28": {"q": [{"who": "masago", "n": "단도를 치켜들고"}]},
+ "29": {"q": [{"who": "takehiro", "n": "소리 없이 입술만, 업신여기며"}]},
+ "31": {"nar": "takehiro", "mood": "eerie"},
+ "32": {"q": [{"who": "masago", "n": "うっとりと — 넋 잃은 듯"}]},
+ "33": {"q": [
+  {"who": "masago", "how": "shout", "n": "気が狂ったように 叫び立てた"},
+  {"who": "masago", "how": "shout", "n": "되풀이한 외침"},
+  {"who": "masago", "how": "shout", "n": "叫びながら 팔에 매달려"},
+  {"who": "tajomaru", "n": "静かに両腕を組む"}
+ ]},
+ "35": {"q": [{"who": "tajomaru", "how": "whisper", "n": "呟いた"}]}
+}

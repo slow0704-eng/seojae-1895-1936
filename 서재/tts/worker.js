@@ -12,13 +12,14 @@
 
    메시지
      → {type:"init", cfg}            ← {type:"progress", got, total} … {type:"ready", info}
-     → {type:"synth", id, text, lang, voice, speed, steps, lufs}
+     → {type:"synth", id, text, lang, voice, speed, steps, lufs,
+        mix?, pitch?, temp?, tilt?}       ← 연기(대본): 목소리 섞기·음높이·억양 폭·음색 기울기
                                      ← {type:"audio", id, pcm, sr, ms, dur}  (pcm 은 transfer)
      ← {type:"error", id?, fatal?, gpu?, message} */
-import "./normalize.js?v=60f67bf7ca";
+import "./normalize.js?v=2717842408";
 const N = self.TTSNorm;
 
-let ort = null, CFG = null, S = {}, IDX = null, STYLES = {}, SR = 44100, TTSCFG = null;
+let ort = null, CFG = null, S = {}, IDX = null, STYLES = {}, RAW = {}, SR = 44100, TTSCFG = null;
 let F16 = false, GPU = false;
 
 /* ---------------- fp16 ↔ fp32 ---------------- */
@@ -100,8 +101,8 @@ async function init(cfg) {
   IDX = new Int16Array(bufs.idx);
   const sv = new Float32Array(bufs.voices), per = 50 * 256 + 8 * 16;
   cfg.voiceNames.forEach((name, i) => {
-    STYLES[name] = { ttl: T(sv.slice(i * per, i * per + 50 * 256), [1, 50, 256]),
-                     dp: T(sv.slice(i * per + 50 * 256, (i + 1) * per), [1, 8, 16]) };
+    RAW[name] = { ttl: sv.slice(i * per, i * per + 50 * 256), dp: sv.slice(i * per + 50 * 256, (i + 1) * per) };
+    STYLES[name] = { ttl: T(RAW[name].ttl, [1, 50, 256]), dp: T(RAW[name].dp, [1, 8, 16]) };
   });
   for (const k of ["dp", "te", "ve", "voc"]) {
     const opt = { executionProviders: [GPU ? "webgpu" : "wasm"], graphOptimizationLevel: "all", logSeverityLevel: 3 };
@@ -145,11 +146,35 @@ function rng(seed) {
   let s = seed >>> 0 || 1;
   return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
 }
+/* 단역 구분용 목소리 섞기: base 를 (1 − Σw), 나머지를 w 만큼 — 스타일 벡터의 선형 보간.
+   배역표 voice.mix 그대로(합 < 1). 섞은 텐서는 몇 개만 기억 */
+const MIXED = new Map();
+function styleOf(voice, mix) {
+  const base = RAW[voice] ? voice : CFG.voiceNames[0];
+  const ks = mix ? Object.keys(mix).filter((k) => RAW[k] && mix[k] > 0) : [];
+  if (!ks.length) return STYLES[base];
+  const key = base + "|" + ks.map((k) => k + ":" + mix[k]).join(",");
+  let st = MIXED.get(key);
+  if (st) return st;
+  const blend = (f) => {
+    const w0 = 1 - ks.reduce((a, k) => a + mix[k], 0), o = new Float32Array(RAW[base][f].length);
+    for (let i = 0; i < o.length; i++) {
+      let v = RAW[base][f][i] * w0;
+      for (const k of ks) v += RAW[k][f][i] * mix[k];
+      o[i] = v;
+    }
+    return o;
+  };
+  st = { ttl: T(blend("ttl"), [1, 50, 256]), dp: T(blend("dp"), [1, 8, 16]) };
+  MIXED.set(key, st);
+  if (MIXED.size > 24) MIXED.delete(MIXED.keys().next().value);
+  return st;
+}
 function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 
 async function synth(m) {
   const t0 = performance.now();
-  const style = STYLES[m.voice] || STYLES[CFG.voiceNames[0]];
+  const style = styleOf(m.voice, m.mix);
   const spoken = N.normalize(m.text, m.lang);
   if (!/[\p{L}\p{N}]/u.test(spoken)) return { pcm: new Float32Array(0), ms: 0, dur: 0 };
   /* GPU 는 텐서 모양이 바뀔 때마다 셰이더를 새로 만듭니다. 길이를 몇 개의 칸으로
@@ -174,10 +199,13 @@ async function synth(m) {
   const D = TTSCFG.ttl.latent_dim * TTSCFG.ttl.chunk_compress_factor;
   const x0 = new Float32Array(D * Tn);
   const r = rng(hash(m.voice + "|" + spoken));
+  /* 억양 폭: 흐름 정합의 첫 잡음 크기(temp). 1 보다 크면 높낮이가 넓어지고 작으면 고르게
+     — 연기 대본의 how·mood 가 정함(config.json act) */
+  const temp = m.temp || 1;
   for (let d = 0; d < D; d++) for (let t = 0; t < T0; t += 2) {   /* Box–Muller, 빈 칸은 0 */
     const u1 = Math.max(1e-7, r()), u2 = r(), mag = Math.sqrt(-2 * Math.log(u1));
-    x0[d * Tn + t] = mag * Math.cos(2 * Math.PI * u2);
-    if (t + 1 < T0) x0[d * Tn + t + 1] = mag * Math.sin(2 * Math.PI * u2);
+    x0[d * Tn + t] = temp * mag * Math.cos(2 * Math.PI * u2);
+    if (t + 1 < T0) x0[d * Tn + t + 1] = temp * mag * Math.sin(2 * Math.PI * u2);
   }
   let xt = T(x0, [1, D, Tn]), prev = null;
   const lm = new Float32Array(Tn); lm.fill(1, 0, T0);
@@ -196,7 +224,12 @@ async function synth(m) {
   if (te.text_emb.dispose) te.text_emb.dispose();
   const wav = await cpuData(voc.wav_tts);
   let pcm = Float32Array.from(wav.subarray(0, Math.min(wavLen, wav.length)));
-  if (Math.abs(stretch - 1) > 0.02) pcm = wsola(pcm, stretch);
+  /* 음높이(pitch, 반음): 다시 표본화하면 높이와 빠르기가 함께 P 배 — 그래서 먼저
+     WSOLA 로 stretch/P 만큼만 줄이고, 다시 표본화로 나머지를 채웁니다 */
+  const P = m.pitch ? Math.pow(2, m.pitch / 12) : 1, f = stretch / P;
+  if (Math.abs(f - 1) > (P === 1 ? 0.02 : 0.005)) pcm = wsola(pcm, f);
+  if (P !== 1) pcm = repitch(pcm, P);
+  if (m.tilt) pcm = filt(pcm, shelf(1500, m.tilt));
   pcm = master(pcm, m.lufs, m.expect);
   return { pcm, ms: performance.now() - t0, dur: pcm.length / SR };
 }
@@ -233,6 +266,26 @@ function wsola(x, factor) {
   const out = new Float32Array(outLen);
   for (let i = 0; i < outLen; i++) out[i] = ws[i] > 1e-3 ? y[i] / ws[i] : y[i];
   return out;
+}
+
+/* 다시 표본화(4점 Catmull-Rom). P>1 이면 짧아지고 높아짐. 음성 대역에선 P≤1.2 의
+   접힘(20kHz 위)이 들리지 않음 */
+function repitch(x, P) {
+  const n = Math.floor((x.length - 3) / P), o = new Float32Array(Math.max(0, n));
+  for (let i = 0; i < n; i++) {
+    const t = i * P, k = Math.floor(t), u = t - k;
+    const p0 = x[k > 0 ? k - 1 : 0], p1 = x[k], p2 = x[k + 1], p3 = x[k + 2];
+    o[i] = p1 + 0.5 * u * (p2 - p0 + u * (2 * p0 - 5 * p1 + 4 * p2 - p3 + u * (3 * (p1 - p2) + p3 - p0)));
+  }
+  return o;
+}
+/* 음색 기울기: 1.5kHz 위를 dB 만큼 올리거나 내리는 고역 선반(RBJ). 외침은 고역이 살고(+),
+   속삭임·슬픔은 가라앉음(−) */
+function shelf(fc, gdb) {
+  const A = Math.pow(10, gdb / 40), w = 2 * Math.PI * fc / SR, c = Math.cos(w), al = Math.sin(w) / Math.SQRT2, sA = 2 * Math.sqrt(A) * al;
+  const a0 = (A + 1) - (A - 1) * c + sA;
+  return { b0: A * ((A + 1) + (A - 1) * c + sA) / a0, b1: -2 * A * ((A - 1) + (A + 1) * c) / a0,
+           b2: A * ((A + 1) + (A - 1) * c - sA) / a0, a1: 2 * ((A - 1) - (A + 1) * c) / a0, a2: ((A + 1) - (A - 1) * c - sA) / a0 };
 }
 
 /* ---------------- 라우드니스 · 다듬기 ----------------

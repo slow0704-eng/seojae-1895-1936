@@ -1,0 +1,347 @@
+{
+ "96": {
+  "mood": "sad"
+ },
+ "99": {
+  "q": [
+   {
+    "who": "mr-white",
+    "n": "다정하게"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "100": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "sad",
+    "n": "울며"
+   }
+  ]
+ },
+ "101": {
+  "mood": "eerie"
+ },
+ "102": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "미친 듯이"
+   },
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   }
+  ]
+ },
+ "103": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "놀라 일어나며"
+   }
+  ]
+ },
+ "104": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "n": "조용히"
+   },
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "105": {
+  "q": [
+   {
+    "who": "mr-white",
+    "n": "의아해하며"
+   },
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "107": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "laugh",
+    "n": "울다 웃는 히스테리"
+   },
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "108": {
+  "q": [
+   {
+    "who": "mr-white"
+   }
+  ]
+ },
+ "109": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "tense",
+    "n": "빠르게"
+   },
+   {
+    "who": "mrs-white",
+    "how": "tense"
+   }
+  ]
+ },
+ "110": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "angry",
+    "n": "사납게"
+   }
+  ]
+ },
+ "111": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "의기양양하게"
+   },
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "112": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "shout",
+    "n": "기겁해서"
+   }
+  ]
+ },
+ "113": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "tense",
+    "n": "헐떡이며"
+   },
+   {
+    "who": "mrs-white",
+    "how": "sad",
+    "n": "울부짖음"
+   }
+  ]
+ },
+ "114": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "목소리가 흔들림"
+   },
+   {
+    "who": "mr-white",
+    "how": "fear"
+   }
+  ]
+ },
+ "115": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "tense",
+    "n": "열에 들뜬 듯"
+   },
+   {
+    "who": "mrs-white",
+    "how": "tense"
+   }
+  ]
+ },
+ "116": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "더듬으며"
+   }
+  ]
+ },
+ "117": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "흥분해 떨며"
+   }
+  ]
+ },
+ "118": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "목소리가 떨림"
+   }
+  ]
+ },
+ "119": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   },
+   {
+    "who": "mrs-white"
+   }
+  ]
+ },
+ "120": {
+  "mood": "eerie"
+ },
+ "122": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "힘찬 목소리"
+   }
+  ]
+ },
+ "123": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "더듬거리며"
+   }
+  ]
+ },
+ "124": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "n": "되풀이"
+   }
+  ]
+ },
+ "125": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear"
+   }
+  ]
+ },
+ "129": {
+  "mood": "tense"
+ },
+ "131": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "fear",
+    "n": "벌떡 일어나며"
+   }
+  ]
+ },
+ "132": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "떨리는 목소리"
+   },
+   {
+    "who": "mr-white",
+    "how": "fear"
+   }
+  ]
+ },
+ "134": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "비명"
+   },
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   }
+  ]
+ },
+ "136": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "whisper",
+    "n": "쉰 목소리로"
+   }
+  ]
+ },
+ "137": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "몸부림치며"
+   },
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   }
+  ]
+ },
+ "138": {
+  "q": [
+   {
+    "who": "mr-white",
+    "how": "fear",
+    "n": "떨며"
+   }
+  ]
+ },
+ "139": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "몸부림치며"
+   },
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   }
+  ]
+ },
+ "141": {
+  "q": [
+   {
+    "who": "mrs-white",
+    "how": "shout",
+    "n": "크게, 헐떡이며"
+   },
+   {
+    "who": "mrs-white",
+    "how": "shout"
+   }
+  ]
+ },
+ "143": {
+  "mood": "sad"
+ }
+}

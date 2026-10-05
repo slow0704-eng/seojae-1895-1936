@@ -32,8 +32,10 @@ NR_CFG["ver"] = _hl.sha1(b"".join(io.open(_os.path.join(TTS, f), "rb").read()
 _NARR = io.open(_os.path.join(HERE, "narrate.js"), encoding="utf-8").read().replace(
     "__NR_CFG__", json.dumps(NR_CFG, ensure_ascii=False, separators=(",", ":")))
 _NORM = io.open(_os.path.join(TTS, "normalize.js"), encoding="utf-8").read()
+# 연기 대본의 대사 세기 — act.py spans() 의 JS 짝을 그대로 넣음
+_SPANS = io.open(_os.path.join(HERE, "act", "spans.js"), encoding="utf-8").read()
 JS = JS.replace("/* ---------- go ---------- */",
-                _NORM + "\nvar TTSNorm = self.TTSNorm;\n" + _NARR + "\n/* ---------- go ---------- */", 1)
+                _NORM + "\nvar TTSNorm = self.TTSNorm;\n" + _SPANS + "\n" + _NARR + "\n/* ---------- go ---------- */", 1)
 for _k, _v in (("__VKO__", NR_CFG["voices"]["ko"]), ("__VEN__", NR_CFG["voices"]["en"]), ("__VJA__", NR_CFG["voices"]["ja"])):
     JS = JS.replace(_k, _v)
 
@@ -244,6 +246,7 @@ READER_SHELL = """
     <div class="st-row"><span class="st-l">한국어 목소리</span><span class="st-c"><select data-k="nrVoiceKo">%(vopts)s</select></span></div>
     <div class="st-row"><span class="st-l">영어 목소리</span><span class="st-c"><select data-k="nrVoiceEn">%(vopts)s</select></span></div>
     <div class="st-row"><span class="st-l">일본어 목소리</span><span class="st-c"><select data-k="nrVoiceJa">%(vopts)s</select></span></div>
+    <div class="st-row"><span class="st-l">목소리 연기</span><span class="st-c"><button class="st-tog" data-tog="nrAct"><i></i></button></span></div>
     <div class="st-row"><span class="st-l">미리 듣기</span><span class="st-c"><button class="mini" data-do="nrpreview">들어 보기</button></span></div>
     <div class="st-row"><span class="st-l">음량</span><span class="st-c"><input type="range" data-k="nrVol" min="40" max="140" step="5"><span class="v" data-v="nrVol"></span></span></div>
     <div class="st-row"><span class="st-l">방 울림</span><span class="st-c"><button class="st-tog" data-tog="nrRoom"><i></i></button></span></div>

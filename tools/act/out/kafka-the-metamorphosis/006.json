@@ -1,0 +1,6 @@
+{
+ "55": {"mood": "tense", "q": [{"who": "grete"}, {"who": "grete", "how": "tense", "n": "hurriedly, 떨리는 목소리"}]},
+ "56": {"q": [{"who": "mother", "how": "shout", "n": "screamed"}, {"who": "grete", "how": "shout", "n": "shouted, 노려보며 주먹"}]},
+ "57": {"q": [{"who": "father"}, {"who": "grete", "how": "whisper", "n": "subdued voice, 가슴에 얼굴 묻음"}, {"who": "father"}, {"who": "father"}]},
+ "58": {"mood": "grim", "q": [{"who": "father", "how": "shout", "n": "shouted, 화나고도 기쁜"}]}
+}

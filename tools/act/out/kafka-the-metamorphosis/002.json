@@ -1,0 +1,9 @@
+{
+ "11": {"q": [{"who": "gregor", "n": "혼잣말"}, {"who": "gregor", "n": "혼잣말"}]},
+ "12": {"q": [{"who": "gregor", "n": "혼잣말"}]},
+ "14": {"mood": "tense", "q": [{"who": "gregor", "n": "혼잣말, 얼어붙음"}, {"who": "gregor", "n": "혼잣말, 터무니없는 희망"}]},
+ "15": {"q": [{"who": "clerk"}, {"who": "grete", "how": "whisper", "n": "whispered"}, {"who": "gregor", "how": "whisper", "n": "목소리를 높이지 못함"}]},
+ "16": {"q": [{"who": "father"}, {"who": "father"}, {"who": "clerk", "n": "called"}, {"who": "mother"}, {"who": "mother"}, {"who": "gregor", "n": "slowly and thoughtfully"}, {"who": "clerk"}, {"who": "clerk"}, {"who": "father", "n": "impatiently, 문을 두드림"}, {"who": "gregor"}]},
+ "18": {"q": [{"who": "clerk", "how": "shout", "n": "raised his voice"}, {"who": "clerk", "how": "shout", "n": "raised his voice, 다그침"}]},
+ "19": {"q": [{"who": "gregor", "how": "tense", "n": "beside himself, excitement"}, {"who": "gregor", "how": "tense", "n": "흥분해 쏟아냄"}]}
+}

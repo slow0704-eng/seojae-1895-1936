@@ -1,0 +1,214 @@
+{
+ "50": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "51": {
+  "q": [
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "53": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "54": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "55": {
+  "q": [
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "56": {
+  "q": [
+   {
+    "who": "traveller",
+    "n": "retorted 되받아"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "57": {
+  "mood": "tense",
+  "q": [
+   {
+    "who": "traveller",
+    "n": "suddenly 불쑥"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "59": {
+  "mood": "calm",
+  "q": [
+   {
+    "who": "traveller",
+    "how": "laugh",
+    "n": "laughed cheerfully, 심리학자 흉내"
+   }
+  ]
+ },
+ "60": {
+  "q": [
+   {
+    "who": "medical-man"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "61": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "62": {
+  "q": [
+   {
+    "who": "filby"
+   }
+  ]
+ },
+ "63": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "64": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "65": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "66": {
+  "q": [
+   {
+    "who": "psychologist"
+   }
+  ]
+ },
+ "67": {
+  "q": [
+   {
+    "who": "guest"
+   },
+   {
+    "who": "guest"
+   }
+  ]
+ },
+ "68": {
+  "q": [
+   {
+    "who": "mayor",
+    "n": "with an air of impartiality"
+   }
+  ]
+ },
+ "69": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "70": {
+  "q": [
+   {
+    "who": "psychologist"
+   },
+   {
+    "who": "psychologist"
+   },
+   {
+    "who": "psychologist",
+    "how": "laugh",
+    "n": "laughing"
+   }
+  ]
+ },
+ "72": {
+  "q": [
+   {
+    "who": "medical-man"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "73": {
+  "q": [
+   {
+    "who": "traveller"
+   }
+  ]
+ },
+ "74": {
+  "q": [
+   {
+    "who": "medical-man"
+   },
+   {
+    "who": "medical-man"
+   }
+  ]
+ },
+ "75": {
+  "q": [
+   {
+    "who": "traveller"
+   },
+   {
+    "who": "traveller"
+   }
+  ]
+ }
+}
