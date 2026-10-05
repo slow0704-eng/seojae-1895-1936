@@ -17,7 +17,7 @@ Invariant: a Korean payload never invents or drops a paragraph index. Every key
 must exist in the English source; assembly drops what does not verify.
 """
 from __future__ import annotations
-import os, io, re, json, sys, unicodedata
+import os, io, re, json, sys, unicodedata, html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HERE = os.path.join(ROOT, "tools")
@@ -411,6 +411,50 @@ def status():
     print("%-52s %8d %8d %6.1f%%" % ("TOTAL", tw, tdone, 100.0 * tdone / max(1, tw)))
 
 
+# tr/GUIDE.md '마지막 점검' 5·7: 경고만 (멈추지 않음).
+# 대명사 문턱 = 한국어판 63편(947만 자) 평균의 두 배 — 그녀 만 자당 15, 그는·그가… 46.
+PRON = (("그녀", re.compile(r"그녀"), 30.0),
+        ("그는·그가·그의·그를·그에게", re.compile(r"(?<![가-힣])그(?:는|가|의|를|에게)\s"), 92.0))
+
+
+SPEECHY = re.compile(r"[.?!…。？！](?!$)|[?!？！][”’」』]?$")
+SAYS = re.compile(r"^[\s,，、]*(?:\w+\s+){0,2}(?:said|says|asked|cried|replied|answered|shouted|whispered|"
+                  r"exclaimed|muttered|murmured|called|added|went on|と(?:言|云|答|叫|囁|呟))", re.I)
+
+
+def style_warnings(job, clean):
+    import act as A   # 대사 세기는 연기 대본과 같은 규칙(act.spans)
+    out = []
+    keys = [it["k"] for it in job["items"] if it["k"].startswith("p:") and clean.get(it["k"])]
+    src = {it["k"]: plain_text(it["t"]) for it in job["items"]}
+    ko = {k: plain_text(clean[k]) for k in keys}
+    lang = metaof(job.get("book", "")).get("orig", "en")
+    so = A.detect_opens([src[k] for k in keys], lang) if keys else "“"
+    kop = A.detect_opens([ko[k] for k in keys], "ko") if keys else "“"
+    diff, cs, ck = [], None, None
+    for k in keys:
+        a, cs = A.spans(src[k], so, cs)
+        b, ck = A.spans(ko[k], kop, ck)
+        # 제목·용어를 감싼 따옴표는 한국어판에서 「」로 바뀌는 게 맞으므로, 말로 보이는
+        # 대사(안에 문장부호가 있거나 뒤에 말하기 동사)만 세어 그보다 줄었을 때만
+        talk = sum(1 for s, e, _ in a if SPEECHY.search(src[k][s:e]) or SAYS.match(src[k][e:e + 30]))
+        if len(b) < talk:
+            diff.append("%s %d→%d" % (k, talk, len(b)))
+    if diff:
+        out.append("대사 수가 원문과 다름 (낭독 연기가 물러남): " + ", ".join(diff[:8]) + (" …" if len(diff) > 8 else ""))
+    text = " ".join(ko.values())
+    if len(text) >= 2000:
+        for name, rx, lim in PRON:
+            per = len(rx.findall(text)) * 10000.0 / len(text)
+            if per > lim:
+                out.append("대명사 %s 만 자당 %.0f회 (문턱 %.0f) — 생략·이름·관계 명사로" % (name, per, lim))
+    return out
+
+
+def plain_text(s):
+    return html.unescape(re.sub(r"<[^>]+>", "", str(s)))
+
+
 def check_cli(args):
     """Verify already-written out/*.json against their jobs. Prints problems."""
     targets = []
@@ -447,6 +491,8 @@ def check_cli(args):
             print("    warn: emphasis count differs in %s (%d -> %d)"
                   % (k, src[k].count("<em>") + src[k].count("<span"),
                      clean[k].count("<em>") + clean[k].count("<span")))
+        for m in style_warnings(job, clean):
+            print("    warn: " + m)
         if prob:
             bad += 1
             print("%-56s %d problem(s)" % (t, len(prob)))
