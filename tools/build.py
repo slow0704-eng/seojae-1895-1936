@@ -17,7 +17,7 @@ DATA = _os.path.join(SITE, "data")
 ORIG = _os.path.join(DATA, "orig")   # 원문 본문 (곁 자료는 data/ko · act · yomi)
 
 import bookparse
-from meta import build as build_catalog
+from meta import build as build_catalog, GENRE_KO
 
 CSS = io.open(_os.path.join(HERE, "reader.css"), encoding="utf-8").read()
 IDXCSS = io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read()
@@ -143,7 +143,7 @@ def man(n):
 
 
 ORIG_KO = {"en": "영문", "ja": "일본어"}   # what the original-language button says
-FACET_KO = {"author": "작가", "decade": "연대", "form": "형식", "size": "분량",
+FACET_KO = {"author": "작가", "genre": "장르", "decade": "연대", "form": "형식", "size": "분량",
             "state": "상태", "lang": "언어"}
 
 
@@ -307,6 +307,7 @@ def index_page(cat, works):
     manifest = [dict({k: w[k] for k in ("id", "title", "titleKo", "author", "authorKo",
                                         "authorEn", "year", "chars", "minutes", "words")},
                      titleOrig=w.get("titleOrig", ""), form=w.get("form", "novel"),
+                     genre=w.get("genre", []),
                      orig=w.get("orig", "en"))
                 for w in works]
 
@@ -336,6 +337,8 @@ def index_page(cat, works):
     facets = "\n".join([
         chips("author", [(s, a_ko[s], auth_ct[s]) for s in
                          sorted(auth_ct, key=lambda s: -auth_ct[s])]),
+        chips("genre", [(g, GENRE_KO[g], sum(1 for w in works if g in w.get("genre", [])))
+                        for g in GENRE_KO if any(g in w.get("genre", []) for w in works)]),
         chips("decade", [(str(d), "%d년대" % d, dec_ct[d]) for d in sorted(dec_ct)]),
         chips("form", [(f, FORM_KO.get(f, f), form_ct[f]) for f in
                        sorted(form_ct, key=lambda f: -form_ct[f])]),

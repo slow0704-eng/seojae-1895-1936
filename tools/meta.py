@@ -155,6 +155,62 @@ KO_TITLES = {
     "The Centaur": ("켄타우로스", ""),
 }
 
+# 장르 — 서재의 '장르' 필터. 한 작품에 여럿(앞이 주된 것). 이름은 GENRE_KO, 차례도 그 순서.
+GENRE_KO = {
+    "sf": "SF·과학 공상", "weird": "괴기·초자연", "fable": "환상·우화", "mystery": "추리·범죄",
+    "society": "사회·풍속", "romance": "연애", "comic": "유머·풍자", "history": "역사·모험",
+    "ideas": "사상·유토피아",
+}
+GENRE = {
+    "akutagawa-rashomon": ["history"], "akutagawa-jigokuhen": ["history", "weird"],
+    "akutagawa-yabu-no-naka": ["mystery", "history"],
+    "andreyev-the-seven-who-were-hanged": ["society"],
+    "blackwood-the-empty-house-and-other-ghost-stories": ["weird"], "blackwood-the-willows": ["weird"],
+    "blackwood-john-silence-physician-extraordinary": ["weird", "mystery"], "blackwood-the-wendigo": ["weird"],
+    "blackwood-the-centaur": ["fable"],
+    "chambers-the-king-in-yellow": ["weird"], "chambers-the-mystery-of-choice": ["romance", "weird"],
+    "chambers-cardigan": ["history", "romance"], "chambers-in-search-of-the-unknown": ["comic", "romance"],
+    "chambers-the-slayer-of-souls": ["weird", "history"],
+    "fitzgerald-flappers-and-philosophers": ["society", "romance"],
+    "fitzgerald-this-side-of-paradise": ["society", "romance"],
+    "fitzgerald-tales-of-the-jazz-age": ["society", "fable", "comic"],
+    "fitzgerald-the-beautiful-and-damned": ["society", "romance"], "fitzgerald-the-vegetable": ["comic"],
+    "fitzgerald-the-great-gatsby": ["society", "romance"], "fitzgerald-all-the-sad-young-men": ["society"],
+    "harbou-metropolis": ["sf"],
+    "jacobs-the-monkey-s-paw": ["weird"],
+    "kafka-the-metamorphosis": ["fable"], "kafka-the-trial": ["fable"], "kafka-the-castle": ["fable"],
+    "kafka-the-knock-at-the-manor-gate": ["fable"], "kafka-give-it-up": ["fable"],
+    "kafka-poseidon": ["fable"], "kafka-the-helmsman": ["fable"],
+    "machen-the-white-people": ["weird"],
+    "wells-select-conversations-with-an-uncle": ["comic"],
+    "wells-the-stolen-bacillus-and-other-incidents": ["sf", "comic", "weird"],
+    "wells-the-time-machine": ["sf"], "wells-the-wonderful-visit": ["fable", "comic"],
+    "wells-the-island-of-doctor-moreau": ["sf", "weird"], "wells-the-red-room": ["weird"],
+    "wells-the-wheels-of-chance": ["comic", "romance"], "wells-the-invisible-man": ["sf"],
+    "wells-the-plattner-story-and-others": ["sf", "weird"], "wells-the-star": ["sf"],
+    "wells-thirty-strange-stories": ["sf", "weird", "comic"], "wells-the-war-of-the-worlds": ["sf"],
+    "wells-tales-of-space-and-time": ["sf"], "wells-when-the-sleeper-wakes": ["sf"],
+    "wells-love-and-mr-lewisham": ["romance", "society"], "wells-the-first-men-in-the-moon": ["sf"],
+    "wells-the-sea-lady": ["fable", "romance", "comic"], "wells-twelve-stories-and-a-dream": ["sf", "fable"],
+    "wells-the-food-of-the-gods": ["sf"], "wells-a-modern-utopia": ["ideas", "sf"],
+    "wells-kipps": ["comic", "society"], "wells-in-the-days-of-the-comet": ["sf", "ideas"],
+    "wells-the-war-in-the-air": ["sf"], "wells-ann-veronica": ["society", "romance"],
+    "wells-tono-bungay": ["society"], "wells-the-history-of-mr-polly": ["comic", "society"],
+    "wells-the-sleeper-awakes": ["sf"], "wells-the-country-of-the-blind-and-other-stories": ["sf", "fable"],
+    "wells-the-door-in-the-wall-and-other-stories": ["fable", "sf"],
+    "wells-the-new-machiavelli": ["society", "romance"], "wells-marriage": ["romance", "society"],
+    "wells-the-passionate-friends": ["romance", "society"],
+    "wells-the-wife-of-sir-isaac-harman": ["society", "romance"], "wells-the-world-set-free": ["sf", "ideas"],
+    "wells-bealby": ["comic"], "wells-boon": ["comic", "ideas"],
+    "wells-the-research-magnificent": ["ideas", "society"], "wells-mr-britling-sees-it-through": ["society"],
+    "wells-the-soul-of-a-bishop": ["ideas", "society"], "wells-joan-and-peter": ["society"],
+    "wells-the-undying-fire": ["ideas"], "wells-tales-of-the-unexpected": ["weird", "sf", "fable"],
+    "wells-the-secret-places-of-the-heart": ["romance", "society"], "wells-the-dream": ["society", "sf"],
+    "wells-christina-albertas-father": ["society", "comic"],
+    "yumeno-masayume": ["weird"], "yumeno-shojo-jigoku": ["mystery", "weird"],
+    "yumeno-akuma-kitosho": ["weird", "mystery"],
+}
+
 FORM = {
     "Thirty Strange Stories": "collection",
     "Tales of Space and Time": "collection",
@@ -233,6 +289,10 @@ def build():
                 "orig": a.get("orig", "en"),
             })
     out["works"].sort(key=lambda w: (w["author"], w["year"], w["title"]))
+    for w in out["works"]:
+        w["genre"] = GENRE.get(w["id"], [])
+        if not w["genre"]:
+            print("meta: 장르 없음 — GENRE 에 넣을 것:", w["id"])
     return out
 
 

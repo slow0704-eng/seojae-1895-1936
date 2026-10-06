@@ -372,9 +372,16 @@ body.hud-on #hud-bot{ bottom:6px; }
    used to spill over the buttons. The page itself already names the book. */
 @media (max-width:620px){
   .h-title,.h-ch{ display:none; }
-  #hud-top{ gap:0; }
-  .h-right{ gap:0; }
-  .hbtn{ padding:8px 7px; font-size:13px; }
+  #hud-top{ gap:0; padding-right:0; }
+  #hud-top > .hbtn{ flex:none; }
+  /* 아홉 개(서재·언어 셋·듣기·자동·목차·책갈피·설정)는 360px 화면보다 넓습니다 —
+     오른쪽 묶음을 손가락으로 옆으로 밀어 넘기게 */
+  .h-right{ gap:0; min-width:0; overflow-x:auto; overscroll-behavior-x:contain;
+            scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-right:10px; }
+  .h-right::-webkit-scrollbar{ display:none; }
+  .h-right > *{ flex:none; }
+  .hbtn{ padding:8px 6px; font-size:13px; }
+  .lseg--hud button{ padding:5px 8px; }
 }
 
 /* ---------- 9. SCRIM + DRAWERS ---------- */

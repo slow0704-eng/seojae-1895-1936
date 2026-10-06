@@ -1097,7 +1097,7 @@ function matchWork(id, ts) {
 
 /* ---------- facets ---------- */
 var UI = load("rdr/v1/ui", { sort: "era", facets: {} });
-var FACETS = { author: [], decade: [], form: [], size: [], state: [], lang: [] };
+var FACETS = { author: [], genre: [], decade: [], form: [], size: [], state: [], lang: [] };
 Object.keys(FACETS).forEach(function (k) {
   if (UI.facets && Array.isArray(UI.facets[k])) FACETS[k] = UI.facets[k].slice();
 });
@@ -1128,6 +1128,7 @@ function anyOf(sel, have) {
 }
 function passFacets(w) {
   if (FACETS.author.length && FACETS.author.indexOf(w.author) < 0) return false;
+  if (FACETS.genre.length && !anyOf(FACETS.genre, w.genre || [])) return false;
   if (FACETS.decade.length && FACETS.decade.indexOf(String(decadeOf(w.year))) < 0) return false;
   if (FACETS.form.length && FACETS.form.indexOf(w.form || "novel") < 0) return false;
   if (FACETS.size.length && FACETS.size.indexOf(sizeOf(w)) < 0) return false;
@@ -1593,11 +1594,16 @@ function bindPointer() {
   /* a finger on the page holds auto-scroll still, so it can be read or dragged */
   addEventListener("touchend", function () { AS.hold = false; AS.last = 0; AS.pos = -1; }, { passive: true });
   addEventListener("touchcancel", function () { AS.hold = false; AS.last = 0; AS.pos = -1; }, { passive: true });
+  /* 휴대폰에서 위 막대를 옆으로 밀어 넘기는 동안에도 숨김 타이머를 미룸 */
+  document.addEventListener("scroll", function (e) {
+    if (e.target !== document && e.target.closest && e.target.closest(".hud")) revealHud();
+  }, { passive: true, capture: true });
   addEventListener("touchstart", function (e) {
     lastActive = Date.now();
     if (view !== "reader" || anyOverlay()) return;
     /* a tap on a control is not a page turn, and must not hold the scroll */
-    if (e.target.closest && e.target.closest("#asctl, .hud, button, a, input")) return;
+    if (e.target.closest && e.target.closest(".hud")) { revealHud(); return; }   /* 막대를 만지는 동안은 숨기지 않음 */
+    if (e.target.closest && e.target.closest("#asctl, button, a, input")) return;
     if (AS.on) AS.hold = true;
     var x = e.touches[0].clientX / innerWidth, y = e.touches[0].clientY / innerHeight;
     if (x > 0.2 && x < 0.8 && y > 0.2 && y < 0.8) { hudOn ? hideHud() : revealHud(); }
