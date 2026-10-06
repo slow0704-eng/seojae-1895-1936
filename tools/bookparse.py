@@ -77,7 +77,7 @@ DROP_LINE_RX = [
 
 # blocks that are front-matter apparatus and get dropped outright
 FRONT_DROP_RX = [
-    re.compile(r"^\s*(?:A\s+)?(?:TABLE\s+OF\s+)?CONTENTS?\.?\s*$", re.I),
+    re.compile(r"^\s*(?:A\s+)?(?:TABLE\s+OF\s+)?CONTENTS?[.:]?\s*$", re.I),
     re.compile(r"^\s*LIST OF ILLUSTRATIONS\.?\s*$", re.I),
     re.compile(r"^\s*(?:BY THE SAME AUTHOR|By the Same Author)\b", re.I),
     re.compile(r"^\s*(?:Mr\.?\s+)?WELLS has also written\b", re.I),
@@ -181,8 +181,10 @@ def _list_shaped(b):
     ls = [l.strip() for l in b.lines if l.strip()]
     if not ls or len(ls) > 30:
         return False
-    for l in ls:
-        if len(l) > 60 or l[-1] in ".!?,;:":
+    for i, l in enumerate(ls):
+        # the list's last title may close with a full stop (Kipps:
+        # "Mankind in the Making.")
+        if len(l) > 60 or l[-1] in "!?,;:" or (l[-1] == "." and i < len(ls) - 1):
             return False
     return True
 
@@ -332,7 +334,9 @@ _RX_ACT = re.compile(
     r"^(ACT|Act)\s+(%s|\d{1,3}|%s)\b\.?\s*(.*)$" % (ROMAN, NUMWORD), re.I)
 _RX_SCENE = re.compile(
     r"^(SCENE|Scene)\s+(%s|\d{1,3}|%s)\b\.?\s*(.*)$" % (ROMAN, NUMWORD), re.I)
-_RX_SECTSIGN = re.compile(r"^§\s*(\d{1,3})\.?\s*$")
+# Kipps writes Gutenberg's "Sec.1" for §1. Only the unspaced form: Boon and
+# Marriage set "Sec. 1" as body text and their translations are keyed to that.
+_RX_SECTSIGN = re.compile(r"^(?:§\s*|Sec\.)(\d{1,3})\.?\s*$")
 _RX_BARE_ROMAN = re.compile(r"^(%s)\s*\.?\s*$" % ROMAN)
 _RX_BARE_ARABIC = re.compile(r"^(\d{1,3})\s*\.?\s*$")
 _RX_NUM_TITLE = re.compile(r"^(%s|\d{1,3})\s*[.—:-]{1,3}\s+(\S.*)$" % ROMAN)
@@ -505,7 +509,7 @@ def detect_profile(doc):
 # ---- 5b. manifest (TOC) harvesting ---------------------------------------
 
 TOC_HEAD_RX = re.compile(
-    r"^\s*(?:A\s+)?(?:TABLE\s+OF\s+)?CONTENTS?\.?\s*$", re.I)
+    r"^\s*(?:A\s+)?(?:TABLE\s+OF\s+)?CONTENTS?[.:]?\s*$", re.I)
 
 
 MAX_TOC_ENTRIES = 120
@@ -604,7 +608,7 @@ def _toc_row(line):
         return None
     if re.fullmatch(r"(?:CHAPTER|CHAP\.|STORY|PAGE|BOOK|PART)\s+PAGE", s, re.I):
         return None
-    if re.fullmatch(r"PAGE|FACING\s+PAGE|CONTENTS?\.?|CONTENTSCHAP\.", s, re.I):
+    if re.fullmatch(r"PAGE|FACING\s+PAGE|CONTENTS?[.:]?|CONTENTSCHAP\.", s, re.I):
         return None
     had_page = bool(re.search(r"(?:[\s.]{2,}|\s)\d{1,4}\s*$", s))
     s = re.sub(r"[\s.]{2,}\d{1,4}\s*$", "", s)
@@ -702,7 +706,15 @@ def _backup_over_heading(doc, bi, last_toc, toc_used):
             break
         prev = doc.blocks[bi - 1]
         gap = doc.blocks[bi].lineno - (prev.lineno + len(prev.lines))
-        if gap > 3 or len(prev.lines) > 2:
+        # Kipps leaves four blank lines under "BOOK I / THE MAKING OF KIPPS";
+        # allow that much only when a BOOK heading sits right above the title
+        limit = 3
+        if bi - 2 > last_toc and (bi - 2) not in toc_used:
+            pp = doc.blocks[bi - 2]
+            hp = classify_heading_line(pp.text) if len(pp.lines) <= 2 else None
+            if hp and hp[0] == "book" and prev.lineno - (pp.lineno + len(pp.lines)) <= 3:
+                limit = 5
+        if gap > limit or len(prev.lines) > 2:
             break
         h = classify_heading_line(prev.text)
         caps = _is_allcaps(prev.text) and len(prev.text) <= 62
