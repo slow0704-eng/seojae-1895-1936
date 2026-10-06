@@ -129,6 +129,7 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*Italicized text is surrounded by underscores", re.I),
     re.compile(r"^\s*1\.\s+P\.\s*\d+,\s+changed\s", re.I),
     re.compile(r"^\s*The following pages contain advertisements", re.I),   # Macmillan
+    re.compile(r"^\s*Obvious punctuation and hyphenation inconsistencies", re.I),   # Marriage 교정자 주석
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
