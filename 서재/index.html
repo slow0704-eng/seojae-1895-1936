@@ -5864,7 +5864,7 @@ else root.TTSNorm = api;
 })(typeof self !== "undefined" ? self : this);
 
 var TTSNorm = self.TTSNorm;
-/* tools/act.py spans()·align() 의 JS 짝 (참조 구현 — 낭독 런타임 tools/tts/act.js 가 대본 순번을 셀 때 이것을 그대로 씀).
+/* tools/act.py spans()·align() 의 JS 짝 (낭독 런타임 tools/narrate.js 의 nrActPlan 이 대본 순번을 셀 때 이것을 그대로 씀).
    전 코퍼스(원문 79권 + 한국어판 63권 = 142 책·언어, 184,150 문단)에서 파이썬과 대사 수·cont 가 100% 같음.
    대본 q 순번 = 이 함수가 돌려주는 구간 순번. 파이썬과 한 글자도 다르게 세면 안 됨. */
 var ACT_PAIR = { "“": "”", "‘": "’", "「": "」", "『": "』" };

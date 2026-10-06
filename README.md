@@ -125,6 +125,7 @@ index.html        ← 현관 (소개 · 소장작 · 조판 · 작가)
 값은 전부 측정해서 정했습니다 — 받아쓰기(Whisper) 오류율로 본 양자화·샘플링 단계·속도 한계,
 목소리별 장기 평균 스펙트럼, 라우드니스, 언어별 말 속도. 과정과 숫자는
 [`tools/tts/CALIB.md`](tools/tts/CALIB.md).
+낭독을 고치거나 넓힐 때의 구조·절차·남은 빈칸은 [`tools/tts/GUIDE.md`](tools/tts/GUIDE.md).
 
 ---
 
