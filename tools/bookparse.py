@@ -122,6 +122,10 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*Popular Copyright Novels\s*$", re.I),   # A. L. Burt's list
     # Gutenberg production notes after the text (This Side of Paradise)
     re.compile(r"^\s*Appendix: Production notes for eBook", re.I),
+    # 제목 줄("Transcriber's Notes")만 떨어지고 남던 교정자 주석 본문
+    # (Christina Alberta's Father, Thirty Strange Stories)
+    re.compile(r"^\s*Italicized text is surrounded by underscores", re.I),
+    re.compile(r"^\s*1\.\s+P\.\s*\d+,\s+changed\s", re.I),
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)

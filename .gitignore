@@ -16,3 +16,5 @@ tools/fonts/src/
 
 # 브라우저 자동화(Playwright MCP) 스냅샷·스크린샷
 .playwright-mcp/
+# 기존 번역을 깔아 둔 초안(재사용 스크립트 중간 산출물)
+tools/tr/draft/
