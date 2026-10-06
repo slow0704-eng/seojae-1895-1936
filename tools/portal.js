@@ -1128,7 +1128,7 @@ function anyOf(sel, have) {
 }
 function passFacets(w) {
   if (FACETS.author.length && FACETS.author.indexOf(w.author) < 0) return false;
-  if (FACETS.genre.length && !anyOf(FACETS.genre, w.genre || [])) return false;
+  if (FACETS.genre.length && FACETS.genre.indexOf(w.genre) < 0) return false;
   if (FACETS.decade.length && FACETS.decade.indexOf(String(decadeOf(w.year))) < 0) return false;
   if (FACETS.form.length && FACETS.form.indexOf(w.form || "novel") < 0) return false;
   if (FACETS.size.length && FACETS.size.indexOf(sizeOf(w)) < 0) return false;

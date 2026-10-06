@@ -307,7 +307,7 @@ def index_page(cat, works):
     manifest = [dict({k: w[k] for k in ("id", "title", "titleKo", "author", "authorKo",
                                         "authorEn", "year", "chars", "minutes", "words")},
                      titleOrig=w.get("titleOrig", ""), form=w.get("form", "novel"),
-                     genre=w.get("genre", []),
+                     genre=w.get("genre", ""),
                      orig=w.get("orig", "en"))
                 for w in works]
 
@@ -337,8 +337,8 @@ def index_page(cat, works):
     facets = "\n".join([
         chips("author", [(s, a_ko[s], auth_ct[s]) for s in
                          sorted(auth_ct, key=lambda s: -auth_ct[s])]),
-        chips("genre", [(g, GENRE_KO[g], sum(1 for w in works if g in w.get("genre", [])))
-                        for g in GENRE_KO if any(g in w.get("genre", []) for w in works)]),
+        chips("genre", [(g, GENRE_KO[g], sum(1 for w in works if w.get("genre") == g))
+                        for g in GENRE_KO if any(w.get("genre") == g for w in works)]),
         chips("decade", [(str(d), "%d년대" % d, dec_ct[d]) for d in sorted(dec_ct)]),
         chips("form", [(f, FORM_KO.get(f, f), form_ct[f]) for f in
                        sorted(form_ct, key=lambda f: -form_ct[f])]),
