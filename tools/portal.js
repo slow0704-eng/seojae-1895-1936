@@ -1161,6 +1161,13 @@ function buildFacets() {
     FACETS.author = (!v || (FACETS.author.length === 1 && FACETS.author[0] === v)) ? [] : [v];
     syncFacets(); saveUI(); applyFilter();
   });
+  var gbar = $("#genbar");
+  if (gbar) gbar.addEventListener("click", function (e) {
+    var b = e.target.closest(".aub"); if (!b) return;
+    var v = b.dataset.v;
+    FACETS.genre = (!v || (FACETS.genre.length === 1 && FACETS.genre[0] === v)) ? [] : [v];
+    syncFacets(); saveUI(); applyFilter();
+  });
   btn.addEventListener("click", function () {
     var on = box.hidden;
     box.hidden = !on;
@@ -1186,6 +1193,11 @@ function syncFacets() {
   $$("#aubar .aub").forEach(function (c) {
     var v = c.dataset.v;
     var on = v ? (FACETS.author.length === 1 && FACETS.author[0] === v) : !FACETS.author.length;
+    c.classList.toggle("on", on); c.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  $$("#genbar .aub").forEach(function (c) {
+    var v = c.dataset.v;
+    var on = v ? (FACETS.genre.length === 1 && FACETS.genre[0] === v) : !FACETS.genre.length;
     c.classList.toggle("on", on); c.setAttribute("aria-pressed", on ? "true" : "false");
   });
   var n = facetTotal(), b = $(".ctl__facetn");

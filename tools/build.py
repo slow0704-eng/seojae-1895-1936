@@ -334,6 +334,14 @@ def index_page(cat, works):
                  % (a["slug"], a["slug"], mark(a["slug"], "aub__mark"), html.escape(a["ko"]),
                     auth_ct.get(a["slug"], 0))
                  for a in cat["authors"] if auth_ct.get(a["slug"]))))
+    # 장르도 늘 보이게 — 작가 막대 밑 한 줄, 한 번에 한 장르
+    gen_ct = {}
+    for w in works:
+        gen_ct[w.get("genre")] = gen_ct.get(w.get("genre"), 0) + 1
+    aubar += ('<div class="aubar genbar" id="genbar" role="group" aria-label="장르별로 보기">'
+              '<button class="aub" data-v="">전체 장르</button>%s</div>'
+              % "".join('<button class="aub" data-v="%s">%s<span class="aub__n">%d</span></button>'
+                        % (g, html.escape(GENRE_KO[g]), gen_ct[g]) for g in GENRE_KO if gen_ct.get(g)))
     facets = "\n".join([
         chips("author", [(s, a_ko[s], auth_ct[s]) for s in
                          sorted(auth_ct, key=lambda s: -auth_ct[s])]),
