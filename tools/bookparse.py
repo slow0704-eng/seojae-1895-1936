@@ -99,6 +99,8 @@ FRONT_DROP_RX = [
     re.compile(r"^\s*_?ILLUSTRATED_?\s*$", re.I),
     re.compile(r"^\s*WITH FRONTISPIECE\s*$", re.I),
     re.compile(r"^\s*(?:CHAPTER|STORY|PAGE|CHAP\.)\s+PAGE\s*$", re.I),
+    # 제목 줄 없이 장 이름만 늘어놓은 목차(The Wife of Sir Isaac Harman) — 앞부분에서만 봄
+    re.compile(r"^\s*Chapter\s+[IVXLC]+\.\s+\S"),
 ]
 
 # a block starting with one of these ends the body: everything after is dropped
@@ -126,6 +128,7 @@ BACK_MATTER_RX = [
     # (Christina Alberta's Father, Thirty Strange Stories)
     re.compile(r"^\s*Italicized text is surrounded by underscores", re.I),
     re.compile(r"^\s*1\.\s+P\.\s*\d+,\s+changed\s", re.I),
+    re.compile(r"^\s*The following pages contain advertisements", re.I),   # Macmillan
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
