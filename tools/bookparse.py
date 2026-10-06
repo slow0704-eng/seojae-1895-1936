@@ -68,6 +68,9 @@ DROP_LINE_RX = [
     re.compile(r"^\s*\[?Device\]?\s*$", re.I),
     re.compile(r"^\s*Produced by\b", re.I),
     re.compile(r"^\s*(?:\[)?Transcriber.?s?\s+note", re.I),
+    # Cardigan 머리 교정자 주석(두 줄로 감긴 것) — 본문 시작 뒤에 걸려 앞부분 규칙이 못 잡음
+    re.compile(r"^\s*Italic text is denoted by _underscores_ and bold text by =equal\s*$"),
+    re.compile(r"^\s*signs=\.\s*$"),
     re.compile(r"^\s*End of (?:the )?Project Gutenberg", re.I),
     re.compile(r"^\s*\*\*\*\s*(?:START|END) OF TH", re.I),
     re.compile(r"^\s*\+[-+]{5,}\+\s*$"),                      # ascii box rule
@@ -99,6 +102,9 @@ FRONT_DROP_RX = [
     re.compile(r"^\s*_?ILLUSTRATED_?\s*$", re.I),
     re.compile(r"^\s*WITH FRONTISPIECE\s*$", re.I),
     re.compile(r"^\s*(?:CHAPTER|STORY|PAGE|CHAP\.)\s+PAGE\s*$", re.I),
+    # 책 머리 교정자 주석(Cardigan)
+    re.compile(r"^\s*Inconsistent hyphenation and spelling in the original", re.I),
+    re.compile(r"^\s*Italic text is denoted by underscores", re.I),
     # 제목 줄 없이 장 이름만 늘어놓은 목차(The Wife of Sir Isaac Harman) — 앞부분에서만 봄
     re.compile(r"^\s*Chapter\s+[IVXLC]+\.\s+\S"),
 ]
@@ -130,6 +136,8 @@ BACK_MATTER_RX = [
     re.compile(r"^\s*1\.\s+P\.\s*\d+,\s+changed\s", re.I),
     re.compile(r"^\s*The following pages contain advertisements", re.I),   # Macmillan
     re.compile(r"^\s*Obvious punctuation and hyphenation inconsistencies", re.I),   # Marriage 교정자 주석
+    re.compile(r"^\s*Popular Copyright Books\s*$", re.I),   # A. L. Burt 광고(Cardigan)
+    re.compile(r"^\s*1\.\s+Silently corrected typographical", re.I),   # Joan and Peter 교정자 주석
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)
