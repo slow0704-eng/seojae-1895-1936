@@ -12,7 +12,7 @@ from __future__ import annotations
 import difflib, glob, html as H, io, json, os, re, subprocess, sys, unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, chr(49436) + chr(51116), "data")
+DATA = os.path.join(ROOT, chr(49436) + chr(51116), "data", "orig")
 OUT = os.path.join(ROOT, "tools", "tr", "out")
 UNIT = re.compile(r'<h2 class="(?:chapter|part)" id="([^"]+)"[^>]*>(.*?)</h2>'
                   r'|<p[^>]*data-p="(\d+)"[^>]*>(.*?)</p>', re.S)
@@ -30,9 +30,12 @@ def units(src):
 
 
 def remap(bid):
-    rel = "%s/data/%s.js" % (chr(49436) + chr(51116), bid)
-    old = subprocess.run(["git", "show", "HEAD:" + rel], cwd=ROOT,
-                         capture_output=True).stdout.decode("utf-8")
+    old = ""
+    for rel in ("%s/data/orig/%s.js", "%s/data/%s.js"):   # 2026-10-06 에 data/ → data/orig/
+        old = subprocess.run(["git", "show", "HEAD:" + rel % (chr(49436) + chr(51116), bid)], cwd=ROOT,
+                             capture_output=True).stdout.decode("utf-8")
+        if old:
+            break
     new = io.open(os.path.join(DATA, bid + ".js"), encoding="utf-8").read()
     a, b = units(old), units(new)
     tr = {}

@@ -4135,10 +4135,10 @@ function loadBook(id, cb) {
   if (CACHE.has(id)) { CACHE.set(id, CACHE.get(id)); return cb(CACHE.get(id)); }
   if (pending[id]) { pending[id].push(cb); return; }
   pending[id] = [cb];
-  inject("data/" + encodeURIComponent(id) + ".js", function () {
+  inject("data/orig/" + encodeURIComponent(id) + ".js", function () {
     delete pending[id];
     document.body.classList.remove("loading");
-    toast("본문 파일을 불러오지 못했습니다 · data/" + id + ".js", 6000);
+    toast("본문 파일을 불러오지 못했습니다 · data/orig/" + id + ".js", 6000);
   });
 }
 

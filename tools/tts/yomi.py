@@ -20,6 +20,7 @@ import os, re, io, json, html
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 DATA = os.path.join(ROOT, "서재", "data")
+ORIG = os.path.join(DATA, "orig")
 OUT = os.path.join(DATA, "yomi")
 
 KANJI = re.compile(r"[㐀-䶿一-鿿豈-﫿々〆ヶ]")
@@ -73,10 +74,10 @@ def main():
     titles = {w["id"]: w["title"] for w in man if w.get("orig") == "ja"}
     os.makedirs(OUT, exist_ok=True)
     made = 0
-    for f in sorted(os.listdir(DATA)):
+    for f in sorted(os.listdir(ORIG)):
         if not f.endswith(".js"):
             continue
-        src = io.open(os.path.join(DATA, f), encoding="utf-8").read()
+        src = io.open(os.path.join(ORIG, f), encoding="utf-8").read()
         j = json.loads(src[src.index("(") + 1:src.rindex(")")])
         body = j.get("html", "")
         if "<ruby>" not in body and not re.search(r"[\u3040-\u30ff]", body[:4000]):

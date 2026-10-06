@@ -120,6 +120,8 @@ BACK_MATTER_RX = [
     # form in The Undying Fire is left alone, its translation keys depend on it
     re.compile(r"^\s*(?:¶\s*)?MR\.? WELLS has also written the following novels:\s*$", re.I),
     re.compile(r"^\s*Popular Copyright Novels\s*$", re.I),   # A. L. Burt's list
+    # Gutenberg production notes after the text (This Side of Paradise)
+    re.compile(r"^\s*Appendix: Production notes for eBook", re.I),
 ]
 
 END_MARK_RX = re.compile(r"^\s*THE END\.?\s*$", re.I)

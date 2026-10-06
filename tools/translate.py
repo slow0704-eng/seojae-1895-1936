@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Korean translation pipeline for 서재 1895—1936.
 
-The English text already ships as 서재/data/<id>.js (a SEOJAE.receive() call).
+The English text already ships as 서재/data/orig/<id>.js (a SEOJAE.receive() call).
 This module slices that text into translation *jobs*, collects the Korean that
 agents write back, and assembles 서재/data/ko/<id>.js — a parallel payload keyed
 by the same data-p indices, so the runtime can swap languages without touching
@@ -23,6 +23,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HERE = os.path.join(ROOT, "tools")
 SITE = os.path.join(ROOT, "서재")
 DATA = os.path.join(SITE, "data")
+ORIG = os.path.join(DATA, "orig")
 KODATA = os.path.join(DATA, "ko")
 TR = os.path.join(HERE, "tr")
 JOBS = os.path.join(TR, "jobs")
@@ -66,7 +67,7 @@ def metaof(bid):
 
 
 def read_payload(bid):
-    p = os.path.join(DATA, bid + ".js")
+    p = os.path.join(ORIG, bid + ".js")
     s = io.open(p, encoding="utf-8").read()
     return json.loads(s[s.index("(") + 1:s.rindex(")")])
 
@@ -396,7 +397,7 @@ def write_index():
 
 
 def status():
-    ids = [f[:-3] for f in sorted(os.listdir(DATA)) if f.endswith(".js")]
+    ids = [f[:-3] for f in sorted(os.listdir(ORIG)) if f.endswith(".js")]
     cov = coverage()
     tw = tdone = 0
     print("%-52s %8s %8s %7s" % ("work", "units", "korean", "cov"))
@@ -513,7 +514,7 @@ def main(argv):
         pass
     cmd = argv[1] if len(argv) > 1 else "status"
     arg = argv[2] if len(argv) > 2 else ""
-    ids = [f[:-3] for f in sorted(os.listdir(DATA)) if f.endswith(".js")]
+    ids = [f[:-3] for f in sorted(os.listdir(ORIG)) if f.endswith(".js")]
     if cmd == "plan":
         targets = (TIER1 if arg == "--tier1" else TIER2 if arg == "--tier2"
                    else ids if arg == "--all" else [arg])

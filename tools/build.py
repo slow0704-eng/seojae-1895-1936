@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Build the single-page portal: index.html + data/<id>.js for each work.
+"""Build the single-page portal: index.html + data/orig/<id>.js for each work.
 
 fetch() is blocked under file://, but a dynamically appended <script src> is
 not — so each book's text ships as a small JS file that calls SEOJAE.receive().
@@ -14,6 +14,7 @@ ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 HERE = _os.path.join(ROOT, "tools")
 SITE = _os.path.join(ROOT, chr(49436) + chr(51116))          # 소설/서재
 DATA = _os.path.join(SITE, "data")
+ORIG = _os.path.join(DATA, "orig")   # 원문 본문 (곁 자료는 data/ko · act · yomi)
 
 import bookparse
 from meta import build as build_catalog
@@ -448,7 +449,7 @@ var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 def main():
     cat = build_catalog()
     works = cat["works"]
-    for d in (SITE, DATA):
+    for d in (SITE, DATA, ORIG):
         if not _os.path.isdir(d):
             _os.makedirs(d)
     # the portal replaces the old one-file-per-work site
@@ -469,7 +470,7 @@ def main():
             payload = {"id": w["id"], "sig": sig("%d:%s" % (len(chapters), body[:200] + body[-200:])),
                        "chapters": chapters, "html": body}
             js = "SEOJAE.receive(" + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + ");\n"
-            p = _os.path.join(DATA, w["id"] + ".js")
+            p = _os.path.join(ORIG, w["id"] + ".js")
             with open(p, "wb") as f:
                 f.write(js.encode("utf-8"))
             total += len(js)
@@ -491,7 +492,7 @@ def main():
         f.write(idx.encode("utf-8"))
     print("\n서재/index.html  %s bytes" % "{:,}".format(len(idx)))
     print("index.html      %s bytes  (front door)" % "{:,}".format(landing.write(cat, works)))
-    print("data/       %s bytes across %d files" % ("{:,}".format(total), len(works) - len(bad)))
+    print("data/orig/  %s bytes across %d files" % ("{:,}".format(total), len(works) - len(bad)))
     print("FAILURES:", len(bad))
     for b in bad:
         print("  ", b)

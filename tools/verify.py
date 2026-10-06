@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Invariant checks over the built portal: index.html + data/<id>.js."""
+"""Invariant checks over the built portal: index.html + data/orig/<id>.js."""
 from __future__ import annotations
 import os, io, re, json, html as H, unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, chr(49436) + chr(51116))          # 소설/서재
 DATA = os.path.join(SITE, "data")
+ORIG = os.path.join(DATA, "orig")
 
 TAG = re.compile(r"<[^>]+>")
 P_RX = re.compile(r'<p[^>]*data-p="(\d+)"[^>]*>(.*?)</p>', re.S)
@@ -44,7 +45,7 @@ def main():
     print("\n" + hdr + "\n" + "-" * len(hdr))
 
     for w in MAN:
-        p = os.path.join(DATA, w["id"] + ".js")
+        p = os.path.join(ORIG, w["id"] + ".js")
         bad = []
         if not os.path.exists(p):
             fails.append((w["id"], "data file missing")); print("FAIL", w["id"], "missing"); continue
@@ -134,7 +135,7 @@ def verify_ko(MAN):
         if not raw.startswith("SEOJAE.receiveKo("):
             bad.append("bad wrapper")
         d = json.loads(raw[raw.index("(") + 1:raw.rindex(")")])
-        src = io.open(os.path.join(DATA, bid + ".js"), encoding="utf-8").read()
+        src = io.open(os.path.join(ORIG, bid + ".js"), encoding="utf-8").read()
         body = json.loads(src[src.index("(") + 1:src.rindex(")")])["html"]
         pn = set(a for a, _ in P_RX.findall(body))
         hn = set(H_ID.findall(body))
@@ -180,7 +181,7 @@ def verify_ko(MAN):
         fails.append(("data/ko/index.js", "unknown works %s" % orphan[:3]))
     lib = 0
     for w in MAN:
-        s2 = io.open(os.path.join(DATA, w["id"] + ".js"), encoding="utf-8").read()
+        s2 = io.open(os.path.join(ORIG, w["id"] + ".js"), encoding="utf-8").read()
         b2 = json.loads(s2[s2.index("(") + 1:s2.rindex(")")])["html"]
         lib += len(P_RX.findall(b2)) + len(H_ID.findall(b2))
     print("korean %s of %s units in these %d works · %s of %s across all %d  (%.1f%%)"
