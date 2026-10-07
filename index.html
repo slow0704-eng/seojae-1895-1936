@@ -227,6 +227,8 @@ svg{ display:block }
 .hero__roll{ margin-top:clamp(22px,2.6vw,32px); font-size:clamp(12px,1.15vw,14.5px);
   color:var(--fg-m); font-family:var(--ff-display);
   font-variant-caps:all-small-caps; letter-spacing:.22em; text-indent:.22em }
+.hero__roll{ text-wrap:balance }
+.hero__roll .nm, .mh__roll .nm{ white-space:nowrap }
 .hero__lede{ margin:clamp(26px,3vw,36px) auto 0; max-width:34em; text-wrap:balance }
 .hero__cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:clamp(32px,3.6vw,44px) }
@@ -413,7 +415,7 @@ kbd{
 .ft__t{ font-family:var(--ff-display); font-size:15px; letter-spacing:.12em; color:var(--fg-h);
   margin-bottom:10px }
 .ft p, .ft li{ font-size:12.5px; line-height:2; color:var(--fg-m) }
-.ft h4{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg-m);
+.ft h4,.ft .ft__h{ font-weight:400;  font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg-m);
   margin-bottom:8px; font-weight:500 }
 .ft a{ color:var(--fg-m); text-decoration:none; border-bottom:1px solid transparent }
 .ft a:hover{ color:var(--fg); border-bottom-color:var(--hair) }
@@ -460,7 +462,7 @@ kbd{
 <section class="hero wrap">
   <p class="kicker hero__kick">개인 서재 &middot; 퍼블릭 도메인</p>
   <h1 class="hero__t">1895<em>—</em>1936</h1>
-  <p class="hero__roll">Kafka &nbsp;·&nbsp; Wells &nbsp;·&nbsp; Fitzgerald &nbsp;·&nbsp; von Harbou &nbsp;·&nbsp; Blackwood &nbsp;·&nbsp; Chambers &nbsp;·&nbsp; Machen &nbsp;·&nbsp; Andreyev &nbsp;·&nbsp; Jacobs &nbsp;·&nbsp; Kyūsaku &nbsp;·&nbsp; Ryūnosuke</p>
+  <p class="hero__roll"><span class="nm">Kafka&nbsp;&nbsp;·</span> <span class="nm">Wells&nbsp;&nbsp;·</span> <span class="nm">Fitzgerald&nbsp;&nbsp;·</span> <span class="nm">von Harbou&nbsp;&nbsp;·</span> <span class="nm">Blackwood&nbsp;&nbsp;·</span> <span class="nm">Chambers&nbsp;&nbsp;·</span> <span class="nm">Machen&nbsp;&nbsp;·</span> <span class="nm">Andreyev&nbsp;&nbsp;·</span> <span class="nm">Jacobs&nbsp;&nbsp;·</span> <span class="nm">Yumeno&nbsp;&nbsp;·</span> <span class="nm">Akutagawa</span></p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
     소설 79편이 한 페이지 안에 있고, 덮은 자리의 <b>글자</b> 위에 다시 세워 둡니다.
     설치도, 계정도, 네트워크도 필요하지 않습니다.</p>
@@ -730,7 +732,7 @@ kbd{
       <p>퍼블릭 도메인 영문 소설 79편을 위한<br>오프라인 장시간 독서 사이트.</p>
     </div>
     <div>
-      <h4>원문 출처</h4>
+      <h2 class="ft__h">원문 출처</h2>
       <ul>
         <li><a href="https://www.gutenberg.org">Project Gutenberg</a></li>
         <li><a href="https://standardebooks.org">Standard Ebooks</a></li>
@@ -738,7 +740,7 @@ kbd{
       </ul>
     </div>
     <div>
-      <h4>저작권</h4>
+      <h2 class="ft__h">저작권</h2>
       <ul>
         <li>Franz Kafka &middot; 1924</li>
         <li>H. G. Wells &middot; 1946</li>

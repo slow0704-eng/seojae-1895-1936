@@ -50,15 +50,23 @@ MARKS = {
 }
 
 
-def surname(en):
-    """'Thea von Harbou' -> 'von Harbou', 'H. G. Wells' -> 'Wells'."""
+def surname(en, orig="en"):
+    """'Thea von Harbou' -> 'von Harbou', 'H. G. Wells' -> 'Wells'.
+    Japanese names are written family name first: 'Yumeno Kyūsaku' -> 'Yumeno'."""
     w = en.split()
+    if orig == "ja":
+        return w[0]
     return " ".join(w[-2:]) if len(w) > 2 and w[-2].islower() else w[-1]
 
 
 def roll(authors):
-    """The masthead name line, from the catalogue so it can never fall behind."""
-    return " &nbsp;·&nbsp; ".join(surname(a["en"]) for a in authors)
+    """The masthead name line, from the catalogue so it can never fall behind.
+    Each name is one unbreakable unit and the dot rides at its head, so a
+    narrow screen never splits 'von / Harbou' or starts a line with a dot."""
+    last = len(authors) - 1
+    return " ".join('<span class="nm">%s%s</span>' % (surname(a["en"], a.get("orig", "en")),
+                                                      "" if i == last else "&nbsp;&nbsp;·")
+                    for i, a in enumerate(authors))
 
 
 def mark(slug, cls="mark"):

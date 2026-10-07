@@ -292,7 +292,7 @@ def build_landing(cat, works):
       <p>퍼블릭 도메인 영문 소설 %(n)d편을 위한<br>오프라인 장시간 독서 사이트.</p>
     </div>
     <div>
-      <h4>원문 출처</h4>
+      <h2 class="ft__h">원문 출처</h2>
       <ul>
         <li><a href="https://www.gutenberg.org">Project Gutenberg</a></li>
         <li><a href="https://standardebooks.org">Standard Ebooks</a></li>
@@ -300,7 +300,7 @@ def build_landing(cat, works):
       </ul>
     </div>
     <div>
-      <h4>저작권</h4>
+      <h2 class="ft__h">저작권</h2>
       <ul>
         %(deaths)s
       </ul>

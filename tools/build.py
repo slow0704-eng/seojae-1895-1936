@@ -161,7 +161,7 @@ def cover(w, i):
  data-form="%(formk)s" style="--i:%(i)d">
 <a class="card__link" href="#/w/%(idq)s">
  <div class="cover"><i class="cover__frame"></i>%(mark)s<i class="rule rule--head"></i>
-  <h3 class="cover__title">%(main)s%(sub)s</h3>
+  <h2 class="cover__title">%(main)s%(sub)s</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
   <span class="cover__ko" hidden></span></div>
@@ -184,8 +184,8 @@ def cover(w, i):
 
 
 READER_SHELL = """
-<div id="reader">
-  <div id="hud-top" class="hud">
+<main id="reader">
+  <div id="hud-top" class="hud" role="toolbar" aria-label="읽기 도구">
     <button class="hbtn" data-act="lib">&lsaquo; 서재</button>
     <span class="h-title"></span><span class="h-ch"></span>
     <span class="h-right">
@@ -214,16 +214,16 @@ READER_SHELL = """
   <div id="langsw" class="lseg lseg--float" role="group" aria-label="본문 언어" hidden><button data-lang="en">영문</button><button data-lang="ko">한글</button><button data-lang="both">대역</button></div>
   <div id="hairline"><div id="hair-fill"></div><div id="hair-ticks"></div></div>
   <article id="book" lang="en"></article>
-</div>
+</main>
 
 <div id="scrim"></div>
-<aside id="drawer">
-  <div class="dw-tabs"><button data-tab="toc" class="on">목차</button><button data-tab="bm">책갈피</button><button class="dw-x" title="닫기">✕</button></div>
-  <input class="dw-filter" placeholder="장 제목 검색" hidden>
+<aside id="drawer" role="dialog" aria-label="목차와 책갈피" tabindex="-1">
+  <div class="dw-tabs" role="tablist"><button role="tab" data-tab="toc" class="on">목차</button><button role="tab" data-tab="bm">책갈피</button><button class="dw-x" title="닫기" aria-label="닫기">✕</button></div>
+  <input class="dw-filter" placeholder="장 제목 검색" aria-label="장 제목 검색" hidden>
   <div class="dw-body"></div>
 </aside>
-<aside id="settings">
-  <div class="st-hd">설정<button class="st-x">✕</button></div>
+<aside id="settings" role="dialog" aria-label="설정" tabindex="-1">
+  <div class="st-hd">설정<button class="st-x" aria-label="설정 닫기">✕</button></div>
   <div class="st-body">
     <div class="st-grp">활자</div>
     <div class="st-row"><span class="st-l">글자 크기</span><span class="st-c"><input type="range" data-k="fs" min="15" max="30" step="1"><span class="v" data-v="fs"></span></span></div>
@@ -267,8 +267,20 @@ READER_SHELL = """
     <div class="st-row"><span class="st-l">모두 기본값으로</span><span class="st-c"><button class="mini" data-do="reset">되돌리기</button></span></div>
   </div>
 </aside>
-<div id="palette"><div class="pl-box"><input class="pl-q" placeholder="작품 또는 작가 검색"><div class="pl-list"></div></div></div>
+<div id="palette" role="dialog" aria-label="작품 전환"><div class="pl-box"><input class="pl-q" placeholder="작품 또는 작가 검색" aria-label="작품 또는 작가 검색"><div class="pl-list"></div></div></div>
 """
+def _label_rows(shell):
+    """<span class="st-l">글자 크기</span> names the control(s) beside it."""
+    def row(m):
+        lab, ctl = m.group(1), m.group(2)
+        ctl = re.sub(r'<(input type="range"|select)(?=[\s>])', lambda x: '<%s aria-label="%s"' % (x.group(1), lab), ctl)
+        ctl = ctl.replace('<button class="st-tog"', '<button class="st-tog" role="switch" aria-checked="false" aria-label="%s"' % lab)
+        ctl = ctl.replace('<span class="st-seg', '<span role="group" aria-label="%s" class="st-seg' % lab)
+        return '<span class="st-l">%s</span><span class="st-c">%s</span></div>' % (lab, ctl)
+    return re.sub(r'<span class="st-l">([^<]+)</span><span class="st-c">(.*?)</span></div>', row, shell)
+
+
+READER_SHELL = _label_rows(READER_SHELL)
 READER_SHELL = READER_SHELL.replace("%(rates)s", "".join(
     '<button data-seg="%g">%s</button>' % (r, ("%g" % r)) for r in NR_CFG["rates"])).replace("%(vopts)s", "".join(
     '<option value="%s">%s</option>' % (v, ("여성 " if v[0] == "F" else "남성 ") + v[1]) for v in
@@ -392,7 +404,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <body data-view="library">
 <div id="dimmer"></div>
 
-<div id="library">
+<main id="library">
 <div class="topbar"><div class="topbar__in">
   <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
   <span class="topbar__hint"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>?</kbd> 단축키</span>
@@ -415,7 +427,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
     <button role="tab" data-sort="recent">최근순</button>
   </div>
   <span class="ctl__search">
-    <input class="ctl__find" type="search" id="find" placeholder="제목 · 작가 · 연도 · ㅊㅅ" aria-label="찾기"
+    <input class="ctl__find" type="search" id="find" placeholder="제목 · 작가 · ㅊㅅ" aria-label="찾기"
            autocomplete="off" spellcheck="false">
     <span class="ctl__hint" id="findhint"></span>
   </span>
@@ -431,7 +443,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <button class="facet__clear" id="facetclear">모두 해제</button>
 </div>
 <div class="sugg" id="sugg" hidden></div>
-<main class="grid" id="grid">%(grid)s</main>
+<div class="grid" id="grid">%(grid)s</div>
 <div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav">%(authnav)s</nav>%(plates)s</div>
 <footer class="lib-foot">
   <p>모든 작품은 퍼블릭 도메인입니다. 출처 — <a href="https://www.gutenberg.org">Project Gutenberg</a>
@@ -439,7 +451,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
      &middot; <a href="https://en.wikisource.org">Wikisource</a></p>
   <p class="lib-foot__k"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>1</kbd>–<kbd>4</kbd> 정렬 &nbsp; <kbd>?</kbd> 단축키</p>
 </footer>
-</div></div>
+</div></main>
 %(shell)s
 <script>var MANIFEST=%(manifest)s;
 var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>

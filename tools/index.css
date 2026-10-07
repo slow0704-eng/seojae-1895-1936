@@ -50,7 +50,8 @@
   height:58px; padding-inline:var(--mar);
   background:var(--glass); backdrop-filter:blur(14px) saturate(1.4);
   -webkit-backdrop-filter:blur(14px) saturate(1.4);
-  border-bottom:1px solid transparent; transition:border-color .3s var(--ease);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease), transform .28s var(--ease);
 }
 @supports not (backdrop-filter:blur(1px)){ .topbar{ background:var(--bg) } }
 .topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
@@ -79,8 +80,17 @@
   font-size:clamp(40px,7.4vw,92px); line-height:.98; letter-spacing:.09em; text-indent:.09em;
   font-variant-numeric:oldstyle-nums; color:var(--fg-heading) }
 .mh__title em{ font-style:normal; color:var(--accent); opacity:.85; padding-inline:.05em }
-.mh__roll{ margin:20px 0 0; font-family:var(--ff-display); font-variant-caps:all-small-caps;
-  letter-spacing:.2em; font-size:13.5px; color:var(--fg-muted) }
+.mh__roll{ margin:20px auto 0; max-width:62em; font-family:var(--ff-display); font-variant-caps:all-small-caps;
+  letter-spacing:.2em; font-size:13.5px; color:var(--fg-muted); text-wrap:balance }
+.mh__roll .nm{ white-space:nowrap }
+/* a phone opens on books, not on a poster: the masthead shrinks to a header */
+@media (max-width:600px){
+  .masthead{ padding:26px 0 22px }
+  .mh__kicker{ margin-bottom:12px; font-size:10.5px }
+  .mh__roll{ margin-top:14px; font-size:12px; letter-spacing:.14em; line-height:1.7 }
+  .mh__rule{ margin-top:18px }
+  .mh__stat{ margin-top:12px }
+}
 .mh__rule{ height:4px; width:min(300px,52%); margin:26px auto 0;
   background:linear-gradient(var(--ink-rule) 0 1.5px,transparent 1.5px 3.5px,var(--ink-rule) 3.5px 4px) }
 .mh__stat{ margin:16px 0 0; font-size:11.5px; letter-spacing:.05em; color:var(--fg-muted) }
@@ -132,8 +142,16 @@
   margin-bottom:clamp(26px,3vw,38px);
   background:var(--glass); backdrop-filter:blur(14px) saturate(1.4);
   -webkit-backdrop-filter:blur(14px) saturate(1.4);
-  border-bottom:1px solid var(--ink-hair) }
+  border-bottom:1px solid var(--ink-hair);
+  transition:transform .28s var(--ease) }
 @supports not (backdrop-filter:blur(1px)){ .ctl{ background:var(--bg) } }
+/* scrolling down the shelf, the sticky header and controls step out of the way
+   (they ate 28% of a laptop screen and 43% of a phone); any upward scroll
+   brings them straight back */
+body.lib-tuck .topbar{ transform:translateY(-100%) }
+body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
+@media (prefers-reduced-motion:reduce){ .topbar,.ctl{ transition:none } }
+.card{ scroll-margin-top:96px; scroll-margin-bottom:24px }
 
 .ctl__sort{ display:flex; gap:2px; padding:3px; border-radius:999px;
   background:color-mix(in srgb, var(--fg) 5%, transparent) }
@@ -153,7 +171,22 @@
   transition:border-color .18s var(--ease), width .22s var(--ease) }
 .ctl__find::placeholder{ color:var(--fg-muted) }
 .ctl__find:focus{ border-color:var(--accent); width:240px }
-@media (max-width:600px){ .ctl__find, .ctl__find:focus{ width:100%; flex:1 } }
+/* phone: search · 거르기 · 테마 on one row, the five sorts on the next, then
+   the author and genre rails — four short rows instead of six tall ones */
+@media (max-width:640px){
+  .ctl{ gap:8px; padding-block:8px 9px }
+  .ctl > .ctl__search{ order:1; flex:1; min-width:0 }
+  .ctl__find, .ctl__find:focus{ width:100%; box-sizing:border-box; font-size:16px; padding-block:7px }
+  .ctl__find::placeholder{ font-size:13px }
+  .ctl > .ctl__facet{ order:2; padding-inline:10px 12px }
+  .ctl > .ctl__theme{ order:3; padding-inline:12px 26px }
+  .ctl__count{ order:4; flex:1 0 100%; margin:0 }
+  .ctl__count:empty{ display:none }
+  .ctl__sort{ order:5; flex:1 0 100%; overflow-x:auto; scrollbar-width:none }
+  .ctl__sort::-webkit-scrollbar{ display:none }
+  .ctl__sort button{ flex:1; text-align:center; padding:6px 8px; font-size:13px }
+  .aubar{ order:6; margin-top:0 }
+}
 .ctl__count{ font-size:11.5px; color:var(--fg-muted); margin-right:auto;
   font-variant-numeric:tabular-nums }
 .ctl__count:empty{ margin-right:auto }
@@ -289,11 +322,11 @@
 .mt__ko{ font-size:13.5px; line-height:1.45; color:var(--fg);
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
 .mt__by{ display:flex; align-items:baseline; gap:6px; font-size:11px; color:var(--fg-muted) }
-.mt__by .form{ color:var(--au); letter-spacing:.02em }
+.mt__by .form{ color:color-mix(in srgb, var(--au) 78%, var(--fg)); letter-spacing:.02em }
 .mt__by .form::after{ content:"·"; margin-left:6px;
   color:color-mix(in srgb, var(--fg-muted) 45%, transparent) }
 .cap{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.42em; margin:1px 0 0;
-  font-size:11px; line-height:1.5; color:color-mix(in srgb, var(--fg-muted) 82%, transparent);
+  font-size:11px; line-height:1.5; color:var(--fg-muted);
   font-variant-numeric:tabular-nums }
 .cap b{ font-weight:400; color:color-mix(in srgb, var(--fg-muted) 45%, transparent) }
 .cap__pct{ color:var(--accent); font-variant-numeric:tabular-nums }
@@ -358,10 +391,20 @@
 .sg__p{ font-size:10.5px; color:var(--accent); font-variant-numeric:tabular-nums; min-width:2.4em; text-align:right; }
 
 /* ---------- facets ---------- */
-.ctl__facet{ all:unset; cursor:pointer; font-size:12px; letter-spacing:.06em;
-  color:var(--fg-muted); border-bottom:1px solid transparent; padding-bottom:3px; }
-.ctl__facet:hover,.ctl__facet.on{ color:var(--fg); border-bottom-color:var(--accent); }
-.ctl__facetn{ margin-left:6px; font-size:10px; color:var(--accent); font-variant-numeric:tabular-nums; }
+.ctl__facet{ all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+  font-size:12.5px; color:var(--fg-muted); white-space:nowrap;
+  padding:7px 13px 7px 11px; border:1px solid var(--ink-hair); border-radius:999px;
+  background:color-mix(in srgb, var(--fg) 3%, transparent);
+  transition:color .18s var(--ease), border-color .18s var(--ease) }
+.ctl__facet::before{ content:""; width:14px; height:14px; flex:none; background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M4 7h16M7 12h10M10 17h4'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M4 7h16M7 12h10M10 17h4'/%3E%3C/svg%3E") center/contain no-repeat }
+.ctl__facet:hover{ color:var(--fg); border-color:var(--border) }
+.ctl__facet[aria-expanded=true],.ctl__facet.on{ color:var(--fg); border-color:var(--accent) }
+.ctl__facet:focus-visible{ outline:2px solid var(--accent); outline-offset:1px }
+.ctl__facetn{ min-width:16px; height:16px; padding:0 4px; box-sizing:border-box; border-radius:999px;
+  display:inline-grid; place-items:center; font-size:10px; line-height:1;
+  color:var(--bg); background:var(--accent); font-variant-numeric:tabular-nums; }
 .ctl__facetn[hidden]{ display:none; }
 .facets{ display:grid; gap:10px; margin:-10px 0 26px; padding:16px 18px;
   border:1px solid var(--ink-hair); background:color-mix(in srgb, var(--fg) 2%, var(--bg)); }
@@ -372,13 +415,18 @@
   border:1px solid var(--ink-hair); border-radius:999px; color:var(--fg-muted);
   transition:color .1s, border-color .1s, background-color .1s; }
 .chip:hover{ color:var(--fg); border-color:var(--border); }
+.chip:focus-visible,.ctl__theme:focus-visible,.facet__clear:focus-visible,.authnav__b:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px; }
 .chip.on{ color:var(--bg); background:var(--accent); border-color:var(--accent); }
-.chip__n{ margin-left:.45em; font-size:.82em; opacity:.7; font-variant-numeric:tabular-nums; }
+.chip__n{ margin-left:.45em; font-size:.82em; font-variant-numeric:tabular-nums; }
 .chip__n:empty{ display:none; }
 /* author bar: the author facet, always in view inside the sticky controls */
 .aubar{ flex:1 0 100%; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
   margin-top:2px; padding-bottom:1px; -webkit-overflow-scrolling:touch; }
 .aubar::-webkit-scrollbar{ display:none; }
+.aubar{ -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);
+        mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); padding-right:24px; }
+.aubar.at-end{ -webkit-mask-image:none; mask-image:none; }
 .aub{ all:unset; cursor:pointer; flex:none; display:inline-flex; align-items:center; gap:.42em;
   font-size:12px; padding:.34em .8em .34em .62em; white-space:nowrap;
   border:1px solid var(--ink-hair); border-radius:999px; color:var(--fg-muted);
@@ -388,7 +436,7 @@
 .aub.on{ color:var(--bg); background:var(--au,var(--accent)); border-color:var(--au,var(--accent)); }
 .aub__mark{ width:14px; height:14px; color:var(--au); }
 .aub.on .aub__mark{ color:currentColor; }
-.aub__n{ font-size:.82em; opacity:.65; font-variant-numeric:tabular-nums; }
+.aub__n{ font-size:.82em; font-variant-numeric:tabular-nums; }
 /* 열기 영문/한글/대역 — under a card that has a Korean edition */
 .openas{ display:flex; align-items:center; gap:4px; margin:6px 0 2px; font-size:11.5px; }
 .openas[hidden]{ display:none; }
@@ -427,9 +475,12 @@
 .cover__ko.part{ color:var(--accent); background:var(--accent-soft);
   box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
 .cover__ko:hover{ background:var(--fg-heading); color:var(--bg); box-shadow:none; }
-.card[data-koed] .cover{ box-shadow:inset 0 2px 0 var(--accent); }
+.card[data-koed] .cover{ box-shadow:inset 0 2px 0 var(--accent), var(--shadow-1); }
 .card[data-koed="part"] .cover{
-  box-shadow:inset 0 2px 0 color-mix(in srgb, var(--accent) 50%, transparent); }
+  box-shadow:inset 0 2px 0 color-mix(in srgb, var(--accent) 50%, transparent), var(--shadow-1); }
+/* the head-edge mark must not cost the board its lift on hover */
+.card[data-koed] .card__link:hover .cover, .card[data-koed] .card__link:focus-visible .cover{
+  box-shadow:inset 0 2px 0 var(--accent), var(--shadow-2); }
 
 /* ===========================================================
    Portal view switching — library and reader are one document

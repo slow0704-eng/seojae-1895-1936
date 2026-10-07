@@ -216,6 +216,8 @@ svg{ display:block }
 .hero__roll{ margin-top:clamp(22px,2.6vw,32px); font-size:clamp(12px,1.15vw,14.5px);
   color:var(--fg-m); font-family:var(--ff-display);
   font-variant-caps:all-small-caps; letter-spacing:.22em; text-indent:.22em }
+.hero__roll{ text-wrap:balance }
+.hero__roll .nm, .mh__roll .nm{ white-space:nowrap }
 .hero__lede{ margin:clamp(26px,3vw,36px) auto 0; max-width:34em; text-wrap:balance }
 .hero__cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
   margin-top:clamp(32px,3.6vw,44px) }
@@ -402,7 +404,7 @@ kbd{
 .ft__t{ font-family:var(--ff-display); font-size:15px; letter-spacing:.12em; color:var(--fg-h);
   margin-bottom:10px }
 .ft p, .ft li{ font-size:12.5px; line-height:2; color:var(--fg-m) }
-.ft h4{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg-m);
+.ft h4,.ft .ft__h{ font-weight:400;  font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg-m);
   margin-bottom:8px; font-weight:500 }
 .ft a{ color:var(--fg-m); text-decoration:none; border-bottom:1px solid transparent }
 .ft a:hover{ color:var(--fg); border-bottom-color:var(--hair) }

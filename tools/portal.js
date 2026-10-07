@@ -34,7 +34,7 @@ var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
   dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
-  lang: "en", trScale: 85, markUntr: true, asLpm: 16,
+  lang: "ko", trScale: 85, markUntr: true, asLpm: 16,
   nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko", nrAct: true,
   nrVoiceKo: "__VKO__", nrVoiceEn: "__VEN__", nrVoiceJa: "__VJA__", nrGot: false, nrGpuFail: 0,
   wpm: 200, wpmSamples: 0, seenHint: false, updated: 0
@@ -63,6 +63,7 @@ function applySettings() {
 applySettings();
 
 /* ---------- helpers ---------- */
+var COARSE = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
 function throttle(fn, ms) {
   var t = null, pending = false;
   return function () {
@@ -93,7 +94,7 @@ function ago(ts) {
 }
 var toastEl = null, toastT = null;
 function toast(msg, ms) {
-  if (!toastEl) { toastEl = document.createElement("div"); toastEl.id = "toast"; document.body.appendChild(toastEl); }
+  if (!toastEl) { toastEl = document.createElement("div"); toastEl.id = "toast"; toastEl.setAttribute("role", "status"); document.body.appendChild(toastEl); }
   toastEl.textContent = msg;
   toastEl.classList.add("on");
   clearTimeout(toastT);
@@ -307,7 +308,10 @@ function mount(opts) {
 
   if (!S.seenHint) {
     S.seenHint = true; saveSettingsSoon();
-    setTimeout(function () { toast("?  단축키   ·   ,  설정   ·   t  목차   ·   Backspace  서재", 6500); }, 900);
+    setTimeout(function () {
+      toast(COARSE ? "가운데 누르기  메뉴   ·   양쪽 끝 누르기  넘기기"
+                   : "?  단축키   ·   ,  설정   ·   t  목차   ·   Backspace  서재", 6500);
+    }, 900);
   }
 }
 
@@ -325,6 +329,7 @@ function goLibrary(replace) {
   view = "library";
   document.body.dataset.view = "library";
   document.title = "서재 1895—1936";
+  document.body.classList.remove("lib-tuck");
   paintCards(); paintShelf(); paintMine(); applyFilter();
   var h = "#/";
   if (replace) history.replaceState(null, "", h); else if (location.hash !== h) history.pushState(null, "", h);
@@ -577,6 +582,13 @@ function buildHud() {
     if (!hudOn || view !== "reader") return;
     jumpToFraction(e.clientX / innerWidth);
   });
+  hud.top.addEventListener("focusin", function (e) {
+    /* keyboard only — a mouse click focuses the button too, and must not pin the bar */
+    if (e.target.matches && e.target.matches(":focus-visible")) { hudPinned = true; revealHud(); }
+  });
+  hud.top.addEventListener("focusout", function (e) {
+    if (!hud.top.contains(e.relatedTarget)) { hudPinned = false; revealHud(); }
+  });
   hud.rem.addEventListener("mouseenter", function () { hud.rem.dataset.hover = "1"; updateHud(); });
   hud.rem.addEventListener("mouseleave", function () { delete hud.rem.dataset.hover; updateHud(); });
 }
@@ -617,6 +629,27 @@ function revealHud() {
   if (!hudPinned && !anyOverlay()) hideT = setTimeout(hideHud, 2500);
 }
 function hideHud() { if (hudPinned || anyOverlay()) return; hudOn = false; document.body.classList.remove("hud-on"); }
+/* Closed panels sit off-screen but stay in the DOM — make them inert so Tab
+   never wanders into them, and hand focus in on open and back on close. */
+var overlayReturn = null;
+function syncOverlays() {
+  var b = document.body.classList;
+  [["#drawer", "drawer-on"], ["#settings", "set-on"], ["#palette", "pal-on"]].forEach(function (x) {
+    var el = $(x[0]); if (!el) return;
+    var on = b.contains(x[1]);
+    el.inert = !on; el.setAttribute("aria-hidden", on ? "false" : "true");
+  });
+}
+function overlayOpened(sel) {
+  if (!overlayReturn) overlayReturn = document.activeElement;
+  syncOverlays();
+  var el = $(sel); if (!el) return;
+  setTimeout(function () {
+    if (el.contains(document.activeElement)) return;
+    var f = el.querySelector(".pl-q, .dw-tabs button.on, .st-x") || el;
+    f.focus({ preventScroll: true });
+  }, 30);
+}
 function anyOverlay() { return document.body.classList.contains("drawer-on") || document.body.classList.contains("set-on") || document.body.classList.contains("pal-on"); }
 
 /* ---------- movement ---------- */
@@ -763,19 +796,28 @@ function buildDrawer() {
     }
   });
   $(".dw-filter", drawer).addEventListener("input", renderDrawer);
+  /* chapter and bookmark rows are reachable by Tab and open with Enter/Space */
+  drawer.addEventListener("keydown", function (e) {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-ch], [data-bm]")) { e.preventDefault(); e.target.click(); }
+  });
 }
 function openDrawer(tab) {
   if (view !== "reader") return;
   drawerTab = tab || "toc"; document.body.classList.add("drawer-on"); revealHud(); renderDrawer();
+  overlayOpened("#drawer");
 }
 function closeOverlays() {
+  var was = anyOverlay();
   document.body.classList.remove("drawer-on", "set-on", "pal-on");
+  syncOverlays();
+  if (was && overlayReturn && overlayReturn.focus && document.contains(overlayReturn)) overlayReturn.focus({ preventScroll: true });
+  overlayReturn = null;
   escMute = Date.now() + 600;
   clearTimeout(hideT); hideT = setTimeout(hideHud, 2500);
 }
 function renderDrawer() {
   if (!WORK) return;
-  $$(".dw-tabs [data-tab]", drawer).forEach(function (b) { b.classList.toggle("on", b.dataset.tab === drawerTab); });
+  $$(".dw-tabs [data-tab]", drawer).forEach(function (b) { var on = b.dataset.tab === drawerTab; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); });
   var body = $(".dw-body", drawer), filt = $(".dw-filter", drawer);
   filt.hidden = !(drawerTab === "toc" && WORK.chapters.length > 15);
   var h = "";
@@ -787,12 +829,13 @@ function renderDrawer() {
       var label = chLabel(c) + " " + (c.label || "") + (c.title ? " " + c.title : "");
       if (q && label.toLowerCase().indexOf(q) < 0) return;
       if (c.kind === "part") {
-        h += '<div class="dw-part' + (c.i === cur ? " cur" : "") + '" data-ch="' + c.i + '">' + esc(chLabel(c)) + "</div>";
+        h += '<div class="dw-part' + (c.i === cur ? " cur" : "") + '" data-ch="' + c.i + '" tabindex="0" role="button">' + esc(chLabel(c)) + "</div>";
         return;
       }
       var endF = WORK.chapters[c.i + 1] ? WORK.chapters[c.i + 1].frac : 1;
       var dot = mf >= endF ? "●" : (mf > c.frac ? "◐" : "○");
-      h += '<div class="dw-row' + (c.i === cur ? " cur" : "") + '" data-ch="' + c.i + '">' +
+      h += '<div class="dw-row' + (c.i === cur ? " cur" : "") + '" data-ch="' + c.i + '" tabindex="0" role="button"' +
+        (c.i === cur ? ' aria-current="true"' : "") + '>' +
         '<span class="dot">' + dot + '</span><span class="lbl">' + esc(chLabel(c)) +
         (c.title ? ' <em>' + esc(c.title) + "</em>" : "") + "</span>" +
         '<span class="pc">' + Math.floor(c.frac * 100) + "%</span></div>";
@@ -803,10 +846,10 @@ function renderDrawer() {
     h += '<div class="dw-head">책갈피 · ' + bms.length + "개</div>";
     if (!bms.length) h += '<p class="dw-empty">아직 책갈피가 없습니다.<br><kbd>b</kbd> 를 눌러 현재 위치를 표시하세요.</p>';
     bms.forEach(function (m) {
-      h += '<div class="bm-row" data-bm="' + m.id + '"><div class="bm-meta"><span class="pc">' +
+      h += '<div class="bm-row" data-bm="' + m.id + '" tabindex="0" role="button"><div class="bm-meta"><span class="pc">' +
         Math.floor(m.frac * 100) + "%</span> " + esc(chLabel(WORK.chapters[m.ch])) +
         '</div><div class="bm-txt">' + esc(m.text) + '</div><div class="bm-foot">' +
-        ago(m.created) + '<button class="bm-del" title="삭제">✕</button></div></div>';
+        ago(m.created) + '<button class="bm-del" title="삭제" aria-label="책갈피 삭제">✕</button></div></div>';
     });
   }
   body.innerHTML = h;
@@ -924,12 +967,13 @@ function syncSettings() {
   $$(".st-seg", setEl).forEach(function (sg) {
     $$("[data-seg]", sg).forEach(function (b) { b.classList.toggle("on", String(S[sg.dataset.k]) === b.dataset.seg); });
   });
-  $$(".st-tog", setEl).forEach(function (b) { b.classList.toggle("on", !!S[b.dataset.tog]); });
+  $$(".st-tog", setEl).forEach(function (b) { b.classList.toggle("on", !!S[b.dataset.tog]); b.setAttribute("aria-checked", S[b.dataset.tog] ? "true" : "false"); });
+  $$(".st-seg [data-seg]", setEl).forEach(function (b) { b.setAttribute("aria-pressed", b.classList.contains("on") ? "true" : "false"); });
   var th = $("#theme"); if (th) th.value = S.theme;
   var tr = setEl.querySelector('[data-k="trScale"]');
   if (tr) tr.closest(".st-row").hidden = (S.lang !== "both");
 }
-function openSettings() { document.body.classList.add("set-on"); if (view === "reader") revealHud(); syncSettings(); }
+function openSettings() { document.body.classList.add("set-on"); if (view === "reader") revealHud(); syncSettings(); overlayOpened("#settings"); }
 
 var wakeRef = null;
 /* auto-scroll holds the screen on too — a page that moves by itself must not go dark */
@@ -1008,7 +1052,7 @@ function buildPalette() {
 function openPalette() {
   document.body.classList.add("pal-on"); if (view === "reader") revealHud();
   $(".pl-q", pal).value = ""; renderPalette();
-  setTimeout(function () { $(".pl-q", pal).focus(); }, 30);
+  overlayOpened("#palette");
 }
 function fuzzy(q, s) {
   q = q.toLowerCase(); s = String(s || "").toLowerCase();
@@ -1047,7 +1091,7 @@ function renderPalette() {
 }
 function palRow(w, p) {
   var cov = koCov(w.id);
-  return '<div class="pl-row" data-id="' + esc(w.id) + '"><span class="pl-t">' + esc(w.title) +
+  return '<div class="pl-row" data-id="' + esc(w.id) + '"><span class="pl-t">' + esc((S.lang !== "en" && w.titleKo) || w.title) +
     (cov ? ' <b class="pl-k">한' + (cov >= 0.999 ? "" : " " + Math.floor(cov * 100) + "%") + "</b>" : "") + "</span>" +
     '<span class="pl-m">' + esc(w.authorKo) + " · " + w.year + "</span>" +
     '<span class="pl-p">' + (p ? (p.finished ? "완독" : Math.floor(p.frac * 100) + "%") : "—") + "</span>" +
@@ -1183,6 +1227,8 @@ function buildFacets() {
   $$('.facet[data-facet="lang"] .chip', box).forEach(function (c) {
     var n = $(".chip__n", c); if (n) n.textContent = ln[c.dataset.v] || 0;
   });
+  var lf = $('.facet[data-facet="lang"]', box);
+  if (lf && (ln.kofull || 0) === MANIFEST.length) { lf.hidden = true; FACETS.lang = []; }
   syncFacets();
 }
 function syncFacets() {
@@ -1206,7 +1252,11 @@ function syncFacets() {
 }
 
 /* ---------- cards ---------- */
+/* Once every book has a complete Korean edition a 한글본 tag on every jacket
+   says nothing; only a partial translation is still worth flagging. */
+function allKoFull() { return MANIFEST.every(function (w) { return koCov(w.id) >= 0.999; }); }
 function paintCards() {
+  var allFull = allKoFull();
   $$(".card").forEach(function (c) {
     var id = c.dataset.id, p = progOf(id), pct = $(".cap__pct", c);
     c.removeAttribute("data-done"); c.style.removeProperty("--progress");
@@ -1223,14 +1273,14 @@ function paintCards() {
     if (kb) {
       if (ki) {
         var full = ki.cov >= 0.999, pc = Math.floor(ki.cov * 100);
-        kb.hidden = false;
+        kb.hidden = full && allFull;
         kb.textContent = full ? "한글본" : "한글본 " + pc + "%";
         kb.classList.toggle("part", !full);
         var oa = $(".openas", c);
         if (oa) { oa.hidden = false;
           $$("[data-open]", oa).forEach(function (x) { x.classList.toggle("on", x.dataset.open === S.lang); }); }
         kb.title = (full ? "완역" : "부분 번역 " + pc + "%") + " · 눌러서 한글본으로 엽니다";
-        c.dataset.koed = full ? "full" : "part";
+        if (full && allFull) delete c.dataset.koed; else c.dataset.koed = full ? "full" : "part";
       } else { kb.hidden = true; delete c.dataset.koed; var oa2 = $(".openas", c); if (oa2) oa2.hidden = true; }
     }
     var t = $(".cover__title", c);
@@ -1256,7 +1306,7 @@ function paintPlates() {
     var bits = ["전체 " + fmtMin(mins)];
     if (done) bits.push("완독 " + done + "편");
     if (reading) bits.push("읽는 중 " + reading + "편");
-    if (ko) bits.push("한글본 " + ko + "편");
+    if (ko && ko < ws.length) bits.push("한글본 " + ko + "편");
     if (done || reading) bits.push("남은 " + fmtMin(Math.round(left)));
     el.textContent = bits.join("  ·  ");
     pl.style.setProperty("--done", (done / Math.max(1, ws.length)).toFixed(3));
@@ -1276,7 +1326,7 @@ function paintShelf() {
     var lang = (p.lang && p.lang !== "en") ? " · " + LANG_KO[p.lang] : "";
     return '<li><a class="slip" href="#/w/' + encodeURIComponent(w.id) + '" data-author="' + w.author +
       '" style="--progress:' + p.frac.toFixed(4) + '"><span class="spine">' + (mk ? mk.outerHTML : "") +
-      '</span><span class="slip__body"><span class="slip__title">' + esc(w.title) + "</span>" +
+      '</span><span class="slip__body"><span class="slip__title">' + esc((p.lang && p.lang !== "en" && w.titleKo) || w.title) + "</span>" +
       '<span class="slip__meta">' + esc(w.authorKo) + " · " + w.year + " · 남은 " + fmtMin(left) +
       lang + " · " + ago(p.updated) + "</span>" +
       '<span class="slip__bar"><i></i><b>' + Math.floor(p.frac * 100) + "%</b></span></span></a></li>";
@@ -1298,7 +1348,7 @@ function paintMine() {
   var bits = [];
   if (reading) bits.push("읽는 중 " + reading);
   if (done) bits.push("완독 " + done);
-  if (ko) bits.push("한글본 " + ko + "편");
+  if (ko) bits.push(ko === MANIFEST.length ? "전편 한국어판" : "한글본 " + ko + "편");
   if (sess && sess.totalMs > 60000) bits.push("누적 " + fmtMin(Math.round(sess.totalMs / 60000)));
   $("#mine").textContent = bits.length ? "  ·  " + bits.join(" · ") : "";
 }
@@ -1577,7 +1627,7 @@ function showHelp() {
   ];
   groups[0][1] = [["/", "찾기"], ["1–5", "정렬 방식"], ["\\", "거르기"], ["← ↑ → ↓", "표지 넘나들기"],
                   ["Enter", "이어읽기"], ["l", "언어 전환"]];
-  var h = '<div class="hp-box"><div class="hp-hd">단축키<button class="hp-x">✕</button></div><div class="hp-cols">';
+  var h = '<div class="hp-box" role="dialog" aria-modal="true" aria-label="단축키"><div class="hp-hd">단축키<button class="hp-x" aria-label="닫기">✕</button></div><div class="hp-cols">';
   groups.forEach(function (g) {
     h += '<div class="hp-g"><h4>' + g[0] + "</h4>" + g[1].map(function (r) {
       return '<div class="hp-r"><kbd>' + esc(r[0]) + "</kbd><span>" + (r[1] || "") + "</span></div>";
@@ -1586,7 +1636,11 @@ function showHelp() {
   h += "</div></div>";
   var d = document.createElement("div"); d.id = "help"; d.innerHTML = h;
   document.body.appendChild(d);
-  d.addEventListener("click", function (e) { if (e.target === d || e.target.closest(".hp-x")) d.remove(); });
+  var back = document.activeElement;
+  var shut = function () { d.remove(); if (back && back.focus) back.focus({ preventScroll: true }); };
+  d.addEventListener("click", function (e) { if (e.target === d || e.target.closest(".hp-x")) shut(); });
+  d.addEventListener("keydown", function (e) { if (e.key === "Escape" || e.key === "?") { e.preventDefault(); e.stopPropagation(); shut(); } });
+  $(".hp-x", d).focus({ preventScroll: true });
 }
 
 /* ============================================================
@@ -1632,6 +1686,23 @@ addEventListener("scroll", function () {
   var d = scrollY - lastY; lastY = scrollY;
   if (d > 0 && !AS.on) hideHud();
 }, { passive: true });
+var libLastY = 0, findEl = null;
+function libTuck() {
+  if (view !== "library") { document.body.classList.remove("lib-tuck"); return; }
+  var y = scrollY, d = y - libLastY;
+  if (Math.abs(d) < 6) return;
+  libLastY = y;
+  var g = libView === "author" ? $("#grid-author") : $("#grid");
+  var floor = g ? g.getBoundingClientRect().top + y : 600;
+  var fc = $("#facets");
+  var busy = document.activeElement === findEl || (fc && !fc.hidden && fc.getBoundingClientRect().bottom > 0);
+  document.body.classList.toggle("lib-tuck", d > 0 && y > floor && !busy);
+}
+addEventListener("scroll", libTuck, { passive: true });
+/* the rails scroll sideways; the fade at the cut edge goes once you reach the end */
+function railEnd(el) { el.classList.toggle("at-end", el.scrollLeft + el.clientWidth >= el.scrollWidth - 4); }
+$$(".aubar").forEach(function (el) { el.addEventListener("scroll", function () { railEnd(el); }, { passive: true }); railEnd(el); });
+addEventListener("resize", throttle(function () { $$(".aubar").forEach(railEnd); }, 200));
 addEventListener("resize", throttle(function () { if (view === "reader") { var a = captureAnchor(); if (a) restoreAnchor(a); } }, 200));
 addEventListener("pagehide", function () { flush(); });
 addEventListener("beforeunload", function () { flush(); });
@@ -1669,7 +1740,7 @@ buildHud(); buildAutoCtl(); nrBind(); buildDrawer(); buildSettings(); buildPalet
 buildFacets(); buildAuthNav();
 $("#theme").addEventListener("change", function () { S.theme = this.value; applySettings(); saveSettingsSoon(); });
 $$(".ctl__sort button").forEach(function (b) { b.addEventListener("click", function () { setLibView(b.dataset.sort); }); });
-var findEl = $("#find");
+findEl = $("#find");
 findEl.addEventListener("input", applyFilter);
 findEl.addEventListener("focus", applyFilter);
 findEl.addEventListener("blur", function () { setTimeout(function () { $("#sugg").hidden = true; }, 150); });
@@ -1688,5 +1759,6 @@ if (EPHEMERAL) {
   document.body.appendChild(wsg);
 }
 paintCards(); paintShelf(); paintMine(); setLibView(libView);
+syncOverlays();
 route(true);
 })();
