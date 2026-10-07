@@ -77,3 +77,7 @@ super-consciousness 초의식 · threshold 문턱 · extension of personality �
 - 대지(the Earth)는 “그녀”로 받지 않고 대지/어머니/그 영혼으로(시 인용과 원문이 her—the Earth로 쓴 곳만 예외). 페히너 “the Earth was the body…”도 대지.
 - 어휘: rhododendron 만병초 · azalea 철쭉 · steamer 기선 · Turkish/Turkey 터키(시대 표기) · chimney-stacks 굴뚝 기둥 · akin(슈탈) “닮은/닮았다” · 유모의 “wupsey-up” “영차 올라가, 영차 내려가”.
 - en passant·en route 등 외국어 구절과 méchant 등 로스톰의 프랑스어는 한국어로 옮겨 <em>. 원문 대문자 강조는 태그 없음.
+
+
+## 결정 기록
+- (V2 다듬기) 이후 결정은 청크 번호와 함께 아래에.
