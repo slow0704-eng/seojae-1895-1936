@@ -41,3 +41,6 @@
 - (V2 다듬기 전 노트 작성) 현재 번역의 선택을 그대로 기록함. 고칠 곳 없음.
 - “I feel sorry for this man.” → 「이 사람이 딱하게 되었군.」(뒤 문장이 ‘앞으로 닥칠 일’이라 풀이하므로 동정의 대상을 흐리지 않음).
 - whether out of friendliness or warning → 「호의에서였는지 경고에서였는지」, stooping in dismay → 「낭패한 얼굴로 몸을 웅크리고」.
+- 001 p:1: they were apparently frightened → 「겁에 질린 듯」(apparently 누락, A).
+- 001 p:1: We looked back at the manor, as when one observes a distant plume of smoke and waits for the flame — 두 문장(뒤는 조각문)으로 갈렸던 것을 한 문장으로 되돌림(원문 문장 수).
+- 001 p:1: “…but she'll come later.” → 「“하지만 나중에 올 겁니다.”」(but 누락, A). 말투 표의 인용은 「나중에 올 겁니다」뿐이라 등급은 그대로.
