@@ -12,6 +12,8 @@ the anchor arithmetic that stores reading positions.
     python translate.py build <id|--all>           # out/*.json -> data/ko/<id>.js
     python translate.py check <id/NNN|id|--all>    # verify written output only
     python translate.py status                     # coverage table
+    python translate.py revise  <id>               # V2 다시 다듬기: tr/rev/<id>/NNN.json
+    python translate.py revstat <id>               # 다듬기 전후 비교
 
 Invariant: a Korean payload never invents or drops a paragraph index. Every key
 must exist in the English source; assembly drops what does not verify.
@@ -28,6 +30,7 @@ KODATA = os.path.join(DATA, "ko")
 TR = os.path.join(HERE, "tr")
 JOBS = os.path.join(TR, "jobs")
 OUT = os.path.join(TR, "out")
+REV = os.path.join(TR, "rev")
 
 P_RX = re.compile(r'^<p([^>]*)\sdata-p="(\d+)"([^>]*)>(.*)</p>$')
 H_RX = re.compile(r'^<h2 class="(chapter|part)" id="([^"]+)"([^>]*)>(.*)</h2>$')
@@ -506,6 +509,89 @@ def check_cli(args):
     return bad
 
 
+# ------------------------------------------------------------- revision pass
+# 지침 V2(8cc3004) 이전에 옮긴 작품을 지금 지침대로 다시 다듬는다. 처음부터
+# 옮기지 않고, 원문과 지금 한국어를 나란히 주어 고칠 곳만 고치게 한다.
+def ko_payload(bid):
+    p = os.path.join(KODATA, bid + ".js")
+    s = io.open(p, encoding="utf-8").read()
+    return json.loads(s[s.index("(") + 1:s.rindex(")")])
+
+
+def current_ko(bid):
+    """{key: 한국어} — 독자가 지금 읽는 것(조립된 payload)이 기준."""
+    d = ko_payload(bid)
+    cur = {"p:" + k: v for k, v in d["p"].items()}
+    cur.update({"h:" + k: v for k, v in d["h"].items()})
+    return cur
+
+
+def revise_plan(bid):
+    """jobs 를 다시 나누고, out/ 을 같은 나눔으로 맞춘 뒤(내용은 그대로),
+    다듬기 작업 rev/<id>/NNN.json 과 기준 스냅숏 rev/<id>/base.json 을 쓴다."""
+    cur = current_ko(bid)
+    n = plan(bid)
+    od, rd = os.path.join(OUT, bid), os.path.join(REV, bid)
+    for d in (od, rd):
+        if not os.path.isdir(d):
+            os.makedirs(d)
+    for f in os.listdir(od):
+        if f.endswith(".json"):
+            os.remove(os.path.join(od, f))
+    for f in os.listdir(rd):
+        if f.endswith(".json") and f != "base.json":
+            os.remove(os.path.join(rd, f))
+    missing = 0
+    for j in jobfiles(bid):
+        job = json.load(io.open(j, encoding="utf-8"))
+        out = {}
+        for it in job["items"]:
+            v = cur.get(it["k"], "" if not str(it["t"]).strip() else None)
+            if v is None:
+                missing += 1
+                v = ""
+            it["ko"] = v
+            out[it["k"]] = v
+        name = os.path.basename(j)
+        io.open(os.path.join(od, name), "w", encoding="utf-8", newline="\n").write(
+            json.dumps(out, ensure_ascii=False, indent=1))
+        io.open(os.path.join(rd, name), "w", encoding="utf-8", newline="\n").write(
+            json.dumps(job, ensure_ascii=False, indent=1))
+    base = os.path.join(rd, "base.json")
+    if not os.path.exists(base):   # 다시 돌려도 처음 기준은 지킨다
+        io.open(base, "w", encoding="utf-8", newline="\n").write(
+            json.dumps(cur, ensure_ascii=False))
+    return n, missing
+
+
+def _density(texts):
+    t = plain_text(" ".join(texts))
+    L = max(1, len(t))
+    r = {"chars": len(t)}
+    for name, rx, _ in PRON:
+        r[name.split("·")[0]] = len(rx.findall(t)) * 10000.0 / L
+    r["-들"] = len(re.findall(r"[가-힣]들(?=[이은을의에도과와만로]|\s)", t)) * 10000.0 / L
+    return r
+
+
+def revstat(bid):
+    base = json.load(io.open(os.path.join(REV, bid, "base.json"), encoding="utf-8"))
+    now = {}
+    for j in jobfiles(bid):
+        o = outpath(j)
+        if os.path.exists(o):
+            now.update(json.load(io.open(o, encoding="utf-8")))
+    keys = [k for k in base if base[k]]
+    changed = [k for k in keys if now.get(k, base[k]) != base[k]]
+    a, b = _density([base[k] for k in keys]), _density([now.get(k, base[k]) for k in keys])
+    print("%s  units %d  changed %d (%.0f%%)" % (bid, len(keys), len(changed),
+                                                100.0 * len(changed) / max(1, len(keys))))
+    print("%-24s %10s %10s" % ("", "before", "after"))
+    for m in ("chars", "그녀", "그는", "-들"):
+        print("%-24s %10.1f %10.1f" % (m + ("" if m == "chars" else " /만 자"), a[m], b[m]))
+    return changed
+
+
 def main(argv):
     # Titles carry em-dashes and Hangul; a cp949 console would die printing them.
     try:
@@ -548,6 +634,11 @@ def main(argv):
         return 1 if bad else 0
     elif cmd == "status":
         status()
+    elif cmd == "revise":
+        n, missing = revise_plan(arg)
+        print("%s  %d jobs  -> tr/rev/%s/  (번역 빠진 단위 %d)" % (arg, n, arg, missing))
+    elif cmd == "revstat":
+        revstat(arg)
     else:
         print(__doc__)
 
