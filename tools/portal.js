@@ -969,7 +969,7 @@ function syncSettings() {
   });
   $$(".st-tog", setEl).forEach(function (b) { b.classList.toggle("on", !!S[b.dataset.tog]); b.setAttribute("aria-checked", S[b.dataset.tog] ? "true" : "false"); });
   $$(".st-seg [data-seg]", setEl).forEach(function (b) { b.setAttribute("aria-pressed", b.classList.contains("on") ? "true" : "false"); });
-  var th = $("#theme"); if (th) th.value = S.theme;
+  paintThemeSet();
   var tr = setEl.querySelector('[data-k="trScale"]');
   if (tr) tr.closest(".st-row").hidden = (S.lang !== "both");
 }
@@ -1316,7 +1316,9 @@ function paintShelf() {
   var rows = MANIFEST.map(function (w) { return { w: w, p: progOf(w.id) }; })
     .filter(function (x) { return x.p && x.p.frac > 0.002 && !x.p.finished; })
     .sort(function (a, b) { return b.p.updated - a.p.updated; });
-  var sec = $("#now"), list = $("#nowlist");
+  var sec = $("#now"), list = $("#nowlist"), rb = $("#resumebtn");
+  /* the bar's primary action, where the front door has 서재 열기 */
+  if (rb) { rb.hidden = !rows.length; if (rows.length) rb.href = "#/w/" + encodeURIComponent(rows[0].w.id); }
   if (!rows.length) { sec.hidden = true; return; }
   sec.hidden = false;
   list.innerHTML = rows.slice(0, 3).map(function (x) {
@@ -1735,7 +1737,15 @@ document.addEventListener("click", function (e) {
 /* ---------- go ---------- */
 buildHud(); buildAutoCtl(); nrBind(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
 buildFacets(); buildAuthNav();
-$("#theme").addEventListener("change", function () { S.theme = this.value; applySettings(); saveSettingsSoon(); });
+/* the top bar matches the front door's: four theme buttons, 단축키, 이어 읽기 */
+function paintThemeSet() {
+  $$("[data-theme-set]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.themeSet === S.theme ? "true" : "false"); });
+}
+$$("[data-theme-set]").forEach(function (b) {
+  b.addEventListener("click", function () { S.theme = b.dataset.themeSet; applySettings(); paintThemeSet(); saveSettingsSoon(); });
+});
+paintThemeSet();
+$("#helplink").addEventListener("click", function (e) { e.preventDefault(); showHelp(); });
 $$(".ctl__sort button").forEach(function (b) { b.addEventListener("click", function () { setLibView(b.dataset.sort); }); });
 findEl = $("#find");
 findEl.addEventListener("input", applyFilter);

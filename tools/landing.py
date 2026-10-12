@@ -163,7 +163,7 @@ def build_landing(cat, works):
 <div class="shell">
 
 <header class="nav" id="nav">
-  <a class="nav__mark" href="#top" aria-label="모던문고 맨 위로">%(logo)s<b>모던문고</b><span>%(y0)d—%(y1)d</span></a>
+  <a class="nav__mark" href="#top" aria-label="모던문고 맨 위로">%(logo)s<b>모던문고</b></a>
   <nav class="nav__links" aria-label="바로가기">
     <a href="#wall">소장작</a><a href="#craft">조판</a><a href="#authors">작가</a><a href="#keys">단축키</a>
   </nav>
@@ -181,9 +181,9 @@ def build_landing(cat, works):
 <main id="top">
 
 <section class="hero wrap">
-  <div class="hero__brand">%(logo_l)s<p class="hero__bw"><b>모던문고</b><span>MODERN BUNKO</span></p></div>
-  <p class="kicker hero__kick">원문과 새 번역으로 읽는 근대 소설</p>
-  <h1 class="hero__t">%(y0)d<em>—</em>%(y1)d</h1>
+  <div class="hero__brand">%(logo_l)s<p class="hero__bw"><b>모던문고</b></p></div>
+  <h1 class="hero__t">원문과 새 번역으로 읽는<br>근대 소설</h1>
+  <p class="hero__kick"><span class="hero__yr">%(y0)d<em>—</em>%(y1)d</span> &middot; 작가 %(nauth)d명 &middot; 소설 %(n)d편</p>
   <p class="hero__roll">%(roll)s</p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
     소설 %(n)d편이 한 페이지 안에 있고, 덮은 자리의 <b>글자</b> 위에 다시 세워 둡니다.
@@ -294,7 +294,7 @@ def build_landing(cat, works):
  <div class="wrap">
   <div class="ft__grid">
     <div>
-      <p class="ft__t">%(logo)s<b>모던문고</b><span>MODERN BUNKO</span></p>
+      <p class="ft__t">%(logo)s<b>모던문고</b></p>
       <p>%(y0)d–%(y1)d 근대 소설 %(n)d편,<br>원문과 새 번역으로 읽는 오프라인 서재.</p>
     </div>
     <div>
@@ -370,7 +370,7 @@ def build_landing(cat, works):
 """ % {"css": LCSS, "fav": FAVICON, "logo": logo("brand__logo", 3, small=True), "logo_l": logo("hero__logo", 1.3), "site": SITE_HREF,
        "n": len(works), "y0": span[0], "y1": span[1], "yspan": span[1] - span[0],
        "chars": "{:,}".format(tot_chars), "mchars": man(tot_chars),
-       "hours": tot_min // 60, "facts": facts_h, "roll": roll(cat["authors"]),
+       "hours": tot_min // 60, "facts": facts_h, "nauth": len(cat["authors"]), "roll": roll(cat["authors"]),
        "deaths": "\n        ".join("<li>%s &middot; %s</li>" % (html.escape(a["en"]), a["life"][-4:])
                                    for a in cat["authors"]),
        "wall_a": wall(WALL_A), "wall_b": wall(WALL_B),

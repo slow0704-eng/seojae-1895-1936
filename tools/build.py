@@ -416,15 +416,25 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면">%(logo)s<b>모던문고</b><span>1895—1936</span></a>
-  <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
+  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면">%(logo)s<b>모던문고</b></a>
+  <nav class="topbar__links" aria-label="바로가기">
+    <a href="../index.html">소개</a><a href="#" id="helplink">단축키</a>
+  </nav>
+  <div class="topbar__act">
+    <div class="tmg" role="group" aria-label="테마">
+      <button data-theme-set="light" aria-label="종이" title="종이">%(i_sun)s</button>
+      <button data-theme-set="sepia" aria-label="세피아" title="세피아">%(i_leaf)s</button>
+      <button data-theme-set="dark"  aria-label="야간" title="야간">%(i_moon)s</button>
+      <button data-theme-set="night" aria-label="심야" title="심야">%(i_moonf)s</button>
+    </div>
+    <a class="tbtn" id="resumebtn" href="#" hidden>이어 읽기</a>
+  </div>
 </div></div>
 <div class="wrap">
 <header class="masthead">
-  <p class="mh__kicker">원문과 새 번역으로 읽는 근대 소설</p>
-  <h1 class="mh__title">1895<em>—</em>1936</h1>
+  <h1 class="mh__title">서재</h1>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat"><span class="mh__yr">1895–1936</span> &nbsp;·&nbsp; %(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -442,10 +452,6 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   </span>
   <button class="ctl__facet" id="facetbtn" aria-expanded="false">거르기<span class="ctl__facetn" hidden></span></button>
   <span class="ctl__count" id="count"></span>
-  <select class="ctl__theme" id="theme" aria-label="테마">
-    <option value="light">종이</option><option value="sepia">세피아</option>
-    <option value="dark">야간</option><option value="night">심야</option>
-  </select>
   %(aubar)s
 </nav>
 <div class="facets" id="facets" hidden>%(facets)s
@@ -470,6 +476,7 @@ var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 </html>
 """ % {"css": CSS, "icss": IDXCSS, "js": JS, "shell": READER_SHELL,
        "fav": landing.FAVICON, "logo": logo("topbar__logo", 3, small=True),
+       "i_sun": landing.icon("sun"), "i_leaf": landing.icon("leaf"), "i_moon": landing.icon("moon"), "i_moonf": landing.icon("moonf"),
        "n": len(works), "mchars": man(tot_chars), "hours": tot_min // 60,
        "roll": roll(cat["authors"]), "nauth": len(cat["authors"]),
        "grid": "\n".join(grid), "plates": "\n".join(plates),

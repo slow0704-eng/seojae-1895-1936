@@ -942,33 +942,58 @@ body.narrating #asctl{ display:none; }
 [data-author="yumeno"]     { --au:var(--author-yumeno) }
 [data-author="akutagawa"]  { --au:var(--author-akutagawa) }
 
-/* ---------- sticky bar ---------- */
+/* ---------- sticky bar ----------
+   The same bar as the front door (landing.css .nav): 64px, the same gutter,
+   the same lockup, links, theme buttons and one primary button. Only the
+   links and the button's job differ by page. */
+:root{ --nav-x:22px }
+@media (min-width:768px){  :root{ --nav-x:36px } }
+@media (min-width:1200px){ :root{ --nav-x:56px } }
 .topbar{
   position:sticky; top:0; z-index:30;
-  display:flex; align-items:center; gap:16px;
-  height:58px; padding-inline:var(--mar);
+  display:flex; align-items:center;
+  height:64px; padding-inline:var(--nav-x);
   background:var(--glass); backdrop-filter:blur(14px) saturate(1.4);
   -webkit-backdrop-filter:blur(14px) saturate(1.4);
-  border-bottom:1px solid transparent;
+  border-bottom:1px solid var(--ink-hair);
   transition:border-color .3s var(--ease), transform .28s var(--ease);
 }
 @supports not (backdrop-filter:blur(1px)){ .topbar{ background:var(--bg) } }
-.topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
-  max-width:var(--page-max); margin-inline:auto }
+.topbar__in{ display:flex; align-items:center; gap:18px; width:100% }
 /* the brand lockup, as drawn: house mark + 모던문고 in a plain sans (tools/DESIGN.md) */
 .topbar__home{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto }
 .topbar__logo{ width:24px; height:24px; flex:none; color:var(--fg-heading);
   transition:color .18s var(--ease) }
 .topbar__home:hover .topbar__logo{ color:var(--accent) }
-.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:16.5px;
+.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:17px;
   letter-spacing:.01em; color:var(--fg-heading) }
-.topbar__home span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
-  font-size:12px; letter-spacing:.14em; color:var(--fg-muted) }
-.topbar__home:hover span{ color:var(--fg) }
-@media (max-width:560px){ .topbar__home span{ display:none } }
-.topbar__hint{ font-size:12px; color:var(--fg-muted) }
-.topbar__hint kbd{ font-size:10px }
-@media (max-width:900px){ .topbar__hint{ display:none } }
+.topbar__links{ display:flex; gap:26px }
+@media (max-width:900px){ .topbar__links{ display:none } }
+.topbar__links a{ font-size:13.5px; color:var(--fg-muted); text-decoration:none; position:relative; padding-block:6px }
+.topbar__links a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:0 50%;
+  transition:transform .22s var(--ease) }
+.topbar__links a:hover{ color:var(--fg) }
+.topbar__links a:hover::after{ transform:scaleX(1) }
+.topbar__act{ display:flex; align-items:center; gap:10px }
+.tmg{ display:flex; gap:2px; padding:3px; border:1px solid var(--ink-hair); border-radius:999px }
+.tmg button{
+  all:unset; cursor:pointer; width:28px; height:26px; border-radius:999px;
+  display:grid; place-items:center; color:var(--fg-muted);
+  transition:background-color .16s var(--ease), color .16s var(--ease) }
+.tmg button svg{ width:14px; height:14px }
+.tmg button:hover{ color:var(--fg) }
+.tmg button[aria-pressed="true"]{ background:color-mix(in srgb,var(--fg) 9%,transparent); color:var(--fg-heading) }
+.tmg button:focus-visible{ outline:2px solid var(--accent); outline-offset:1px }
+.tbtn{ display:inline-flex; align-items:center; height:38px; padding-inline:18px; border-radius:999px;
+  font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;
+  background:var(--accent); color:#FCF7F2; box-shadow:var(--shadow-1);
+  background-image:linear-gradient(color-mix(in srgb,#fff 12%,transparent),transparent 62%);
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease) }
+.tbtn[hidden]{ display:none }
+[data-theme="dark"] .tbtn,[data-theme="night"] .tbtn{ color:#1A1512 }
+.tbtn:hover{ box-shadow:var(--shadow-2); transform:translateY(-1px) }
+.tbtn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
 
 /* ---------- masthead ---------- */
 .masthead{ text-align:center; padding:clamp(36px,4.4vw,60px) 0 clamp(22px,2.6vw,32px); position:relative }
@@ -980,7 +1005,7 @@ body.narrating #asctl{ display:none; }
 .mh__kicker{ margin:0 0 14px; font-size:13px; letter-spacing:.06em; text-indent:0;
   color:var(--fg-muted) }
 .mh__title{ margin:0; font-family:var(--ff-display); font-weight:400;
-  font-size:clamp(40px,6.4vw,80px); line-height:.98; letter-spacing:.09em; text-indent:.09em;
+  font-size:clamp(30px,3.6vw,44px); line-height:1.1; letter-spacing:.06em; text-indent:.06em;
   font-variant-numeric:oldstyle-nums; color:var(--fg-heading) }
 .mh__title em{ font-style:normal; color:var(--accent); opacity:.85; padding-inline:.05em }
 .mh__roll{ margin:20px auto 0; max-width:62em; font-family:var(--ff-display); font-variant-caps:all-small-caps;
@@ -997,7 +1022,8 @@ body.narrating #asctl{ display:none; }
 .mh__rule{ height:4px; width:min(300px,52%); margin:20px auto 0;
   background:linear-gradient(var(--ink-rule) 0 1.5px,transparent 1.5px 3.5px,var(--ink-rule) 3.5px 4px) }
 .mh__stat{ margin:14px 0 0; font-size:12.5px; letter-spacing:.05em; color:var(--fg-muted) }
-.mh__mine{ color:var(--accent) }
+.mh__mine{ color:var(--accent); white-space:nowrap }
+.mh__yr{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums; font-size:1.12em; letter-spacing:.04em; color:var(--fg-heading) }
 
 /* ---------- 읽는 중 ---------- */
 .now{ margin:8px 0 clamp(34px,4vw,52px);
@@ -1040,7 +1066,7 @@ body.narrating #asctl{ display:none; }
 .now__list li:not(:has(.slip)){ display:flex; align-items:center }
 
 /* ---------- controls ---------- */
-.ctl{ position:sticky; top:58px; z-index:20;
+.ctl{ position:sticky; top:64px; z-index:20;
   display:flex; align-items:center; gap:14px; flex-wrap:wrap;
   padding:12px var(--mar) 13px; margin-inline:calc(var(--mar) * -1);
   margin-bottom:clamp(26px,3vw,38px);
@@ -1053,7 +1079,7 @@ body.narrating #asctl{ display:none; }
    (they ate 28% of a laptop screen and 43% of a phone); any upward scroll
    brings them straight back */
 body.lib-tuck .topbar{ transform:translateY(-100%) }
-body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
+body.lib-tuck .ctl{ transform:translateY(calc(-100% - 64px)) }
 @media (prefers-reduced-motion:reduce){ .topbar,.ctl{ transition:none } }
 .card{ scroll-margin-top:96px; scroll-margin-bottom:24px }
 
@@ -1522,15 +1548,25 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면"><svg class="topbar__logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M8 22.5H2L24 2L46 22.5H40"/><path d="M24 2V46"/><path d="M8 22.5V40.2Q17 40.6 24 46Q31 40.6 40 40.2V22.5"/><path d="M14 18.2Q20.5 19.4 24 26Q27.5 19.4 34 18.2V36.6Q28.6 37.2 24 41.2Q19.4 37.2 14 36.6Z"/></svg><b>모던문고</b><span>1895—1936</span></a>
-  <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
+  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면"><svg class="topbar__logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M8 22.5H2L24 2L46 22.5H40"/><path d="M24 2V46"/><path d="M8 22.5V40.2Q17 40.6 24 46Q31 40.6 40 40.2V22.5"/><path d="M14 18.2Q20.5 19.4 24 26Q27.5 19.4 34 18.2V36.6Q28.6 37.2 24 41.2Q19.4 37.2 14 36.6Z"/></svg><b>모던문고</b></a>
+  <nav class="topbar__links" aria-label="바로가기">
+    <a href="../index.html">소개</a><a href="#" id="helplink">단축키</a>
+  </nav>
+  <div class="topbar__act">
+    <div class="tmg" role="group" aria-label="테마">
+      <button data-theme-set="light" aria-label="종이" title="종이"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></g></svg></button>
+      <button data-theme-set="sepia" aria-label="세피아" title="세피아"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M19 5c0 8-5 13-12 13 0-8 5-13 12-13Z"/><path d="M5 19c3-3 6-5 9-6" opacity=".5"/></g></svg></button>
+      <button data-theme-set="dark"  aria-label="야간" title="야간"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M19.2 14.6A8 8 0 0 1 9.4 4.8a8 8 0 1 0 9.8 9.8Z"/></g></svg></button>
+      <button data-theme-set="night" aria-label="심야" title="심야"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19.2 14.6A8 8 0 0 1 9.4 4.8a8 8 0 1 0 9.8 9.8Z"/></svg></button>
+    </div>
+    <a class="tbtn" id="resumebtn" href="#" hidden>이어 읽기</a>
+  </div>
 </div></div>
 <div class="wrap">
 <header class="masthead">
-  <p class="mh__kicker">원문과 새 번역으로 읽는 근대 소설</p>
-  <h1 class="mh__title">1895<em>—</em>1936</h1>
+  <h1 class="mh__title">서재</h1>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">79편 &nbsp;·&nbsp; 작가 11명 &nbsp;·&nbsp; 약 369시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat"><span class="mh__yr">1895–1936</span> &nbsp;·&nbsp; 79편 &nbsp;·&nbsp; 작가 11명 &nbsp;·&nbsp; 약 369시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -1548,10 +1584,6 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   </span>
   <button class="ctl__facet" id="facetbtn" aria-expanded="false">거르기<span class="ctl__facetn" hidden></span></button>
   <span class="ctl__count" id="count"></span>
-  <select class="ctl__theme" id="theme" aria-label="테마">
-    <option value="light">종이</option><option value="sepia">세피아</option>
-    <option value="dark">야간</option><option value="night">심야</option>
-  </select>
   <div class="aubar" id="aubar" role="group" aria-label="작가별로 보기"><button class="aub" data-v="">전체<span class="aub__n">79</span></button><button class="aub" data-v="kafka" data-author="kafka"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg>프란츠 카프카<span class="aub__n">7</span></button><button class="aub" data-v="wells" data-author="wells"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg>H. G. 웰스<span class="aub__n">45</span></button><button class="aub" data-v="fitzgerald" data-author="fitzgerald"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg>F. 스콧 피츠제럴드<span class="aub__n">7</span></button><button class="aub" data-v="harbou" data-author="harbou"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/><path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>테아 폰 하르부<span class="aub__n">1</span></button><button class="aub" data-v="blackwood" data-author="blackwood"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M7.6 9.4 12 3l4.4 6.4"/><path d="M6 13.9 12 6.9l6 7"/><path d="M4.6 18.2 12 10.8l7.4 7.4"/><path d="M12 18.2v3.3"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>앨저넌 블랙우드<span class="aub__n">5</span></button><button class="aub" data-v="chambers" data-author="chambers"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"><path d="M4.6 17.4 3.6 7.6l4.9 4.1L12 5.2l3.5 6.5 4.9-4.1-1 9.8z"/><path d="M2.8 21.5h18.4" opacity=".45"/></g><circle cx="12" cy="14.2" r=".85" fill="currentColor"/></svg>로버트 W. 체임버스<span class="aub__n">5</span></button><button class="aub" data-v="machen" data-author="machen"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M9.6 17.6V6.4c0-2.2 4.8-2.2 4.8 0v11.2"/><path d="M2.8 21.5c3.6-3.9 14.8-3.9 18.4 0" opacity=".45"/></g><circle cx="12" cy="9.4" r=".8" fill="currentColor"/></svg>아서 마켄<span class="aub__n">1</span></button><button class="aub" data-v="andreyev" data-author="andreyev"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6.5 21.5V3.2h10.4"/><path d="M6.5 7.4 10.7 3.2" opacity=".6"/><path d="M16.9 3.2v5.3"/><circle cx="16.9" cy="10.4" r="1.9"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>레오니트 안드레예프<span class="aub__n">1</span></button><button class="aub" data-v="jacobs" data-author="jacobs"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M9 21.5v-6.3c-1.6-.6-2.4-2-2.4-3.6"/><path d="M15 21.5v-6.3c1.2-.9 1.9-2.4 1.9-4.1"/><path d="M9.6 14.6V6.1c0-1.2 1.6-1.2 1.6 0v6.2"/><path d="M11.2 12.3V4.4c0-1.2 1.6-1.2 1.6 0v7.9"/><path d="M12.8 12.3V6.3c0-1.2 1.6-1.2 1.6 0v6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>W. W. 제이컵스<span class="aub__n">1</span></button><button class="aub" data-v="yumeno" data-author="yumeno"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M12 11.6c.6 0 .9.5.8 1-.2.8-1.2 1.1-1.9.7-1-.6-1.1-2-.4-2.9 1-1.2 2.9-1.2 4-.2 1.4 1.3 1.3 3.6-.1 4.9-1.7 1.6-4.5 1.5-6.1-.2-1.9-2-1.7-5.3.3-7.2 2.3-2.2 6.1-2 8.3.4"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>유메노 규사쿠<span class="aub__n">3</span></button><button class="aub" data-v="akutagawa" data-author="akutagawa"><svg class="aub__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M3.4 6.2h17.2"/><path d="M4.8 9.6h14.4"/><path d="M5.2 14h13.6" opacity=".6"/><path d="M6.6 6.2v15.3"/><path d="M17.4 6.2v15.3"/><path d="M12 9.6v4.4"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg>아쿠타가와 류노스케<span class="aub__n">3</span></button></div><div class="aubar genbar" id="genbar" role="group" aria-label="장르별로 보기"><button class="aub" data-v="">전체 장르</button><button class="aub" data-v="sf">SF·과학 공상<span class="aub__n">19</span></button><button class="aub" data-v="weird">괴기·초자연<span class="aub__n">12</span></button><button class="aub" data-v="fable">환상·우화<span class="aub__n">11</span></button><button class="aub" data-v="mystery">추리·범죄<span class="aub__n">2</span></button><button class="aub" data-v="society">사회·풍속<span class="aub__n">15</span></button><button class="aub" data-v="romance">연애<span class="aub__n">5</span></button><button class="aub" data-v="comic">유머·풍자<span class="aub__n">8</span></button><button class="aub" data-v="history">역사·모험<span class="aub__n">3</span></button><button class="aub" data-v="ideas">사상·유토피아<span class="aub__n">4</span></button></div>
 </nav>
 <div class="facets" id="facets" hidden><div class="facet" data-facet="author"><span class="facet__l">작가</span><button class="chip" data-v="wells">H. G. 웰스<span class="chip__n">45</span></button><button class="chip" data-v="fitzgerald">F. 스콧 피츠제럴드<span class="chip__n">7</span></button><button class="chip" data-v="kafka">프란츠 카프카<span class="chip__n">7</span></button><button class="chip" data-v="blackwood">앨저넌 블랙우드<span class="chip__n">5</span></button><button class="chip" data-v="chambers">로버트 W. 체임버스<span class="chip__n">5</span></button><button class="chip" data-v="akutagawa">아쿠타가와 류노스케<span class="chip__n">3</span></button><button class="chip" data-v="yumeno">유메노 규사쿠<span class="chip__n">3</span></button><button class="chip" data-v="andreyev">레오니트 안드레예프<span class="chip__n">1</span></button><button class="chip" data-v="harbou">테아 폰 하르부<span class="chip__n">1</span></button><button class="chip" data-v="jacobs">W. W. 제이컵스<span class="chip__n">1</span></button><button class="chip" data-v="machen">아서 마켄<span class="chip__n">1</span></button></div>
@@ -5176,7 +5208,7 @@ function syncSettings() {
   });
   $$(".st-tog", setEl).forEach(function (b) { b.classList.toggle("on", !!S[b.dataset.tog]); b.setAttribute("aria-checked", S[b.dataset.tog] ? "true" : "false"); });
   $$(".st-seg [data-seg]", setEl).forEach(function (b) { b.setAttribute("aria-pressed", b.classList.contains("on") ? "true" : "false"); });
-  var th = $("#theme"); if (th) th.value = S.theme;
+  paintThemeSet();
   var tr = setEl.querySelector('[data-k="trScale"]');
   if (tr) tr.closest(".st-row").hidden = (S.lang !== "both");
 }
@@ -5523,7 +5555,9 @@ function paintShelf() {
   var rows = MANIFEST.map(function (w) { return { w: w, p: progOf(w.id) }; })
     .filter(function (x) { return x.p && x.p.frac > 0.002 && !x.p.finished; })
     .sort(function (a, b) { return b.p.updated - a.p.updated; });
-  var sec = $("#now"), list = $("#nowlist");
+  var sec = $("#now"), list = $("#nowlist"), rb = $("#resumebtn");
+  /* the bar's primary action, where the front door has 서재 열기 */
+  if (rb) { rb.hidden = !rows.length; if (rows.length) rb.href = "#/w/" + encodeURIComponent(rows[0].w.id); }
   if (!rows.length) { sec.hidden = true; return; }
   sec.hidden = false;
   list.innerHTML = rows.slice(0, 3).map(function (x) {
@@ -7252,7 +7286,15 @@ if (/[?&]nrdebug\b/.test(location.search)) window.NR_DEBUG = { NR: NR, S: S, cfg
 /* ---------- go ---------- */
 buildHud(); buildAutoCtl(); nrBind(); buildDrawer(); buildSettings(); buildPalette(); bindKeys(); bindPointer();
 buildFacets(); buildAuthNav();
-$("#theme").addEventListener("change", function () { S.theme = this.value; applySettings(); saveSettingsSoon(); });
+/* the top bar matches the front door's: four theme buttons, 단축키, 이어 읽기 */
+function paintThemeSet() {
+  $$("[data-theme-set]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.themeSet === S.theme ? "true" : "false"); });
+}
+$$("[data-theme-set]").forEach(function (b) {
+  b.addEventListener("click", function () { S.theme = b.dataset.themeSet; applySettings(); paintThemeSet(); saveSettingsSoon(); });
+});
+paintThemeSet();
+$("#helplink").addEventListener("click", function (e) { e.preventDefault(); showHelp(); });
 $$(".ctl__sort button").forEach(function (b) { b.addEventListener("click", function () { setLibView(b.dataset.sort); }); });
 findEl = $("#find");
 findEl.addEventListener("input", applyFilter);

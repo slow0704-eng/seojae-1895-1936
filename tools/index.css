@@ -46,33 +46,58 @@
 [data-author="yumeno"]     { --au:var(--author-yumeno) }
 [data-author="akutagawa"]  { --au:var(--author-akutagawa) }
 
-/* ---------- sticky bar ---------- */
+/* ---------- sticky bar ----------
+   The same bar as the front door (landing.css .nav): 64px, the same gutter,
+   the same lockup, links, theme buttons and one primary button. Only the
+   links and the button's job differ by page. */
+:root{ --nav-x:22px }
+@media (min-width:768px){  :root{ --nav-x:36px } }
+@media (min-width:1200px){ :root{ --nav-x:56px } }
 .topbar{
   position:sticky; top:0; z-index:30;
-  display:flex; align-items:center; gap:16px;
-  height:58px; padding-inline:var(--mar);
+  display:flex; align-items:center;
+  height:64px; padding-inline:var(--nav-x);
   background:var(--glass); backdrop-filter:blur(14px) saturate(1.4);
   -webkit-backdrop-filter:blur(14px) saturate(1.4);
-  border-bottom:1px solid transparent;
+  border-bottom:1px solid var(--ink-hair);
   transition:border-color .3s var(--ease), transform .28s var(--ease);
 }
 @supports not (backdrop-filter:blur(1px)){ .topbar{ background:var(--bg) } }
-.topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
-  max-width:var(--page-max); margin-inline:auto }
+.topbar__in{ display:flex; align-items:center; gap:18px; width:100% }
 /* the brand lockup, as drawn: house mark + 모던문고 in a plain sans (tools/DESIGN.md) */
 .topbar__home{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto }
 .topbar__logo{ width:24px; height:24px; flex:none; color:var(--fg-heading);
   transition:color .18s var(--ease) }
 .topbar__home:hover .topbar__logo{ color:var(--accent) }
-.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:16.5px;
+.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:17px;
   letter-spacing:.01em; color:var(--fg-heading) }
-.topbar__home span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
-  font-size:12px; letter-spacing:.14em; color:var(--fg-muted) }
-.topbar__home:hover span{ color:var(--fg) }
-@media (max-width:560px){ .topbar__home span{ display:none } }
-.topbar__hint{ font-size:12px; color:var(--fg-muted) }
-.topbar__hint kbd{ font-size:10px }
-@media (max-width:900px){ .topbar__hint{ display:none } }
+.topbar__links{ display:flex; gap:26px }
+@media (max-width:900px){ .topbar__links{ display:none } }
+.topbar__links a{ font-size:13.5px; color:var(--fg-muted); text-decoration:none; position:relative; padding-block:6px }
+.topbar__links a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:0 50%;
+  transition:transform .22s var(--ease) }
+.topbar__links a:hover{ color:var(--fg) }
+.topbar__links a:hover::after{ transform:scaleX(1) }
+.topbar__act{ display:flex; align-items:center; gap:10px }
+.tmg{ display:flex; gap:2px; padding:3px; border:1px solid var(--ink-hair); border-radius:999px }
+.tmg button{
+  all:unset; cursor:pointer; width:28px; height:26px; border-radius:999px;
+  display:grid; place-items:center; color:var(--fg-muted);
+  transition:background-color .16s var(--ease), color .16s var(--ease) }
+.tmg button svg{ width:14px; height:14px }
+.tmg button:hover{ color:var(--fg) }
+.tmg button[aria-pressed="true"]{ background:color-mix(in srgb,var(--fg) 9%,transparent); color:var(--fg-heading) }
+.tmg button:focus-visible{ outline:2px solid var(--accent); outline-offset:1px }
+.tbtn{ display:inline-flex; align-items:center; height:38px; padding-inline:18px; border-radius:999px;
+  font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;
+  background:var(--accent); color:#FCF7F2; box-shadow:var(--shadow-1);
+  background-image:linear-gradient(color-mix(in srgb,#fff 12%,transparent),transparent 62%);
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease) }
+.tbtn[hidden]{ display:none }
+[data-theme="dark"] .tbtn,[data-theme="night"] .tbtn{ color:#1A1512 }
+.tbtn:hover{ box-shadow:var(--shadow-2); transform:translateY(-1px) }
+.tbtn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
 
 /* ---------- masthead ---------- */
 .masthead{ text-align:center; padding:clamp(36px,4.4vw,60px) 0 clamp(22px,2.6vw,32px); position:relative }
@@ -84,7 +109,7 @@
 .mh__kicker{ margin:0 0 14px; font-size:13px; letter-spacing:.06em; text-indent:0;
   color:var(--fg-muted) }
 .mh__title{ margin:0; font-family:var(--ff-display); font-weight:400;
-  font-size:clamp(40px,6.4vw,80px); line-height:.98; letter-spacing:.09em; text-indent:.09em;
+  font-size:clamp(30px,3.6vw,44px); line-height:1.1; letter-spacing:.06em; text-indent:.06em;
   font-variant-numeric:oldstyle-nums; color:var(--fg-heading) }
 .mh__title em{ font-style:normal; color:var(--accent); opacity:.85; padding-inline:.05em }
 .mh__roll{ margin:20px auto 0; max-width:62em; font-family:var(--ff-display); font-variant-caps:all-small-caps;
@@ -101,7 +126,8 @@
 .mh__rule{ height:4px; width:min(300px,52%); margin:20px auto 0;
   background:linear-gradient(var(--ink-rule) 0 1.5px,transparent 1.5px 3.5px,var(--ink-rule) 3.5px 4px) }
 .mh__stat{ margin:14px 0 0; font-size:12.5px; letter-spacing:.05em; color:var(--fg-muted) }
-.mh__mine{ color:var(--accent) }
+.mh__mine{ color:var(--accent); white-space:nowrap }
+.mh__yr{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums; font-size:1.12em; letter-spacing:.04em; color:var(--fg-heading) }
 
 /* ---------- 읽는 중 ---------- */
 .now{ margin:8px 0 clamp(34px,4vw,52px);
@@ -144,7 +170,7 @@
 .now__list li:not(:has(.slip)){ display:flex; align-items:center }
 
 /* ---------- controls ---------- */
-.ctl{ position:sticky; top:58px; z-index:20;
+.ctl{ position:sticky; top:64px; z-index:20;
   display:flex; align-items:center; gap:14px; flex-wrap:wrap;
   padding:12px var(--mar) 13px; margin-inline:calc(var(--mar) * -1);
   margin-bottom:clamp(26px,3vw,38px);
@@ -157,7 +183,7 @@
    (they ate 28% of a laptop screen and 43% of a phone); any upward scroll
    brings them straight back */
 body.lib-tuck .topbar{ transform:translateY(-100%) }
-body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
+body.lib-tuck .ctl{ transform:translateY(calc(-100% - 64px)) }
 @media (prefers-reduced-motion:reduce){ .topbar,.ctl{ transition:none } }
 .card{ scroll-margin-top:96px; scroll-margin-bottom:24px }
 
