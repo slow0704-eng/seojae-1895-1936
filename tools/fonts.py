@@ -91,5 +91,37 @@ def missing():
                   if 0xAC00 <= ord(c) <= 0xD7A3 and ord(c) not in have)
 
 
+def serif_advances():
+    """Advance widths (em) of the shipped Source Serif 4 for the cover title
+    settings — upper case, small caps, roman, italic — so jacket.py can size a
+    title by its widest word without a browser. Writes tools/serif_adv.json;
+    rerun only if the Source Serif woff2 change."""
+    import json
+    from fontTools.ttLib import TTFont
+    chars = [chr(c) for c in range(0x20, 0x7F)] + list("ÀÁÂÄÇÈÉÊËÍÎÏÑÓÔÖÚÛÜàáâäçèéêëíîïñóôöúûüŌōŪū’‘“”—–")
+    out = {}
+    for face, key in (("Roman", "R"), ("Italic", "I")):
+        f = TTFont(_os.path.join(OUT, "SourceSerif4-%s.woff2" % face))
+        cmap, hm, upm = f.getBestCmap(), f["hmtx"], f["head"].unitsPerEm
+        smcp = {}
+        for fr in f["GSUB"].table.FeatureList.FeatureRecord:
+            if fr.FeatureTag == "smcp":
+                for li in fr.Feature.LookupListIndex:
+                    for st in f["GSUB"].table.LookupList.Lookup[li].SubTable:
+                        st = getattr(st, "ExtSubTable", st)
+                        smcp.update(getattr(st, "mapping", {}) or {})
+        def adv(c, sc=False):
+            g = cmap.get(ord(c))
+            if g is None:
+                return None
+            return round(hm[smcp.get(g, g) if sc else g][0] / upm, 3)
+        out[key] = {c: adv(c) for c in chars if adv(c) is not None}
+        if key == "R":
+            out["SC"] = {c: adv(c, True) for c in chars if adv(c) is not None}
+    with io.open(_os.path.join(HERE, "serif_adv.json"), "w", encoding="utf-8") as fh:
+        json.dump(out, fh, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+
+
 if __name__ == "__main__":
-    build()
+    import sys
+    serif_advances() if sys.argv[1:] == ["adv"] else build()

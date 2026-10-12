@@ -21,40 +21,53 @@
 .cover{
   --c-panel:var(--bg-panel, var(--panel));
   --c-hair:var(--ink-hair, var(--hair));
-  --c-muted:var(--fg-muted, var(--fg-m));
   --c-head:var(--fg-heading, var(--fg-h));
+  /* small words on a tinted board need more than the page's muted grey to
+     reach 4.5:1 — pulled toward the heading colour, more so in the dark */
+  --c-muted:color-mix(in oklab, var(--fg-muted, var(--fg-m)) var(--mute, 75%), var(--c-head));
   /* two inks, as a period cover was printed: black for the words, one colour
      for every ornament (mark, rules, frame, emblem, pattern) */
   --ink:color-mix(in oklab, var(--gc) 82%, var(--c-head));
   --c-rule:color-mix(in srgb, var(--ink) 70%, transparent);
   --fr:4.2cqw;
   --cv-pad:9cqw;
-  --tx-ink:rgba(70,50,30,.032);
+  --tx-ink:rgba(70,50,30,.024);
   --tx-ink2:rgba(70,50,30,.055);
 }
 [data-theme="dark"] .cover, [data-theme="night"] .cover{
-  --tx-ink:rgba(255,255,255,.022); --tx-ink2:rgba(255,255,255,.04);
+  --tx-ink:rgba(255,255,255,.018); --tx-ink2:rgba(255,255,255,.04);
 }
+[data-theme="dark"] .cover{ --mute:65% }
+[data-theme="night"] .cover{ --mute:55% }
 
 /* ---------- colours: genre (spine) and country (board) ---------- */
 :root{
   --g-fiction:#C8632A;
   --g-society:#C8632A;  /* Penguin orange — fiction           */
-  --g-mystery:#3C7350;  /* Penguin green — crime              */
-  --g-ideas:#2F6A99;    /* Pelican blue — ideas, non-fiction  */
-  --g-history:#A8365F;  /* Penguin cerise — travel, adventure */
-  --g-fable:#674C93;    /* Penguin purple — belles-lettres    */
-  --g-comic:#C99A1E;    /* Penguin yellow — miscellany        */
-  --g-sf:#2B7C79;       /* house: instrument teal             */
-  --g-weird:#3A3346;    /* house: lamp-black violet           */
+  /* lightness spread inside each family so green/cerise and blue/purple
+     stay apart for deuteranopes too */
+  --g-mystery:#2F6240;  /* Penguin green — crime              */
+  --g-ideas:#285A85;    /* Pelican blue — ideas, non-fiction  */
+  --g-history:#BC4A72;  /* Penguin cerise — travel, adventure */
+  --g-fable:#7D5DAA;    /* Penguin purple — belles-lettres    */
+  --g-comic:#B8870F;    /* Penguin yellow — miscellany        */
+  --g-sf:#23827F;       /* house: instrument teal             */
+  --g-weird:#46385F;    /* house: lamp-black violet           */
   --g-romance:#A83A36;  /* house: madder red                  */
 
-  --n-uk:#4F6A8A;       /* 영국 — slate, London stock brick at dusk */
-  --n-us:#A0623A;       /* 미국 — tobacco, the Scribner's spine     */
-  --n-de:#6B7558;       /* 독일어권 — Feldgrau                       */
-  --n-ru:#8E3F4F;       /* 러시아 — beet red                         */
-  --n-jp:#A08A5A;       /* 일본 — kakishibu, persimmon-tanned paper  */
+  /* the board itself, one pale stock per country, hues spread round the
+     wheel (OKLCH ≈245° 50° 150° 0° 95°) — an 11% tint was invisible */
+  --n-uk:#DCEBF6;       /* 영국 — slate-blue stock                   */
+  --n-us:#F6E0D2;       /* 미국 — tobacco, the Scribner's spine      */
+  --n-de:#DFEEDF;       /* 독일어권 — Feldgrau-green                  */
+  --n-ru:#F4DCE2;       /* 러시아 — beet                              */
+  --n-jp:#F3EDD3;       /* 일본 — kakishibu, persimmon-tanned paper   */
 }
+[data-theme="sepia"]{ --n-uk:#CFE0EE; --n-us:#EDD5C4; --n-de:#D3E6D4; --n-ru:#EAD0D6; --n-jp:#E9E1C3 }
+[data-theme="dark"]{ --n-uk:#1C2D3C; --n-us:#3E2A1E; --n-de:#1D2F21; --n-ru:#412A31; --n-jp:#2C2611;
+  --g-weird:#75669A }
+[data-theme="night"]{ --n-uk:#12202B; --n-us:#2D1D14; --n-de:#122115; --n-ru:#301E23; --n-jp:#1E1908;
+  --g-weird:#75669A }
 [data-genre="sf"]{--g:var(--g-sf)} [data-genre="weird"]{--g:var(--g-weird)}
 [data-genre="fable"]{--g:var(--g-fable)} [data-genre="mystery"]{--g:var(--g-mystery)}
 [data-genre="society"]{--g:var(--g-society)} [data-genre="romance"]{--g:var(--g-romance)}
@@ -67,19 +80,25 @@
 .cover, .spine{
   --gc:var(--g, var(--g-fiction));
   --band:var(--gc);
-  --paper:color-mix(in srgb, var(--n, var(--fg)) 11%, var(--c-panel, var(--bg-panel)));
-  --pc:color-mix(in srgb, var(--ink, var(--gc)) 30%, transparent);
+  /* the country stock, laid two-thirds strength over the page's paper */
+  --paper:color-mix(in oklab, var(--n, var(--c-panel, var(--bg-panel))) 62%, var(--c-panel, var(--bg-panel)));
+  --pc:color-mix(in srgb, var(--ink, var(--gc)) 21%, transparent);
 }
+/* yellow is too light to print ornaments with on a pale board */
+.cover[data-genre="comic"]{ --ink:color-mix(in oklab, var(--gc) 62%, var(--c-head)) }
 [data-theme="sepia"] .cover, [data-theme="sepia"] .spine{ --band:color-mix(in srgb, var(--gc) 86%, #8a6a3a) }
+[data-theme="sepia"] .cover:is([data-genre="fiction"],[data-genre="society"]){
+  --ink:color-mix(in oklab, var(--gc) 74%, var(--c-head)) }
+/* dark boards: lift the cloth instead of sinking it into the page, or every
+   spine turns the same brown */
 [data-theme="dark"] .cover, [data-theme="dark"] .spine{
-  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 72%, #fff);
-  --band:color-mix(in srgb, var(--gc) 62%, var(--bg));
-  --paper:color-mix(in srgb, var(--n, var(--fg)) 16%, var(--c-panel, var(--bg-panel))); }
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 88%, #fff);
+  --band:var(--gc); }
 [data-theme="night"] .cover, [data-theme="night"] .spine{
-  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 66%, #fff);
-  --band:color-mix(in srgb, var(--gc) 50%, var(--bg));
-  --pc:color-mix(in srgb, var(--ink, var(--gc)) 26%, transparent);
-  --paper:color-mix(in srgb, var(--n, var(--fg)) 13%, var(--c-panel, var(--bg-panel))); }
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 84%, #fff);
+  --band:color-mix(in srgb, var(--gc) 86%, var(--bg));
+  --pc:color-mix(in srgb, var(--ink, var(--gc)) 19%, transparent); }
+[data-theme="dark"] .cover, [data-theme="night"] .cover{ --ink:color-mix(in oklab, var(--gc) 60%, var(--c-head)) }
 
 /* ---------- texture: form ---------- */
 .cover{ --tex:linear-gradient(transparent, transparent) }
@@ -110,7 +129,9 @@
   --sp:max(4px, var(--spw, 5.5cqw));
   position:relative; aspect-ratio:129/198; display:grid;
   grid-template-columns:minmax(0,1fr);
-  grid-template-rows:6cqw auto auto auto auto auto minmax(2cqw,1fr) auto minmax(2cqw,1fr) auto auto 27%;
+  /* the emblem row gives way first when a long title and subtitle need
+     the room, so the board keeps its 129:198 shape */
+  grid-template-rows:8cqw auto auto auto auto auto minmax(1.5cqw,1fr) minmax(0,15.5cqw) minmax(1.5cqw,1fr) auto auto 23.5%;
   justify-items:center; padding-inline:calc(var(--cv-pad) + var(--sp)) var(--cv-pad);
   border:1px solid var(--c-hair); border-radius:1px 3px 3px 1px;
   box-shadow:var(--shadow-1);
@@ -138,47 +159,57 @@
 .cover[data-decade="1890"] .cover__frame{ border:3px double color-mix(in srgb, var(--ink) 62%, transparent) }
 
 /* ---------- the parts, each in its own row ---------- */
-.cover__mark{ grid-row:2; width:9cqw; height:9cqw; color:color-mix(in srgb, var(--ink) 82%, transparent) }
+.cover__mark{ grid-row:2; width:10.5cqw; height:10.5cqw; color:var(--ink) }
 .rule{ display:block; width:100% }
 .rule--head{ grid-row:3; margin-top:3cqw }
 .rule--foot{ grid-row:6; margin-top:2.6cqw; transform:scaleY(-1) }
 .cover__title{ grid-row:4; margin:3cqw 0 0; font-family:var(--ff-display); font-weight:400;
   text-align:center; text-wrap:balance; hyphens:none; color:var(--c-head);
-  font-size:var(--cv-ts); line-height:1.25 }
-.cover__title .sub{ display:block; margin-top:.5em; font-size:.62em; font-style:italic; font-weight:400;
+  /* the bucket size, but never wider than the frame allows for the widest
+     word (--wl, jacket.title_fit); tracking is mirrored as start padding so
+     tracked lines stay centred */
+  --tm:1; --trk:0em;
+  font-size:min(calc(var(--cv-ts) * var(--tm)),
+                calc((100cqw - 2 * var(--cv-pad) - var(--sp) - 2cqw) / var(--wl, 1)));
+  letter-spacing:var(--trk); padding-inline-start:var(--trk); line-height:1.25 }
+.cover__title .sub{ display:block; margin-top:.5em; font-size:max(.62em, 9.5px); font-style:italic; font-weight:400;
   text-transform:none; letter-spacing:.015em; font-variant-caps:normal; color:var(--c-muted) }
 .cover__kt{ grid-row:5; margin:1.8cqw 0 0; font-family:"Seojae Serif KR","Noto Serif KR",serif;
-  font-size:max(9px, 4.8cqw); line-height:1.35; letter-spacing:.02em; text-align:center;
-  word-break:keep-all; text-wrap:balance; color:var(--c-muted) }
-.cover__emb{ grid-row:8; width:13cqw; height:13cqw; color:var(--ink) }
+  font-size:max(10.5px, 5.4cqw); line-height:1.35; text-align:center;
+  word-break:keep-all; text-wrap:balance; color:color-mix(in oklab, var(--c-muted) 70%, var(--c-head)) }
+.cover__emb{ grid-row:8; width:15.5cqw; height:100%; min-height:0; color:var(--ink) }
 .cover__author{ grid-row:10; margin:0; font-family:var(--ff-display); font-variant-caps:all-small-caps;
-  letter-spacing:.17em; font-size:5cqw; line-height:1.2; color:var(--c-muted); text-align:center }
-.cover__year{ grid-row:11; margin:1.2cqw 0 0; font-family:var(--ff-display);
-  font-variant-numeric:oldstyle-nums; letter-spacing:.24em; text-indent:.24em;
-  font-size:4.4cqw; color:color-mix(in srgb, var(--c-muted) 76%, transparent) }
+  letter-spacing:.12em; padding-inline-start:.12em; font-size:max(9.5px, 5.6cqw); line-height:1.2;
+  color:var(--c-muted); text-align:center }
+.cover__year{ grid-row:11; margin:1cqw 0 0; font-family:var(--ff-display);
+  font-variant-numeric:oldstyle-nums; letter-spacing:.2em; padding-inline-start:.2em;
+  font-size:max(9px, 5cqw); color:var(--c-muted) }
 
 /* title size: how much title there is */
-.cover[data-len="s"]  { --cv-ts:10.8cqw }
-.cover[data-len="m"]  { --cv-ts:8.8cqw }
-.cover[data-len="l"]  { --cv-ts:7.4cqw }
-.cover[data-len="xl"] { --cv-ts:6.2cqw }
+.cover[data-len="s"]  { --cv-ts:11.4cqw }
+.cover[data-len="m"]  { --cv-ts:9.2cqw }
+.cover[data-len="l"]  { --cv-ts:7.6cqw }
+.cover[data-len="xl"] { --cv-ts:6.3cqw }
 
 /* title typeface: the original language */
 .cover[data-lang="ja"] .cover__title{
-  font-family:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP","Seojae Serif KR",serif;
-  letter-spacing:.12em; font-weight:500 }
+  /* Japanese mincho only: the Korean face would draw the kanji in Korean
+     forms beside kana from another font */
+  font-family:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif CJK JP",
+    "BIZ UDPMincho","MS PMincho",serif;
+  font-synthesis:none; --trk:.12em; font-weight:500 }
 
 /* title setting: the decade's title-page convention (Latin titles) */
 .cover[data-lang="en"][data-decade="1890"] .cover__title{   /* Victorian: spaced capitals */
-  text-transform:uppercase; letter-spacing:.095em }
+  text-transform:uppercase; --trk:.095em; line-height:1.14 }
 .cover[data-lang="en"][data-decade="1900"] .cover__title{   /* Edwardian: firmer capitals */
-  text-transform:uppercase; letter-spacing:.05em; font-weight:500 }
+  text-transform:uppercase; --trk:.05em; font-weight:500; line-height:1.14 }
 .cover[data-lang="en"][data-decade="1910"] .cover__title{   /* capitals and small capitals */
-  font-variant-caps:small-caps; letter-spacing:.06em; font-size:calc(var(--cv-ts) * 1.06) }
+  font-variant-caps:small-caps; --trk:.06em; --tm:1.06 }
 .cover[data-lang="en"][data-decade="1920"] .cover__title{   /* Deco: heavy, tight capitals */
-  text-transform:uppercase; letter-spacing:.015em; font-weight:600; line-height:1.12 }
+  text-transform:uppercase; --trk:.015em; font-weight:600; line-height:1.12 }
 .cover[data-lang="en"][data-decade="1930"] .cover__title{   /* modern: italic lower case */
-  font-style:italic; letter-spacing:0; font-size:calc(var(--cv-ts) * 1.12); line-height:1.15 }
+  font-style:italic; --tm:1.12; line-height:1.15 }
 
 /* ---------- author rule signature ---------- */
 .cover[data-author="kafka"]      .rule{ height:2px; background:var(--c-rule) }
@@ -204,18 +235,24 @@
    var(--c-rule) 0 2px,transparent 2px 4px,var(--c-rule) 4px 5px) }
 
 /* ---------- pattern at the foot: decade ---------- */
-.cover__pat{ position:absolute; left:calc(var(--sp) + var(--fr)); right:var(--fr); top:77%; bottom:var(--fr);
+/* Every pattern is cut clean at the box: nothing fades out (DESIGN.md) */
+.cover__pat{ position:absolute; left:calc(var(--sp) + var(--fr)); right:var(--fr); top:80%; bottom:var(--fr);
   pointer-events:none; --d:calc(5cqw + var(--pv,0) * 1cqw);
+  --L:linear-gradient(var(--pc), var(--pc));
   border-top:1px solid color-mix(in srgb, var(--ink) 58%, transparent) }
-.cover[data-decade="1890"] .cover__pat{ margin:0 3px 3px; border-top-width:3px; border-top-style:double }
-/* 1890s — Arts and Crafts diaper: a quincunx of dots */
-.cover[data-decade="1890"] .cover__pat{
+/* 1890s — Victorian diaper: a lozenge lattice, a dot in every diamond
+   (inset off the double frame; the frame alone marks the decade) */
+.cover[data-decade="1890"] .cover__pat{ margin:0 3px 3px;
+  --x:linear-gradient(45deg, transparent calc(50% - .5px), var(--pc) 0 calc(50% + .5px), transparent 0);
+  --y:linear-gradient(-45deg, transparent calc(50% - .5px), var(--pc) 0 calc(50% + .5px), transparent 0);
+  --o:radial-gradient(circle, var(--pc) 0 calc(var(--d) * .09), transparent calc(var(--d) * .09 + .6px));
   background:
-    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) 0 0 / var(--d) var(--d),
-    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) calc(var(--d) / 2) calc(var(--d) / 2) / var(--d) var(--d) }
-/* 1900s — Wiener Werkstätte: Hoffmann's square lattice */
+    var(--x) 0 0 / var(--d) var(--d), var(--y) 0 0 / var(--d) var(--d),
+    var(--o) calc(var(--d) / 2) 0 / var(--d) var(--d), var(--o) 0 calc(var(--d) / 2) / var(--d) var(--d) }
+/* 1900s — Wiener Werkstätte: Hoffmann's square lattice under a checker border */
 .cover[data-decade="1900"] .cover__pat{ --d:calc(4.4cqw + var(--pv,0) * 1.1cqw);
   background:
+    repeating-conic-gradient(var(--pc) 0 25%, transparent 0 50%) 0 0 / var(--d) var(--d) repeat-x,
     repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d)),
     repeating-linear-gradient(90deg, var(--pc) 0 1px, transparent 1px var(--d)) }
 /* 1910s — engraver's hatching, leaning one way or the other */
@@ -223,15 +260,44 @@
   background:repeating-linear-gradient(var(--ang, 45deg), var(--pc) 0 1px, transparent 1px var(--d)) }
 .cover[data-decade="1910"][data-pv="1"] .cover__pat,
 .cover[data-decade="1910"][data-pv="3"] .cover__pat{ --ang:-45deg }
-/* 1920s — Art Deco sunburst, rising from the foot */
+/* 1920s — Art Deco rising sun: concentric arcs on a clear disc over the
+   rays, so the rays never pile into a blot where they meet */
 .cover[data-decade="1920"] .cover__pat{
-  background:repeating-conic-gradient(from -90deg at 50% 100%,
-    var(--pc) 0 1.4deg, transparent 1.4deg calc(6deg + var(--pv,0) * 2deg)) }
-/* 1930s — streamline: speed lines thinning toward one edge */
-.cover[data-decade="1930"] .cover__pat{ --d:calc(2.4cqw + var(--pv,0) * .6cqw);
-  background:repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d));
-  -webkit-mask-image:linear-gradient(90deg, #000, transparent 85%);
-          mask-image:linear-gradient(90deg, #000, transparent 85%) }
+  --arc:calc(1px + .3px);
+  background:
+    radial-gradient(circle at 50% 100%, transparent 2.6cqw, var(--pc) 0 calc(2.6cqw + var(--arc)), transparent 0),
+    radial-gradient(circle at 50% 100%, transparent 5.2cqw, var(--pc) 0 calc(5.2cqw + var(--arc)), transparent 0),
+    radial-gradient(circle at 50% 100%, var(--paper) 0 7.8cqw, var(--pc) 0 calc(7.8cqw + var(--arc)), transparent 0),
+    repeating-conic-gradient(from -90deg at 50% 100%,
+      var(--pc) 0 1.4deg, transparent 1.4deg calc(6deg + var(--pv,0) * 2deg)) }
+/* 1930s — streamline speed whiskers: parallel lines stepping shorter,
+   cut hard (Loewy, Bel Geddes), running from one edge or the other */
+.cover[data-decade="1930"] .cover__pat{ --sg:calc(3.2cqw + var(--pv,0) * .4cqw);
+  background:
+    var(--L) 0 calc(50% - 2 * var(--sg)) / 100% 1.5px no-repeat,
+    var(--L) 0 calc(50% - var(--sg)) / 80% 1.5px no-repeat,
+    var(--L) 0 50% / 60% 1.5px no-repeat,
+    var(--L) 0 calc(50% + var(--sg)) / 40% 1.5px no-repeat,
+    var(--L) 0 calc(50% + 2 * var(--sg)) / 20% 1.5px no-repeat }
+.cover[data-decade="1930"]:is([data-pv="1"],[data-pv="3"]) .cover__pat{
+  background-position-x:100% }
+
+/* Japanese books: the period's own ground patterns, not the Western ones */
+/* 大正 (1910s–20s) — 七宝 shippō, interlocking rings, as on Taishō bindings */
+.cover[data-lang="ja"]:is([data-decade="1910"],[data-decade="1920"]) .cover__pat{
+  --d:calc(8cqw + var(--pv,0) * 1cqw);
+  --ring:radial-gradient(circle, transparent calc(var(--d) / 2 - 1.1px), var(--pc) 0 calc(var(--d) / 2 - .1px), transparent 0);
+  background:
+    var(--ring) 0 0 / var(--d) var(--d),
+    var(--ring) calc(var(--d) / 2) calc(var(--d) / 2) / var(--d) var(--d) }
+/* 昭和 (1930s) — 恩地孝四郎's constructivist plane: a ringed disc crossed by bars */
+.cover[data-lang="ja"][data-decade="1930"] .cover__pat{
+  background:
+    radial-gradient(circle at calc(60% + var(--pv,0) * 5%) 55%, var(--pc) 0 2.4cqw, transparent 0 calc(6.5cqw - 1.5px),
+      var(--pc) 0 6.5cqw, transparent calc(6.5cqw + .5px)),
+    var(--L) 0 32% / 64% 2px no-repeat,
+    var(--L) 22% 0 / 2px 100% no-repeat,
+    var(--L) 0 76% / 100% 1px no-repeat }
 
 @supports not (container-type:inline-size){
   .cover{ padding-inline:15px }

@@ -6,7 +6,8 @@ two pages cannot drift apart. Marks are drawn, never fetched: 24×24 line
 work on `currentColor`, so they inherit the author tint and the theme.
 """
 from __future__ import annotations
-import html
+import html, io, json, unicodedata
+import os as _os
 
 MARKS = {
  "kafka": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
@@ -111,6 +112,41 @@ def len_bucket(t):
     return "s" if n <= 14 else "m" if n <= 24 else "l" if n <= 38 else "xl"
 
 
+_ADV = None
+# the decade's title setting in cover.css: case, tracking (em), weight factor
+TITLE_SET = {1890: ("U", .095, 1.0), 1900: ("U", .05, 1.02), 1910: ("SC", .06, 1.0),
+             1920: ("U", .015, 1.05), 1930: ("I", 0.0, 1.0)}
+
+
+def title_fit(t, decade, lang):
+    """Width in em of the title's widest word as cover.css sets it, so the
+    board can cap the type size and a long single word (METAMORPHOSIS in
+    small capitals) never runs through the frame. Widths are the shipped
+    Source Serif 4 advances (tools/serif_adv.json, `python fonts.py adv`)."""
+    global _ADV
+    words = t.split() or [t]
+    if lang == "ja":
+        return max(len(w) for w in words) * 1.12
+    if _ADV is None:
+        _ADV = json.load(io.open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                               "serif_adv.json"), encoding="utf-8"))
+    case, trk, wt = TITLE_SET[min(1930, decade)]
+
+    def ch(c):
+        if case == "U":
+            c = c.upper()
+            return _ADV["R"].get(c) or _ADV["R"].get(_base(c), .7)
+        if case == "SC":
+            tab = "R" if c.isupper() else "SC"
+            return _ADV[tab].get(c) or _ADV[tab].get(_base(c), .6)
+        return _ADV["I"].get(c) or _ADV["I"].get(_base(c), .5)
+    return max(sum(ch(c) + trk for c in w) for w in words) * wt
+
+
+def _base(c):
+    return unicodedata.normalize("NFKD", c)[:1]
+
+
 FORM_KO = {
     "novel": "장편", "novella": "중편", "story": "단편",
     "collection": "단편집", "play": "희곡",
@@ -155,17 +191,17 @@ def cover_board(w, title_tag="h2", extra=""):
     emb = EMBLEMS.get(w.get("genre", ""), "")
     return ('<div class="cover" data-author="%(a)s" data-decade="%(d)d" data-genre="%(g)s" data-form="%(f)s"'
             ' data-nat="%(n)s" data-len="%(len)s" data-lang="%(lang)s" data-pv="%(pv)d"'
-            ' style="--pv:%(pv)d;--spw:%(spw).2fcqw;--au:var(--author-%(a)s, var(--%(a)s))">'
+            ' style="--pv:%(pv)d;--spw:%(spw).2fcqw;--wl:%(wl).2f;--au:var(--author-%(a)s, var(--%(a)s))">'
             '<i class="cover__frame"></i><i class="cover__pat"></i>%(mark)s<i class="rule rule--head"></i>'
             '<%(tt)s class="cover__title" lang="%(lang)s">%(main)s%(sub)s</%(tt)s>'
             '<p class="cover__kt" lang="ko">%(ko)s</p>'
             '<i class="rule rule--foot"></i>'
-            '<svg class="cover__emb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"'
+            '<svg class="cover__emb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".95"'
             ' aria-hidden="true" focusable="false">%(emb)s</svg>'
             '<p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>%(extra)s</div>') % {
         "a": w["author"], "d": min(1930, (w["year"] // 10) * 10), "g": html.escape(w.get("genre", "")),
         "f": html.escape(w.get("form", "novel")), "n": NATION.get(w["author"], "uk"),
-        "len": len_bucket(main), "lang": lang, "pv": pv, "spw": spine_width(w["minutes"]),
+        "len": len_bucket(main), "lang": lang, "wl": title_fit(main, w["year"] // 10 * 10, lang), "pv": pv, "spw": spine_width(w["minutes"]),
         "mark": mark(w["author"], "cover__mark"), "tt": title_tag,
         "main": html.escape(main), "sub": subh, "ko": html.escape(w.get("titleKo", "")),
         "emb": emb, "auth": html.escape(w["authorEn"]), "y": w["year"], "extra": extra}
