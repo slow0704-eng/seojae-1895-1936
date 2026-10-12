@@ -23,7 +23,11 @@
   --c-hair:var(--ink-hair, var(--hair));
   --c-muted:var(--fg-muted, var(--fg-m));
   --c-head:var(--fg-heading, var(--fg-h));
-  --c-rule:color-mix(in srgb, var(--c-muted) 70%, transparent);
+  /* two inks, as a period cover was printed: black for the words, one colour
+     for every ornament (mark, rules, frame, emblem, pattern) */
+  --ink:color-mix(in oklab, var(--gc) 82%, var(--c-head));
+  --c-rule:color-mix(in srgb, var(--ink) 70%, transparent);
+  --fr:4.2cqw;
   --cv-pad:9cqw;
   --tx-ink:rgba(70,50,30,.032);
   --tx-ink2:rgba(70,50,30,.055);
@@ -64,7 +68,7 @@
   --gc:var(--g, var(--g-fiction));
   --band:var(--gc);
   --paper:color-mix(in srgb, var(--n, var(--fg)) 11%, var(--c-panel, var(--bg-panel)));
-  --pc:color-mix(in srgb, var(--gc) 34%, transparent);
+  --pc:color-mix(in srgb, var(--ink, var(--gc)) 30%, transparent);
 }
 [data-theme="sepia"] .cover, [data-theme="sepia"] .spine{ --band:color-mix(in srgb, var(--gc) 86%, #8a6a3a) }
 [data-theme="dark"] .cover, [data-theme="dark"] .spine{
@@ -74,7 +78,7 @@
 [data-theme="night"] .cover, [data-theme="night"] .spine{
   --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 66%, #fff);
   --band:color-mix(in srgb, var(--gc) 50%, var(--bg));
-  --pc:color-mix(in srgb, var(--gc) 22%, transparent);
+  --pc:color-mix(in srgb, var(--ink, var(--gc)) 26%, transparent);
   --paper:color-mix(in srgb, var(--n, var(--fg)) 13%, var(--c-panel, var(--bg-panel))); }
 
 /* ---------- texture: form ---------- */
@@ -106,7 +110,7 @@
   --sp:max(4px, var(--spw, 5.5cqw));
   position:relative; aspect-ratio:129/198; display:grid;
   grid-template-columns:minmax(0,1fr);
-  grid-template-rows:6cqw auto auto auto auto auto minmax(2cqw,1fr) auto minmax(2cqw,1fr) auto auto 25%;
+  grid-template-rows:6cqw auto auto auto auto auto minmax(2cqw,1fr) auto minmax(2cqw,1fr) auto auto 27%;
   justify-items:center; padding-inline:calc(var(--cv-pad) + var(--sp)) var(--cv-pad);
   border:1px solid var(--c-hair); border-radius:1px 3px 3px 1px;
   box-shadow:var(--shadow-1);
@@ -127,12 +131,14 @@
   background:linear-gradient(118deg, color-mix(in srgb,#fff 24%,transparent), transparent 44%);
   opacity:.55 }
 [data-theme="dark"] .cover::before,[data-theme="night"] .cover::before{ opacity:.05 }
-.cover__frame{ display:none; position:absolute; inset:3.4cqw 3.4cqw 3.4cqw calc(var(--sp) + 3.4cqw);
-  pointer-events:none; border:1px solid color-mix(in srgb, var(--c-rule) 50%, transparent) }
-.cover[data-decade="1890"] .cover__frame{ display:block }
+/* the printed frame: every element lives inside it, so the board reads as one
+   printed sheet, not parts laid on paper */
+.cover__frame{ position:absolute; inset:var(--fr) var(--fr) var(--fr) calc(var(--sp) + var(--fr));
+  pointer-events:none; border:1px solid color-mix(in srgb, var(--ink) 58%, transparent) }
+.cover[data-decade="1890"] .cover__frame{ border:3px double color-mix(in srgb, var(--ink) 62%, transparent) }
 
 /* ---------- the parts, each in its own row ---------- */
-.cover__mark{ grid-row:2; width:9cqw; height:9cqw; color:color-mix(in srgb, var(--au) 62%, transparent) }
+.cover__mark{ grid-row:2; width:9cqw; height:9cqw; color:color-mix(in srgb, var(--ink) 82%, transparent) }
 .rule{ display:block; width:100% }
 .rule--head{ grid-row:3; margin-top:3cqw }
 .rule--foot{ grid-row:6; margin-top:2.6cqw; transform:scaleY(-1) }
@@ -144,7 +150,7 @@
 .cover__kt{ grid-row:5; margin:1.8cqw 0 0; font-family:"Seojae Serif KR","Noto Serif KR",serif;
   font-size:max(9px, 4.8cqw); line-height:1.35; letter-spacing:.02em; text-align:center;
   word-break:keep-all; text-wrap:balance; color:var(--c-muted) }
-.cover__emb{ grid-row:8; width:12cqw; height:12cqw; color:color-mix(in srgb, var(--gc) 78%, transparent) }
+.cover__emb{ grid-row:8; width:13cqw; height:13cqw; color:var(--ink) }
 .cover__author{ grid-row:10; margin:0; font-family:var(--ff-display); font-variant-caps:all-small-caps;
   letter-spacing:.17em; font-size:5cqw; line-height:1.2; color:var(--c-muted); text-align:center }
 .cover__year{ grid-row:11; margin:1.2cqw 0 0; font-family:var(--ff-display);
@@ -198,9 +204,10 @@
    var(--c-rule) 0 2px,transparent 2px 4px,var(--c-rule) 4px 5px) }
 
 /* ---------- pattern at the foot: decade ---------- */
-.cover__pat{ position:absolute; left:calc(var(--sp) + 7cqw); right:7cqw; top:77%; bottom:5%;
+.cover__pat{ position:absolute; left:calc(var(--sp) + var(--fr)); right:var(--fr); top:77%; bottom:var(--fr);
   pointer-events:none; --d:calc(5cqw + var(--pv,0) * 1cqw);
-  -webkit-mask-image:linear-gradient(transparent, #000 45%); mask-image:linear-gradient(transparent, #000 45%) }
+  border-top:1px solid color-mix(in srgb, var(--ink) 58%, transparent) }
+.cover[data-decade="1890"] .cover__pat{ margin:0 3px 3px; border-top-width:3px; border-top-style:double }
 /* 1890s — Arts and Crafts diaper: a quincunx of dots */
 .cover[data-decade="1890"] .cover__pat{
   background:
@@ -223,9 +230,8 @@
 /* 1930s — streamline: speed lines thinning toward one edge */
 .cover[data-decade="1930"] .cover__pat{ --d:calc(2.4cqw + var(--pv,0) * .6cqw);
   background:repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d));
-  -webkit-mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
-          mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
-  -webkit-mask-composite:source-in; mask-composite:intersect }
+  -webkit-mask-image:linear-gradient(90deg, #000, transparent 85%);
+          mask-image:linear-gradient(90deg, #000, transparent 85%) }
 
 @supports not (container-type:inline-size){
   .cover{ padding-inline:15px }
