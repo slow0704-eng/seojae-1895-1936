@@ -1,5 +1,5 @@
 /* ============================================================
-   서재 1895—1936 — single-page portal
+   모던문고 (1895—1936) — single-page portal
    One document holds the library and the reader. Book text is injected on
    demand with a <script> tag: fetch() is blocked under file://, script src
    is not. One origin, so localStorage simply works.
@@ -328,7 +328,7 @@ function goLibrary(replace) {
   unmount();
   view = "library";
   document.body.dataset.view = "library";
-  document.title = "서재 1895—1936";
+  document.title = "모던문고 — 원문과 새 번역으로 읽는 근대 소설";
   document.body.classList.remove("lib-tuck");
   paintCards(); paintShelf(); paintMine(); applyFilter();
   var h = "#/";
@@ -358,7 +358,7 @@ function paintHudTitle() {
   var ko = WORK.lang !== "en" && WORK.titleKo;
   hud.title.innerHTML = "<b>" + esc(ko ? WORK.titleKo : WORK.title) + "</b> <i>" +
     esc(WORK.authorKo) + "</i>";
-  document.title = (ko ? WORK.titleKo : WORK.title) + " · 서재";
+  document.title = (ko ? WORK.titleKo : WORK.title) + " · 모던문고";
 }
 /* Both switches — the one in the top bar and the one that stays in the
    bottom-left corner — show all three languages with the current one lit, so

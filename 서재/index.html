@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>서재 1895—1936</title>
-<meta name="description" content="퍼블릭 도메인 소설 79편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
+<title>모던문고 — 원문과 새 번역으로 읽는 근대 소설</title>
+<meta name="description" content="모던문고 — 1895–1936년 근대 소설 79편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='3'%20fill='%23FAF8F4'/%3E%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E">
@@ -949,8 +949,8 @@ body.narrating #asctl{ display:none; }
 .topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
   max-width:var(--page-max); margin-inline:auto }
 .topbar__home{ display:flex; align-items:baseline; gap:9px; text-decoration:none; margin-right:auto }
-.topbar__home b{ font-family:var(--ff-display); font-weight:400; font-size:16px;
-  letter-spacing:.13em; color:var(--fg-heading) }
+.topbar__home b{ font-family:var(--ff-display); font-weight:600; font-size:16px;
+  letter-spacing:.02em; color:var(--fg-heading) }
 .topbar__home span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
   font-size:12px; letter-spacing:.14em; color:var(--fg-muted) }
 .topbar__home:hover span{ color:var(--fg) }
@@ -966,7 +966,7 @@ body.narrating #asctl{ display:none; }
   background:radial-gradient(56% 48% at 50% 36%,
     color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
 }
-.mh__kicker{ margin:0 0 14px; font-size:12px; letter-spacing:.42em; text-indent:.42em;
+.mh__kicker{ margin:0 0 14px; font-size:13px; letter-spacing:.06em; text-indent:0;
   color:var(--fg-muted) }
 .mh__title{ margin:0; font-family:var(--ff-display); font-weight:400;
   font-size:clamp(40px,6.4vw,80px); line-height:.98; letter-spacing:.09em; text-indent:.09em;
@@ -993,7 +993,7 @@ body.narrating #asctl{ display:none; }
   border:1px solid var(--ink-hair); border-radius:4px;
   background:color-mix(in srgb, var(--fg) 2.4%, var(--bg));
   padding:20px clamp(18px,2.2vw,26px) 22px }
-.now__h{ margin:0 0 16px; font-weight:400; font-size:12px; letter-spacing:.28em;
+.now__h{ margin:0 0 16px; font-weight:400; font-size:12.5px; letter-spacing:.04em;
   color:var(--fg-muted); display:flex; align-items:center; gap:12px }
 .now__h::after{ content:""; flex:1; height:1px; background:var(--ink-hair) }
 .now__list{ list-style:none; margin:0; padding:0; display:grid;
@@ -1194,8 +1194,8 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
 [data-genre="society"]{--g:var(--g-society)} [data-genre="romance"]{--g:var(--g-romance)}
 [data-genre="comic"]{--g:var(--g-comic)} [data-genre="history"]{--g:var(--g-history)}
 [data-genre="ideas"]{--g:var(--g-ideas)}
+.cover{ --sp:max(7px, 5.5cqw) }
 .cover, .spine{
-  --sp:max(7px, 5.5cqw);
   --gc:var(--g, var(--g-fiction));
   --band:var(--gc);
   --paper:color-mix(in srgb, var(--gc) 4%, color-mix(in srgb, var(--fg) var(--cv-tint, 3%), var(--bg-panel)));
@@ -1381,7 +1381,7 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
   border:1px solid var(--ink-hair); background:color-mix(in srgb, var(--fg) 2%, var(--bg)); }
 .facets[hidden]{ display:none; }
 .facet{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
-.facet__l{ width:3.4em; flex:none; font-size:12px; letter-spacing:.16em; color:var(--fg-muted); }
+.facet__l{ width:3.4em; flex:none; font-size:12px; letter-spacing:.04em; color:var(--fg-muted); }
 .chip{ all:unset; cursor:pointer; font-size:12.5px; padding:.28em .72em;
   border:1px solid var(--ink-hair); border-radius:999px; color:var(--fg-muted);
   transition:color .1s, border-color .1s, background-color .1s; }
@@ -1511,12 +1511,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
+  <a class="topbar__home" href="../index.html"><b>모던문고</b><span>1895—1936</span></a>
   <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">
 <header class="masthead">
-  <p class="mh__kicker">개인 서재</p>
+  <p class="mh__kicker">원문과 새 번역으로 읽는 근대 소설</p>
   <h1 class="mh__title">1895<em>—</em>1936</h1>
   <i class="rule mh__rule"></i>
   <p class="mh__stat">79편 &nbsp;·&nbsp; 작가 11명 &nbsp;·&nbsp; 약 369시간<span class="mh__mine" id="mine"></span></p>
@@ -4195,7 +4195,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 <script src="data/ko/index.js" onerror="void 0"></script>
 <script>/* ============================================================
-   서재 1895—1936 — single-page portal
+   모던문고 (1895—1936) — single-page portal
    One document holds the library and the reader. Book text is injected on
    demand with a <script> tag: fetch() is blocked under file://, script src
    is not. One origin, so localStorage simply works.
@@ -4524,7 +4524,7 @@ function goLibrary(replace) {
   unmount();
   view = "library";
   document.body.dataset.view = "library";
-  document.title = "서재 1895—1936";
+  document.title = "모던문고 — 원문과 새 번역으로 읽는 근대 소설";
   document.body.classList.remove("lib-tuck");
   paintCards(); paintShelf(); paintMine(); applyFilter();
   var h = "#/";
@@ -4554,7 +4554,7 @@ function paintHudTitle() {
   var ko = WORK.lang !== "en" && WORK.titleKo;
   hud.title.innerHTML = "<b>" + esc(ko ? WORK.titleKo : WORK.title) + "</b> <i>" +
     esc(WORK.authorKo) + "</i>";
-  document.title = (ko ? WORK.titleKo : WORK.title) + " · 서재";
+  document.title = (ko ? WORK.titleKo : WORK.title) + " · 모던문고";
 }
 /* Both switches — the one in the top bar and the one that stays in the
    bottom-left corner — show all three languages with the current one lit, so

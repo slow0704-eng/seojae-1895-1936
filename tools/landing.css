@@ -177,8 +177,8 @@ svg{ display:block }
 .nav.is-stuck{ border-bottom-color:var(--hair) }
 @supports not (backdrop-filter:blur(1px)){ .nav{ background:var(--bg) } }
 .nav__mark{ display:flex; align-items:baseline; gap:9px; text-decoration:none; margin-right:auto }
-.nav__mark b{ font-family:var(--ff-display); font-weight:400; font-size:17px;
-  letter-spacing:.13em; color:var(--fg-h) }
+.nav__mark b{ font-family:var(--ff-display); font-weight:600; font-size:17px;
+  letter-spacing:.02em; color:var(--fg-h) }
 .nav__mark span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
   font-size:12px; letter-spacing:.14em; color:var(--fg-m) }
 @media (max-width:520px){ .nav__mark span{ display:none } }
@@ -212,7 +212,8 @@ svg{ display:block }
     color-mix(in srgb,var(--accent) 8%,transparent), transparent 72%);
   pointer-events:none;
 }
-.hero__kick{ margin-bottom:clamp(24px,3vw,34px) }
+/* a Korean sentence, not a Latin label: no wide tracking (tools/DESIGN.md) */
+.hero__kick{ margin-bottom:clamp(24px,3vw,34px); font-size:13.5px; letter-spacing:.06em; text-indent:0 }
 .hero__t{
   font-family:var(--ff-display); font-weight:400; color:var(--fg-h);
   font-variant-numeric:oldstyle-nums;

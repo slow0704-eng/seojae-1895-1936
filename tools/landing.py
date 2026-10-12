@@ -138,8 +138,8 @@ def build_landing(cat, works):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>서재 %(y0)d—%(y1)d · 퍼블릭 도메인 소설 %(n)d편</title>
-<meta name="description" content="카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
+<title>모던문고 — %(y0)d–%(y1)d 근대 소설 %(n)d편, 원문과 새 번역으로</title>
+<meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -159,7 +159,7 @@ def build_landing(cat, works):
 <div class="shell">
 
 <header class="nav" id="nav">
-  <a class="nav__mark" href="#top"><b>서재</b><span>%(y0)d—%(y1)d</span></a>
+  <a class="nav__mark" href="#top"><b>모던문고</b><span>%(y0)d—%(y1)d</span></a>
   <nav class="nav__links" aria-label="바로가기">
     <a href="#wall">소장작</a><a href="#craft">조판</a><a href="#authors">작가</a><a href="#keys">단축키</a>
   </nav>
@@ -177,7 +177,7 @@ def build_landing(cat, works):
 <main id="top">
 
 <section class="hero wrap">
-  <p class="kicker hero__kick">개인 서재 &middot; 퍼블릭 도메인</p>
+  <p class="kicker hero__kick">모던문고 &middot; 원문과 새 번역으로 읽는 근대 소설</p>
   <h1 class="hero__t">%(y0)d<em>—</em>%(y1)d</h1>
   <p class="hero__roll">%(roll)s</p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
@@ -289,7 +289,7 @@ def build_landing(cat, works):
  <div class="wrap">
   <div class="ft__grid">
     <div>
-      <p class="ft__t">서재 %(y0)d—%(y1)d</p>
+      <p class="ft__t">모던문고 %(y0)d—%(y1)d</p>
       <p>퍼블릭 도메인 영문 소설 %(n)d편을 위한<br>오프라인 장시간 독서 사이트.</p>
     </div>
     <div>

@@ -381,8 +381,8 @@ def index_page(cat, works):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>서재 1895—1936</title>
-<meta name="description" content="퍼블릭 도메인 소설 %(n)d편을 위한 오프라인 독서 사이트. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
+<title>모던문고 — 원문과 새 번역으로 읽는 근대 소설</title>
+<meta name="description" content="모던문고 — 1895–1936년 근대 소설 %(n)d편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
@@ -409,12 +409,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
+  <a class="topbar__home" href="../index.html"><b>모던문고</b><span>1895—1936</span></a>
   <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">
 <header class="masthead">
-  <p class="mh__kicker">개인 서재</p>
+  <p class="mh__kicker">원문과 새 번역으로 읽는 근대 소설</p>
   <h1 class="mh__title">1895<em>—</em>1936</h1>
   <i class="rule mh__rule"></i>
   <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
