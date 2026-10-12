@@ -1,3 +1,6 @@
+@font-face{ font-family:"Seojae Serif KR"; font-weight:400; font-style:normal; font-display:swap;
+  src:local("Noto Serif KR"), url("서재/fonts/NotoSerifKR-Regular.woff2") format("woff2");
+  unicode-range:U+1100-11FF, U+3000-303F, U+3130-318F, U+AC00-D7A3, U+4E00-9FFF, U+FF00-FFEF; }
 /* the house face, shipped with the library — see reader.css */
 @font-face{ font-family:"Seojae Serif"; font-style:normal; font-weight:400 600; font-display:swap;
   src:url("서재/fonts/SourceSerif4-Roman.woff2") format("woff2");
@@ -348,7 +351,10 @@ svg{ display:block }
 .leaf__b{ font-family:var(--ff-read); font-size:17px; line-height:1.72; color:var(--fg);
   letter-spacing:normal; word-break:normal; hyphens:none }
 .leaf__b p{ margin:0 }
-.leaf__b p + p{ text-indent:1.3em }
+.leaf__b p + p{ margin-top:.55em }
+/* the 대역 specimen: original in the reading serif, ours in the Korean serif, a step quieter */
+.leaf__b .en{ color:var(--fg-m); font-size:.94em }
+.leaf__b .ko{ font-family:"Seojae Serif KR",var(--ff-read); word-break:keep-all; line-height:1.85 }
 .leaf__b .drop{ float:left; font-family:var(--ff-display); font-size:3.05em; line-height:.86;
   padding:.06em .1em 0 0; color:var(--fg-h) }
 .leaf__ft{ display:flex; align-items:center; gap:10px; margin-top:26px; padding-top:14px;
@@ -445,10 +451,7 @@ kbd{
   font-size:11.5px; color:var(--fg-m) }
 
 /* ---------- reveal on scroll ---------- */
-.rv{ opacity:0; transform:translateY(18px); transition:opacity .7s var(--ease), transform .7s var(--ease) }
-.rv.in{ opacity:1; transform:none }
-.rv-d1{ transition-delay:.07s } .rv-d2{ transition-delay:.14s } .rv-d3{ transition-delay:.21s }
-@media (prefers-reduced-motion:reduce){ .rv{ opacity:1; transform:none; transition:none } }
+/* no scroll-reveal: every section fading up on its own read as a template (tools/DESIGN.md) */
 
 /* genre colours — Penguin/Pelican codes where they exist, house colours where not (tools/DESIGN.md) */
 [data-genre="society"]{--g:#C8632A} [data-genre="mystery"]{--g:#3C7350} [data-genre="ideas"]{--g:#2F6A99}

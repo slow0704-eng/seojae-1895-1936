@@ -43,11 +43,16 @@ WALL_B = ["kafka-the-castle", "wells-a-modern-utopia", "fitzgerald-the-beautiful
 # The reading surface, shown rather than described. Written for this page —
 # a type specimen, not an extract.
 SPECIMEN = (
-    "<p><span class=\"drop\">T</span>he lamp had been trimmed twice already, and still the "
-    "page held him. Outside, the last tram let go of the wire and the street went quiet "
-    "by degrees, the way a room does when someone stops talking mid-sentence.</p>"
-    "<p>He read the paragraph again, not because it was difficult, but because it was "
-    "the sort of sentence a person wants to arrive at twice.</p>")
+    # the opening of 『타임머신』 as the reader shows it in 대역: original, then ours
+    "<p class=\"en\" lang=\"en\">The Time Traveller (for so it will be convenient to speak of him) was "
+    "expounding a recondite matter to us. His grey eyes shone and twinkled, and his usually "
+    "pale face was flushed and animated.</p>"
+    "<p class=\"ko\" lang=\"ko\">시간 여행자는(그렇게 부르는 편이 편할 테니) 우리에게 난해한 문제를 "
+    "설명하고 있었다. 잿빛 눈은 빛나며 반짝였고, 평소 창백하던 얼굴은 붉게 달아올라 생기가 돌았다.</p>"
+    "<p class=\"en\" lang=\"en\">“You must follow me carefully. I shall have to controvert one or two "
+    "ideas that are almost universally accepted.”</p>"
+    "<p class=\"ko\" lang=\"ko\">“잘 따라오셔야 합니다. 거의 누구나 받아들이는 생각 한둘을 "
+    "반박해야 하니까요.”</p>")
 
 ICONS = {
  "type": '<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">'
@@ -58,6 +63,10 @@ ICONS = {
  "off": '<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">'
         '<path d="M12 19.4v.1"/><path d="M8.4 15.6a5 5 0 0 1 7.2 0"/>'
         '<path d="M5 12.1a10 10 0 0 1 14 0" opacity=".45"/><path d="M4 4l16 16"/></g>',
+ "pair": '<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">'
+         '<path d="M3.5 5h7M3.5 9h7M3.5 13h7M3.5 17h5"/><path d="M13.5 5h7M13.5 9h7M13.5 13h7M13.5 17h5" opacity=".5"/></g>',
+ "voice": '<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">'
+         '<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></g>',
  "sun": '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">'
         '<circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2'
         'M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></g>',
@@ -136,7 +145,7 @@ def build_landing(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>모던문고 — %(y0)d–%(y1)d 근대 소설 %(n)d편, 원문과 새 번역으로</title>
-<meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
+<meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 원문·한글·대역으로 읽고, 소리 내어 들을 수 있습니다.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
@@ -165,7 +174,7 @@ def build_landing(cat, works):
 <header class="nav" id="nav">
   <a class="nav__mark" href="#top" aria-label="모던문고 맨 위로">%(logo)s<b>모던문고</b></a>
   <nav class="nav__links" aria-label="바로가기">
-    <a href="#wall">소장작</a><a href="#craft">조판</a><a href="#authors">작가</a><a href="#keys">단축키</a>
+    <a href="#wall">책장</a><a href="#craft">읽는 법</a><a href="#authors">작가</a><a href="#keys">단축키</a>
   </nav>
   <div class="nav__act">
     <div class="tmg" role="group" aria-label="테마">
@@ -183,16 +192,12 @@ def build_landing(cat, works):
 <section class="hero wrap">
   <div class="hero__brand">%(logo_l)s<p class="hero__bw"><b>모던문고</b></p></div>
   <h1 class="hero__t">원문과 새 번역으로 읽는 근대 소설</h1>
-  <p class="hero__kick"><span class="hero__yr">%(y0)d<em>—</em>%(y1)d</span> &middot; 작가 %(nauth)d명 &middot; 소설 %(n)d편</p>
-  <p class="hero__roll">%(roll)s</p>
-  <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
-    소설 %(n)d편이 한 페이지 안에 있고, 덮은 자리의 <b>글자</b> 위에 다시 세워 둡니다.
-    설치도, 계정도, 네트워크도 필요하지 않습니다.</p>
+  <p class="lede hero__lede">카프카, 피츠제럴드, 아쿠타가와를 비롯한 작가 %(nauth)d명이 %(y0)d년부터 %(y1)d년까지 쓴 소설 %(n)d편.
+    모두 새로 옮긴 한국어판이 있어, 원문과 번역을 나란히 놓고 읽을 수 있습니다.</p>
   <div class="hero__cta">
-    <a class="btn btn--pri" href="%(site)s">서재 열기 %(i_arrow)s</a>
-    <a class="btn btn--gh" href="#craft">어떻게 만들었나</a>
+    <a class="btn btn--pri" href="%(site)s">서재 열기</a>
+    <a class="btn btn--gh" href="#craft">읽는 법 보기</a>
   </div>
-  <dl class="facts">%(facts)s</dl>
 </section>
 
 <section class="wall" id="wall" aria-label="소장작">
@@ -201,45 +206,40 @@ def build_landing(cat, works):
 </section>
 
 <section class="sec wrap" id="craft">
-  <div class="sec__hd rv">
-    <p class="sec__n">01 &nbsp;/&nbsp; 조판</p>
-    <h2 class="sec__t">읽는 데 영향을 주는 것만 손봤습니다.</h2>
-    <p class="lede">화면에서 %(hours)d시간을 견디는 책은 장식이 아니라 조판으로 만들어집니다.
-      아래 세 가지가 이 서재가 다른 이유입니다.</p>
+  <div class="sec__hd">
+    <h2 class="sec__t">원문과 번역 사이를 오가며 읽습니다.</h2>
+    <p class="lede">%(n)d편 전부 이 서재를 위해 새로 옮겼습니다. 읽는 방법은 셋 가운데 고르고, 읽는 도중에도 바꿀 수 있습니다.</p>
   </div>
   <div class="trio">
-    <article class="tile rv">%(i_type)s
-      <h3 class="tile__t">한 줄 글자 수가 고정됩니다</h3>
-      <p class="tile__d">본문 너비를 <code>ch</code>가 아니라 서체별 실측 평균 자폭으로 계산합니다.
-        글자 크기를 15px에서 30px로 키우고 서체를 바꿔도 한 줄에 들어가는 글자 수는 그대로입니다.</p>
-      <p class="tile__m">Sitka <b>0.4709em</b> &middot; Constantia 0.4328 &middot; Georgia 0.4390</p>
+    <article class="tile">%(i_pair)s
+      <h3 class="tile__t">원문, 한글, 대역</h3>
+      <p class="tile__d">영어·일본어 원문만, 한국어판만, 또는 문단마다 원문과 번역을 나란히 놓은 대역으로 읽습니다.
+        읽던 자리는 그대로 두고 <kbd>l</kbd> 키 하나로 바꿉니다.</p>
     </article>
-    <article class="tile rv rv-d1">%(i_anchor)s
-      <h3 class="tile__t">픽셀이 아니라 글자를 기억합니다</h3>
-      <p class="tile__d">읽던 위치를 스크롤 값이 아니라 (문단 번호, 문자 오프셋) 앵커로 저장합니다.
-        창 크기·글자 크기·서체를 전부 바꾸고 돌아와도 읽던 그 글자가 같은 자리에 있습니다.</p>
-      <p class="tile__m">기준선 화면 <b>18%%</b> &middot; 앞 문맥 두어 줄이 남습니다</p>
+    <article class="tile">%(i_anchor)s
+      <h3 class="tile__t">덮은 자리를 기억합니다</h3>
+      <p class="tile__d">읽던 위치를 화면 좌표가 아니라 문단과 글자 단위로 저장합니다.
+        글자 크기나 기기를 바꿔도 읽던 그 문장에서 다시 시작합니다.</p>
     </article>
-    <article class="tile rv rv-d2">%(i_off)s
-      <h3 class="tile__t">네트워크 요청이 0입니다</h3>
-      <p class="tile__d">프레임워크도, CDN도, 웹폰트도, 추적 코드도 없습니다.
-        비행기 안에서도, 10년 뒤에도 같은 파일이 같은 방식으로 열립니다.</p>
-      <p class="tile__m">본문 <b>%(mchars)s만 자</b> &middot; 파일 %(n)d개 &middot; 의존성 없음</p>
+    <article class="tile">%(i_voice)s
+      <h3 class="tile__t">소리 내어 읽어 줍니다</h3>
+      <p class="tile__d">브라우저 안에서 돌아가는 음성 합성으로 원문과 한국어판을 읽어 줍니다.
+        대사는 말하는 인물에 맞춘 목소리로 읽습니다.</p>
     </article>
   </div>
 </section>
 
 <section class="sec spec">
  <div class="wrap spec__grid">
-  <div class="rv">
+  <div>
     <div class="sec__hd" style="margin-bottom:26px">
-      <p class="sec__n">02 &nbsp;/&nbsp; 본문</p>
-      <h2 class="sec__t">인쇄된 책의 대비 대역에 맞췄습니다.</h2>
+      <h2 class="sec__t">인쇄된 책의 대비에 맞춰 짰습니다.</h2>
     </div>
     <div class="dl">
-      <div class="dl__row"><span class="dl__k">본문 서체</span><i class="dl__dot"></i><span class="dl__v">Sitka Text</span></div>
+      <div class="dl__row"><span class="dl__k">한국어 본문</span><i class="dl__dot"></i><span class="dl__v">Noto Serif KR</span></div>
+      <div class="dl__row"><span class="dl__k">원문 본문</span><i class="dl__dot"></i><span class="dl__v">Sitka Text, Source Serif 4</span></div>
       <div class="dl__row"><span class="dl__k">본문 대비</span><i class="dl__dot"></i><span class="dl__v">종이 <b>14.0:1</b> &middot; 심야 8.0:1</span></div>
-      <div class="dl__row"><span class="dl__k">테마</span><i class="dl__dot"></i><span class="dl__v">종이 · 세피아 · 야간 · 심야</span></div>
+      <div class="dl__row"><span class="dl__k">테마</span><i class="dl__dot"></i><span class="dl__v">종이, 세피아, 야간, 심야</span></div>
       <div class="dl__row"><span class="dl__k">글자 크기</span><i class="dl__dot"></i><span class="dl__v">15–30px</span></div>
       <div class="dl__row"><span class="dl__k">한 줄 글자 수</span><i class="dl__dot"></i><span class="dl__v">45–92자</span></div>
       <div class="dl__row"><span class="dl__k">가장 긴 작품</span><i class="dl__dot"></i><span class="dl__v">%(longest)s · %(lch)s만 자</span></div>
@@ -247,17 +247,16 @@ def build_landing(cat, works):
     <p class="spec__note">순백도 순흑도 쓰지 않습니다. 다크 테마의 글자 번짐은 흰색 대신
       난색 회색으로 글자당 발광량을 낮춰서 잡았습니다. 강조색은 사본 채식과 책등의 매더 레드입니다.</p>
   </div>
-  <figure class="leaf rv rv-d1">
-    <figcaption class="leaf__hd"><span>본문 조판 견본</span><span>Sitka Text · 17px</span></figcaption>
+  <figure class="leaf">
+    <figcaption class="leaf__hd"><span>대역 견본 · 『타임머신』 첫머리</span><span>17px</span></figcaption>
     <div class="leaf__b">%(spec)s</div>
-    <div class="leaf__ft"><span>4장</span><i class="leaf__bar"><i></i></i><span>38%% &middot; 남은 2시간 11분</span></div>
+    <div class="leaf__ft"><span>1장</span><i class="leaf__bar"><i></i></i><span>38%% &middot; 남은 2시간 11분</span></div>
   </figure>
  </div>
 </section>
 
 <section class="sec wrap" id="authors">
-  <div class="sec__hd rv">
-    <p class="sec__n">03 &nbsp;/&nbsp; 작가</p>
+  <div class="sec__hd">
     <h2 class="sec__t">열한 사람이 %(yspan)d년을 나눠 씁니다.</h2>
     <p class="lede">한 명은 세기말의 런던에서, 한 명은 프라하의 보험국에서,
       한 명은 재즈 시대의 파티에서, 한 명은 바이마르의 촬영장에서,
@@ -271,21 +270,18 @@ def build_landing(cat, works):
 </section>
 
 <section class="sec wrap" id="keys">
-  <div class="sec__hd rv">
-    <p class="sec__n">04 &nbsp;/&nbsp; 손</p>
+  <div class="sec__hd">
     <h2 class="sec__t">읽는 동안 손이 마우스를 찾지 않도록.</h2>
   </div>
-  <div class="keys rv">%(keys)s</div>
+  <div class="keys">%(keys)s</div>
 </section>
 
 <section class="end wrap">
-  <h2 class="end__t rv">덮은 자리에서,<br><em>그 글자부터</em> 다시.</h2>
-  <p class="lede end__s rv rv-d1">지금 열면 %(n)d편이 전부 그대로 있습니다.
-    가입도 결제도 없습니다 — 파일 하나면 됩니다.</p>
-  <div class="end__cta rv rv-d2">
-    <a class="btn btn--pri" href="%(site)s">서재 열기 %(i_arrow)s</a>
+  <h2 class="end__t">덮은 자리에서,<br>그 글자부터 다시.</h2>
+  <p class="lede end__s">가입도 결제도 없습니다. 서재를 열면 %(n)d편이 모두 그 자리에 있습니다.</p>
+  <div class="end__cta">
+    <a class="btn btn--pri" href="%(site)s">서재 열기</a>
   </div>
-  <p class="end__fine rv rv-d2">%(chars)s자 &middot; 약 %(hours)d시간 &middot; 오프라인</p>
 </section>
 
 </main>
@@ -295,7 +291,7 @@ def build_landing(cat, works):
   <div class="ft__grid">
     <div>
       <p class="ft__t">%(logo)s<b>모던문고</b></p>
-      <p>%(y0)d–%(y1)d 근대 소설 %(n)d편,<br>원문과 새 번역으로 읽는 오프라인 서재.</p>
+      <p>%(y0)d–%(y1)d 근대 소설 %(n)d편을<br>원문과 새 번역으로 읽는 서재.</p>
     </div>
     <div>
       <h2 class="ft__h">원문 출처</h2>
@@ -314,7 +310,7 @@ def build_landing(cat, works):
   </div>
   <div class="ft__bot">
     <span>수록된 작품은 모두 퍼블릭 도메인입니다.</span>
-    <span>번역본에는 별도 저작권이 붙기 때문에 영문판에는 구멍이 있습니다.</span>
+    <span>한국어판은 이 서재를 위해 새로 옮긴 번역입니다.</span>
   </div>
  </div>
 </footer>
@@ -355,14 +351,6 @@ def build_landing(cat, works):
   probe.style.cssText="position:absolute;top:0;height:1px;width:1px";
   document.body.appendChild(probe); stick.observe(probe);
 
-  /* reveal on scroll */
-  var rv=[].slice.call(document.querySelectorAll(".rv"));
-  if(!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
-    },{rootMargin:"0px 0px -12%% 0px"});
-    rv.forEach(function(el){ io.observe(el); });
-  } else rv.forEach(function(el){ el.classList.add("in"); });
 })();
 </script>
 </body>
@@ -373,7 +361,7 @@ def build_landing(cat, works):
        "hours": tot_min // 60, "facts": facts_h, "nauth": len(cat["authors"]), "roll": roll(cat["authors"]),
        "deaths": "\n        ".join("<li>%s &middot; %s</li>" % (html.escape(a["en"]), a["life"][-4:])
                                    for a in cat["authors"]),
-       "wall_a": wall(WALL_A), "wall_b": wall(WALL_B),
+       "i_pair": icon("pair", "tile__i"), "i_voice": icon("voice", "tile__i"), "wall_a": wall(WALL_A), "wall_b": wall(WALL_B),
        "auths": "\n".join(auths_h), "keys": keys_h, "spec": SPECIMEN,
        "longest": html.escape(longest["titleKo"]), "lch": man(longest["chars"]),
        "i_sun": icon("sun"), "i_leaf": icon("leaf"), "i_moon": icon("moon"),
