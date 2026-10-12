@@ -68,13 +68,30 @@
   --body-wght:370;         --dark-track:0.008em;
 }
 
+/* The house face ships with the library. The masthead, the jackets and every
+   small-caps label used to fall to whatever serif a device had — Sitka on
+   Windows, Georgia on a Mac (fake small caps), Noto Serif on Android — so the
+   shelf looked like three different shelves. Source Serif 4 (SIL OFL) has an
+   optical-size axis (Display at 60px, Text at 12px), real smcp/c2sc and
+   oldstyle figures; subset to Latin, weights 400-600, ~145 KB. */
+@font-face{
+  font-family:"Seojae Serif"; font-style:normal; font-weight:400 600; font-display:swap;
+  src:url("fonts/SourceSerif4-Roman.woff2") format("woff2");
+  unicode-range:U+0020-007E, U+00A0-017F, U+0300-0304, U+2010-2027, U+2030-203A, U+2044, U+20AC, U+2122;
+}
+@font-face{
+  font-family:"Seojae Serif"; font-style:italic; font-weight:400 600; font-display:swap;
+  src:url("fonts/SourceSerif4-Italic.woff2") format("woff2");
+  unicode-range:U+0020-007E, U+00A0-017F, U+0300-0304, U+2010-2027, U+2030-203A, U+2044, U+20AC, U+2122;
+}
+
 /* ---------- 2. FACES ----------
    Verified against C:\Windows\Fonts on this machine. All four have a REAL
    drawn italic and real smcp+c2sc. --adj normalises x-height to Sitka Text
    (.4844 em); --avgw is the measured average prose advance, which is what
    keeps characters-per-line honest (ch is the advance of "0", not of prose). */
 :root{
-  --ff-read-1:"Sitka Text",Charter,"Iowan Old Style","Noto Serif",Georgia,serif;
+  --ff-read-1:"Sitka Text","Seojae Serif",Charter,"Iowan Old Style","Noto Serif",Georgia,serif;
   --ff-read-2:Constantia,"Iowan Old Style","Palatino Linotype",Palatino,"Noto Serif",Georgia,serif;
   --ff-read-3:Georgia,Charter,"Bitstream Charter","Noto Serif","Liberation Serif",serif;
   --ff-read-4:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Roboto,"Noto Sans",sans-serif;
@@ -87,19 +104,22 @@
   --ff-body:var(--ff-read-1);
   --adj:var(--adj-1);
   --avgw:var(--avgw-1);
-  --ff-display:"Sitka Display","Sitka Banner",Constantia,Georgia,serif;
+  --ff-display:"Seojae Serif","Sitka Display","Sitka Banner",Constantia,Georgia,"Seojae Serif KR","Noto Serif KR",serif;
 
   --ff-ui:"Pretendard Variable",Pretendard,"Segoe UI",-apple-system,"Malgun Gothic",
           "Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Nanum Gothic",sans-serif;
   --ff-mono:Consolas,"Cascadia Mono",ui-monospace,"SF Mono",Menlo,"DejaVu Sans Mono",monospace;
   --ink-hair:color-mix(in srgb, var(--rule) 55%, transparent);
 }
-[data-font="2"]{ --ff-body:var(--ff-read-2); --adj:var(--adj-2); --avgw:var(--avgw-2);
-                 --ff-display:Constantia,"Iowan Old Style",Georgia,serif; }
-[data-font="3"]{ --ff-body:var(--ff-read-3); --adj:var(--adj-3); --avgw:var(--avgw-3);
-                 --ff-display:Georgia,Charter,"Noto Serif",serif; }
-[data-font="4"]{ --ff-body:var(--ff-read-4); --adj:var(--adj-4); --avgw:var(--avgw-4);
-                 --ff-display:"Segoe UI Variable Display","Segoe UI",-apple-system,sans-serif; }
+[data-font="2"]{ --ff-body:var(--ff-read-2); --adj:var(--adj-2); --avgw:var(--avgw-2); }
+[data-font="3"]{ --ff-body:var(--ff-read-3); --adj:var(--adj-3); --avgw:var(--avgw-3); }
+[data-font="4"]{ --ff-body:var(--ff-read-4); --adj:var(--adj-4); --avgw:var(--avgw-4); }
+/* the reading face is the reader's business: inside a book the headings follow
+   it, but the shelf, the jackets and the masthead keep the house face whatever
+   a reader picked (Apple Books, Kindle: font settings never restyle the library) */
+[data-font="2"] #reader{ --ff-display:Constantia,"Iowan Old Style",Georgia,"Seojae Serif KR",serif; }
+[data-font="3"] #reader{ --ff-display:Georgia,Charter,"Noto Serif","Seojae Serif KR",serif; }
+[data-font="4"] #reader{ --ff-display:"Segoe UI Variable Display","Segoe UI",-apple-system,"Pretendard Variable",sans-serif; }
 
 /* Korean chrome: Latin from Segoe UI, Hangul from Malgun Gothic — a designed pair.
    Malgun has NO italic, so synthesis must be off or Chrome shears the Hangul. */

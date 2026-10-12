@@ -144,6 +144,7 @@ def build_landing(cat, works):
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
 <link rel="alternate" href="%(site)s">
+<link rel="stylesheet" href="서재/fonts/pretendard/pretendard.css">
 <style>%(css)s</style>
 <script>
 /* pre-paint: honour the theme the reader last chose, before the first frame */

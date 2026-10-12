@@ -384,6 +384,7 @@ def index_page(cat, works):
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="%(fav)s">
+<link rel="stylesheet" href="fonts/pretendard/pretendard.css">
 <style>%(css)s
 %(icss)s</style>
 <script>

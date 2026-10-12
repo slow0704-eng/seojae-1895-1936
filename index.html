@@ -9,7 +9,15 @@
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='3'%20fill='%23FAF8F4'/%3E%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="alternate" href="%EC%84%9C%EC%9E%AC/index.html">
-<style>/* ===========================================================
+<link rel="stylesheet" href="서재/fonts/pretendard/pretendard.css">
+<style>/* the house face, shipped with the library — see reader.css */
+@font-face{ font-family:"Seojae Serif"; font-style:normal; font-weight:400 600; font-display:swap;
+  src:url("서재/fonts/SourceSerif4-Roman.woff2") format("woff2");
+  unicode-range:U+0020-007E, U+00A0-017F, U+0300-0304, U+2010-2027, U+2030-203A, U+2044, U+20AC, U+2122; }
+@font-face{ font-family:"Seojae Serif"; font-style:italic; font-weight:400 600; font-display:swap;
+  src:url("서재/fonts/SourceSerif4-Italic.woff2") format("woff2");
+  unicode-range:U+0020-007E, U+00A0-017F, U+0300-0304, U+2010-2027, U+2030-203A, U+2044, U+20AC, U+2122; }
+/* ===========================================================
    서재 1895—1936 · landing
    Warm paper, hairline rules, oldstyle numerals. No images, no
    webfonts, no network — every surface is drawn with gradients.
@@ -31,8 +39,8 @@
   --grain-ink:#6A5C46;   --grain-a:.030;
   --glass:color-mix(in srgb, var(--bg) 78%, transparent);
 
-  --ff-display:"Sitka Display","Sitka Banner",Constantia,Georgia,serif;
-  --ff-read:"Sitka Text",Charter,"Iowan Old Style","Noto Serif",Georgia,serif;
+  --ff-display:"Seojae Serif","Sitka Display","Sitka Banner",Constantia,Georgia,serif;
+  --ff-read:"Sitka Text","Seojae Serif",Charter,"Iowan Old Style","Noto Serif",Georgia,serif;
   --ff-ui:"Pretendard Variable",Pretendard,"Segoe UI",-apple-system,"Malgun Gothic",
           "Apple SD Gothic Neo","Noto Sans KR",sans-serif;
 
