@@ -198,7 +198,8 @@ def cover_board(w, title_tag="h2", extra=""):
             '<i class="rule rule--foot"></i>'
             '<svg class="cover__emb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".95"'
             ' aria-hidden="true" focusable="false">%(emb)s</svg>'
-            '<p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>%(extra)s</div>') % {
+            '<p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>'
+            '<i class="cover__fx"></i>%(extra)s</div>') % {
         "a": w["author"], "d": min(1930, (w["year"] // 10) * 10), "g": html.escape(w.get("genre", "")),
         "f": html.escape(w.get("form", "novel")), "n": NATION.get(w["author"], "uk"),
         "len": len_bucket(main), "lang": lang, "wl": title_fit(main, w["year"] // 10 * 10, lang), "pv": pv, "spw": spine_width(w["minutes"]),
