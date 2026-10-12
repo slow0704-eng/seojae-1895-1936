@@ -158,9 +158,9 @@ def cover(w, i):
     mins = w["minutes"]
     return """<article class="card" data-author="%(a)s" data-decade="%(d)d" data-len="%(len)s"
  data-year="%(y)d" data-id="%(id)s" data-title="%(tl)s" data-ko="%(ko)s" data-mins="%(mins)d"
- data-form="%(formk)s" style="--i:%(i)d">
+ data-form="%(formk)s" data-genre="%(genre)s" style="--i:%(i)d;--pv:%(pv)d">
 <a class="card__link" href="#/w/%(idq)s">
- <div class="cover"><i class="cover__frame"></i>%(mark)s<i class="rule rule--head"></i>
+ <div class="cover"><i class="cover__frame"></i><i class="cover__pat"></i>%(mark)s<i class="rule rule--head"></i>
   <h2 class="cover__title">%(main)s%(sub)s</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
@@ -175,7 +175,9 @@ def cover(w, i):
         "a": w["author"], "d": DECADE(w["year"]), "len": len_bucket(main), "y": w["year"],
         "id": html.escape(w["id"]), "idq": html.escape(w["id"]), "i": i,
         "tl": html.escape(w["title"]), "ko": html.escape(w["titleKo"]), "mins": mins,
-        "formk": w.get("form", "novel"),
+        "formk": w.get("form", "novel"), "genre": w.get("genre", ""),
+        # 0-3 from the id: which variant of the decade's pattern this board gets
+        "pv": int(_hl.md5(w["id"].encode()).hexdigest()[:4], 16) % 4,
         "mark": mark(w["author"], "cover__mark"), "main": html.escape(main), "sub": subh,
         "auth": html.escape(w["authorEn"]), "authko": html.escape(w["authorKo"]),
         "form": FORM_KO.get(w.get("form", "novel"), "장편"), "chars": man(w["chars"]),

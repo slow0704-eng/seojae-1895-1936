@@ -262,13 +262,16 @@ svg{ display:block }
 .jkt{
   position:relative; container-type:inline-size; display:block;
   width:var(--jw,152px); aspect-ratio:129/198; flex:none;
+  /* quarter binding: genre-coloured spine cloth — same system as the library */
+  --sp:max(6px, calc(var(--jw,152px) * .055)); --band:var(--g,#C8632A);
   background:
     linear-gradient(90deg,
-      color-mix(in srgb,var(--fg) 13%,transparent) 0 1px,
-      color-mix(in srgb,var(--fg) 5%,transparent) 1px 7px,
-      transparent 7px 14px),
-    linear-gradient(color-mix(in srgb,var(--fg) var(--tint,6%),var(--panel)),
-                    color-mix(in srgb,var(--fg) var(--tint,6%),var(--panel)));
+      var(--band) 0 var(--sp),
+      color-mix(in srgb,#000 24%,var(--band)) var(--sp) calc(var(--sp) + 1px),
+      color-mix(in srgb,var(--fg) 7%,transparent) calc(var(--sp) + 1px) calc(var(--sp) + 5px),
+      transparent calc(var(--sp) + 5px)),
+    linear-gradient(color-mix(in srgb,var(--g,#C8632A) 4%,color-mix(in srgb,var(--fg) var(--tint,6%),var(--panel))),
+                    color-mix(in srgb,var(--g,#C8632A) 4%,color-mix(in srgb,var(--fg) var(--tint,6%),var(--panel))));
   border:1px solid var(--hair); border-radius:1px 3px 3px 1px;
   box-shadow:var(--shadow-1);
   transition:transform .3s var(--ease), box-shadow .3s var(--ease);
@@ -276,7 +279,7 @@ svg{ display:block }
 .jkt__in{
   position:absolute; inset:0; display:grid; justify-items:center;
   grid-template-rows:9cqw auto auto .82fr auto 1.18fr auto auto 9cqw;
-  padding-inline:9cqw;
+  padding-inline:calc(9cqw + var(--sp,0px)) 9cqw;
 }
 .jkt--l{ --jw:172px } .jkt--s{ --jw:136px }
 .jkt::after{ content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
@@ -424,3 +427,10 @@ kbd{
 .rv.in{ opacity:1; transform:none }
 .rv-d1{ transition-delay:.07s } .rv-d2{ transition-delay:.14s } .rv-d3{ transition-delay:.21s }
 @media (prefers-reduced-motion:reduce){ .rv{ opacity:1; transform:none; transition:none } }
+
+/* genre colours — Penguin/Pelican codes where they exist, house colours where not (tools/DESIGN.md) */
+[data-genre="society"]{--g:#C8632A} [data-genre="mystery"]{--g:#3C7350} [data-genre="ideas"]{--g:#2F6A99}
+[data-genre="history"]{--g:#A8365F} [data-genre="fable"]{--g:#674C93} [data-genre="comic"]{--g:#C99A1E}
+[data-genre="sf"]{--g:#2B7C79} [data-genre="weird"]{--g:#3A3346} [data-genre="romance"]{--g:#A83A36}
+[data-theme="dark"] .jkt{ --band:color-mix(in srgb, color-mix(in oklab, var(--g,#C8632A) 72%, #fff) 62%, var(--bg)) }
+[data-theme="night"] .jkt{ --band:color-mix(in srgb, color-mix(in oklab, var(--g,#C8632A) 66%, #fff) 50%, var(--bg)) }

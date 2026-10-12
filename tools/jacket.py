@@ -107,6 +107,8 @@ def jacket(w, cls="jkt", tag="div", href=None, extra=""):
                '<%s class="%s" data-len="%s" style="--au:var(--%s)"%s>'
                % (tag, cls, len_bucket(main), w["author"], extra))
     close = "</a>" if href else "</%s>" % tag
+    # genre = spine cloth colour, the same rule as the library jackets
+    open_tag = open_tag.replace(' class="%s"' % cls, ' class="%s" data-genre="%s"' % (cls, html.escape(w.get("genre", ""))), 1)
     return """%(open)s<span class="jkt__in">%(mark)s<i class="jkt__r jkt__r--h"></i><span class="jkt__t">%(main)s%(sub)s</span><i class="jkt__r jkt__r--f"></i><span class="jkt__a">%(auth)s</span><span class="jkt__y">%(year)d</span></span>%(close)s""" % {
         "open": open_tag, "close": close,
         "mark": mark(w["author"], "jkt__mark"),

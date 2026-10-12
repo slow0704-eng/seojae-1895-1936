@@ -1324,7 +1324,7 @@ function paintShelf() {
     var left = Math.round((w.chars - w.chars * p.frac) / 5.5 / (S.wpm || 200));
     var mk = $('.card[data-id="' + w.id + '"] .cover__mark');
     var lang = (p.lang && p.lang !== "en") ? " · " + LANG_KO[p.lang] : "";
-    return '<li><a class="slip" href="#/w/' + encodeURIComponent(w.id) + '" data-author="' + w.author +
+    return '<li><a class="slip" href="#/w/' + encodeURIComponent(w.id) + '" data-author="' + w.author + '" data-genre="' + (w.genre || "") +
       '" style="--progress:' + p.frac.toFixed(4) + '"><span class="spine">' + (mk ? mk.outerHTML : "") +
       '</span><span class="slip__body"><span class="slip__title">' + esc((p.lang && p.lang !== "en" && w.titleKo) || w.title) + "</span>" +
       '<span class="slip__meta">' + esc(w.authorKo) + " · 남은 " + fmtMin(left) +

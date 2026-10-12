@@ -117,10 +117,11 @@
 .spine{ position:relative; display:grid; align-content:start; justify-items:center;
   width:38px; height:56px; padding:6px 4px 0; border:1px solid var(--ink-hair);
   border-radius:1px 2px 2px 1px; box-shadow:var(--shadow-1);
+  --sp:5px; padding-left:9px;
   background:
-    linear-gradient(90deg, color-mix(in srgb,var(--fg) 12%,transparent) 0 1px,
-                           color-mix(in srgb,var(--fg) 4%,transparent) 1px 5px, transparent 5px),
-    color-mix(in srgb, var(--fg) 6%, var(--bg)) }
+    linear-gradient(90deg, var(--band) 0 var(--sp), color-mix(in srgb, #000 24%, var(--band)) var(--sp) calc(var(--sp) + 1px),
+                           color-mix(in srgb,var(--fg) 5%,transparent) calc(var(--sp) + 1px) calc(var(--sp) + 4px), transparent calc(var(--sp) + 4px)),
+    color-mix(in srgb, var(--gc) 4%, color-mix(in srgb, var(--fg) 6%, var(--bg))) }
 .spine svg{ width:14px; height:14px; color:color-mix(in srgb, var(--au) 72%, transparent) }
 .spine::after{ content:""; position:absolute; left:0; bottom:0; height:2px;
   width:calc(var(--progress,0)*100%); background:var(--accent) }
@@ -243,16 +244,18 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
 .cover{
   position:relative; aspect-ratio:var(--cv-ratio); display:grid;
   grid-template-rows:var(--cv-pad) auto auto .82fr auto 1.18fr auto auto auto var(--cv-pad);
-  justify-items:center; padding-inline:var(--cv-pad);
+  justify-items:center; padding-inline:calc(var(--cv-pad) + var(--sp)) var(--cv-pad);
   border:1px solid var(--ink-hair); border-radius:1px 3px 3px 1px;
   box-shadow:var(--shadow-1);
+  /* quarter binding: a cloth spine in the genre colour, a hinge line, the
+     shadow of the joint, then the paper side */
   background:
     linear-gradient(90deg,
-      color-mix(in srgb, var(--fg) 14%, transparent) 0 1px,
-      color-mix(in srgb, var(--fg) 5%, transparent) 1px 5px,
-      transparent 5px 11px),
-    linear-gradient(color-mix(in srgb, var(--fg) var(--cv-tint), var(--bg-panel)),
-                    color-mix(in srgb, var(--fg) var(--cv-tint), var(--bg-panel)));
+      var(--band) 0 var(--sp),
+      color-mix(in srgb, #000 24%, var(--band)) var(--sp) calc(var(--sp) + 1px),
+      color-mix(in srgb, var(--fg) 7%, transparent) calc(var(--sp) + 1px) calc(var(--sp) + 5px),
+      transparent calc(var(--sp) + 5px)),
+    linear-gradient(var(--paper), var(--paper));
   transition:transform .3s var(--ease), box-shadow .3s var(--ease),
              border-color .3s var(--ease), background-color .3s var(--ease);
 }
@@ -274,8 +277,78 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
 [data-decade="1930"] .cover{ --cv-tint:10.5%;
   border-color:color-mix(in srgb,var(--rule) 30%,transparent) }
 [data-decade="1890"] .cover .cover__frame{ display:block }
-.cover__frame{ display:none; position:absolute; inset:3.4cqw; pointer-events:none;
+.cover__frame{ display:none; position:absolute; inset:3.4cqw 3.4cqw 3.4cqw calc(var(--sp) + 3.4cqw); pointer-events:none;
   border:1px solid color-mix(in srgb, var(--rule) 34%, transparent) }
+
+/* ---------- the jacket system ----------
+   Four inputs, four places on the board, nothing else varies (tools/DESIGN.md):
+     genre  → spine cloth colour        (Penguin 1935 / Albatross 1932 colour codes)
+     decade → pattern on the lower board (Insel-Bücherei patterned papers, by period style)
+     author → rule signature + mark      (unchanged)
+     title  → type size by length        (unchanged)
+   --pv (0-3, from the id) picks a variant of the decade pattern, so two books
+   of one genre and decade never wear the same board. */
+:root{
+  --g-fiction:#C8632A;                       /* fallback */
+  --g-society:#C8632A;  /* Penguin orange — fiction           */
+  --g-mystery:#3C7350;  /* Penguin green — crime              */
+  --g-ideas:#2F6A99;    /* Pelican blue — ideas, non-fiction  */
+  --g-history:#A8365F;  /* Penguin cerise — travel, adventure */
+  --g-fable:#674C93;    /* Penguin purple — belles-lettres    */
+  --g-comic:#C99A1E;    /* Penguin yellow — miscellany        */
+  --g-sf:#2B7C79;       /* house: instrument teal             */
+  --g-weird:#3A3346;    /* house: lamp-black violet           */
+  --g-romance:#A83A36;  /* house: madder red                  */
+}
+[data-genre="sf"]{--g:var(--g-sf)} [data-genre="weird"]{--g:var(--g-weird)}
+[data-genre="fable"]{--g:var(--g-fable)} [data-genre="mystery"]{--g:var(--g-mystery)}
+[data-genre="society"]{--g:var(--g-society)} [data-genre="romance"]{--g:var(--g-romance)}
+[data-genre="comic"]{--g:var(--g-comic)} [data-genre="history"]{--g:var(--g-history)}
+[data-genre="ideas"]{--g:var(--g-ideas)}
+.cover, .spine{
+  --sp:max(7px, 5.5cqw);
+  --gc:var(--g, var(--g-fiction));
+  --band:var(--gc);
+  --paper:color-mix(in srgb, var(--gc) 4%, color-mix(in srgb, var(--fg) var(--cv-tint, 3%), var(--bg-panel)));
+  --pc:color-mix(in srgb, var(--gc) 34%, transparent);
+}
+[data-theme="sepia"] .cover, [data-theme="sepia"] .spine{ --band:color-mix(in srgb, var(--gc) 86%, #8a6a3a) }
+[data-theme="dark"] .cover, [data-theme="dark"] .spine{
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 72%, #fff);
+  --band:color-mix(in srgb, var(--gc) 62%, var(--bg)); }
+[data-theme="night"] .cover, [data-theme="night"] .spine{
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 66%, #fff);
+  --band:color-mix(in srgb, var(--gc) 50%, var(--bg));
+  --pc:color-mix(in srgb, var(--gc) 22%, transparent); }
+
+/* the pattern field: the lower quarter of the paper side, fading in from above */
+.cover__pat{ position:absolute; left:calc(var(--sp) + 7cqw); right:7cqw; top:73%; bottom:6%;
+  pointer-events:none; --d:calc(5cqw + var(--pv,0) * 1cqw);
+  -webkit-mask-image:linear-gradient(transparent, #000 45%); mask-image:linear-gradient(transparent, #000 45%) }
+/* 1890s — Arts and Crafts diaper: a quincunx of dots */
+[data-decade="1890"] .cover__pat{
+  background:
+    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) 0 0 / var(--d) var(--d),
+    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) calc(var(--d) / 2) calc(var(--d) / 2) / var(--d) var(--d) }
+/* 1900s — Wiener Werkstätte: Hoffmann's square lattice */
+[data-decade="1900"] .cover__pat{ --d:calc(4.4cqw + var(--pv,0) * 1.1cqw);
+  background:
+    repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d)),
+    repeating-linear-gradient(90deg, var(--pc) 0 1px, transparent 1px var(--d)) }
+/* 1910s — engraver's hatching, leaning one way or the other */
+[data-decade="1910"] .cover__pat{ --d:calc(2.6cqw + var(--pv,0) * .7cqw);
+  background:repeating-linear-gradient(var(--ang, 45deg), var(--pc) 0 1px, transparent 1px var(--d)) }
+[data-decade="1910"][style*="--pv:1"] .cover__pat, [data-decade="1910"][style*="--pv:3"] .cover__pat{ --ang:-45deg }
+/* 1920s — Art Deco sunburst, rising from the foot */
+[data-decade="1920"] .cover__pat{
+  background:repeating-conic-gradient(from -90deg at 50% 100%,
+    var(--pc) 0 1.4deg, transparent 1.4deg calc(6deg + var(--pv,0) * 2deg)) }
+/* 1930s — streamline: speed lines thinning toward one edge */
+[data-decade="1930"] .cover__pat{ --d:calc(2.4cqw + var(--pv,0) * .6cqw);
+  background:repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d));
+  -webkit-mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
+          mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
+  -webkit-mask-composite:source-in; mask-composite:intersect }
 
 .rule{ display:block; width:100% }
 [data-author="kafka"]      .rule{ height:2px; background:var(--ink-rule) }
