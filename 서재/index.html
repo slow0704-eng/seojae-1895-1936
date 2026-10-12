@@ -1335,20 +1335,27 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
 .aub__mark{ width:14px; height:14px; color:var(--au); }
 .aub.on .aub__mark{ color:currentColor; }
 .aub__n{ font-size:.82em; font-variant-numeric:tabular-nums; }
-/* 열기 영문/한글/대역 — under a card that has a Korean edition */
-.openas{ display:flex; align-items:center; gap:4px; margin:4px 0 0; font-size:12px; }
+/* 열기 영문/한글/대역 — every one of the 79 cards carried the same three
+   buttons under its label (Apple Books, Kindle: tapping the book opens it;
+   options live on the book, not under it). They now sit on the board's foot
+   and appear on hover or keyboard focus; a phone opens in the last language
+   and switches inside the reader. */
+.openas{ position:absolute; left:6%; right:6%; bottom:7%; z-index:3; margin:0;
+  display:flex; justify-content:center; gap:4px; font-size:12px;
+  opacity:0; transform:translateY(4px); pointer-events:none;
+  transition:opacity .18s var(--ease), transform .18s var(--ease); }
 .openas[hidden]{ display:none; }
-.openas__l{ color:var(--fg-muted); font-size:12px; letter-spacing:.08em; margin-right:2px; }
-.openas [data-open]{ padding:.26em .7em; border:1px solid var(--border); border-radius:999px;
-  color:var(--fg); background:var(--bg); transition:color .1s, background-color .1s, border-color .1s; }
+.openas [data-open]{ flex:1; text-align:center; padding:.42em 0; border:1px solid var(--border);
+  border-radius:999px; color:var(--fg); background:var(--bg-panel);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:color .1s, background-color .1s, border-color .1s; }
 .openas [data-open]:hover{ border-color:var(--accent); color:var(--accent); }
 .openas [data-open].on{ border-color:var(--accent); color:var(--accent); font-weight:600; }
-@media (pointer:coarse){
-  .openas{ gap:6px; margin-top:6px }
-  .openas__l{ display:none }
-  .openas [data-open]{ display:inline-flex; align-items:center; justify-content:center; flex:1;
-    min-height:32px; padding:0 .5em; box-sizing:border-box }
+@media (hover:hover){
+  .card__link:hover .openas, .card__link:focus-visible .openas{
+    opacity:1; transform:none; pointer-events:auto; }
 }
+@media (hover:none){ .openas{ display:none !important; } }
 .facet__clear{ all:unset; cursor:pointer; justify-self:start; font-size:12px;
   color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); }
 .facet__clear:hover{ color:var(--accent); border-bottom-color:var(--accent); }
@@ -1432,15 +1439,14 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <main id="library">
 <div class="topbar"><div class="topbar__in">
   <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
-  <span class="topbar__hint"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>?</kbd> 단축키</span>
+  <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">
 <header class="masthead">
   <p class="mh__kicker">개인 서재</p>
   <h1 class="mh__title">1895<em>—</em>1936</h1>
-  <p class="mh__roll"><span class="nm">Kafka&nbsp;&nbsp;·</span> <span class="nm">Wells&nbsp;&nbsp;·</span> <span class="nm">Fitzgerald&nbsp;&nbsp;·</span> <span class="nm">von Harbou&nbsp;&nbsp;·</span> <span class="nm">Blackwood&nbsp;&nbsp;·</span> <span class="nm">Chambers&nbsp;&nbsp;·</span> <span class="nm">Machen&nbsp;&nbsp;·</span> <span class="nm">Andreyev&nbsp;&nbsp;·</span> <span class="nm">Jacobs&nbsp;&nbsp;·</span> <span class="nm">Yumeno&nbsp;&nbsp;·</span> <span class="nm">Akutagawa</span></p>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">79편 &nbsp;·&nbsp; 11인 &nbsp;·&nbsp; 2,976만 자 &nbsp;·&nbsp; 약 369시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat">79편 &nbsp;·&nbsp; 작가 11명 &nbsp;·&nbsp; 약 369시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -1483,12 +1489,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Select Conversations with an Uncle</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">삼촌과 나눈 대화 몇 토막</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.5만 자</span><b>&middot;</b><span>1시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 19분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1499,12 +1505,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Stolen Bacillus<span class="sub">and Other Incidents</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">도난당한 세균 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>31.3만 자</span><b>&middot;</b><span>3시간 55분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 55분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1515,12 +1521,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Time Machine</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">타임머신</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>18만 자</span><b>&middot;</b><span>2시간 16분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 16분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1531,12 +1537,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wonderful Visit</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">놀라운 방문</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>22만 자</span><b>&middot;</b><span>2시간 42분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 42분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1890" data-len="m"
@@ -1547,12 +1553,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The King in Yellow</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">노란 옷의 왕</p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.3만 자</span><b>&middot;</b><span>5시간 2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
@@ -1563,12 +1569,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Island of Doctor Moreau</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">모로 박사의 섬</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>24.1만 자</span><b>&middot;</b><span>3시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
@@ -1579,12 +1585,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Red Room</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">붉은 방</p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>17분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1595,12 +1601,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wheels of Chance</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">우연의 수레바퀴</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>32만 자</span><b>&middot;</b><span>3시간 54분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 54분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1611,12 +1617,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Invisible Man</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">투명인간</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>27.3만 자</span><b>&middot;</b><span>3시간 24분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 24분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
@@ -1627,12 +1633,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Plattner Story and Others</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">플래트너 이야기 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>44.3만 자</span><b>&middot;</b><span>5시간 30분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 30분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
@@ -1643,12 +1649,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Star</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">별</p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.5만 자</span><b>&middot;</b><span>18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1659,12 +1665,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Thirty Strange Stories</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">기묘한 이야기 서른 편</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>65.4만 자</span><b>&middot;</b><span>8시간 7분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 7분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1890" data-len="m"
@@ -1675,12 +1681,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Mystery of Choice</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">선택의 수수께끼</p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>32.5만 자</span><b>&middot;</b><span>4시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1691,12 +1697,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The War of the Worlds</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1898</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">우주 전쟁</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>33.7만 자</span><b>&middot;</b><span>4시간 12분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 12분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1707,12 +1713,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of Space and Time</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1899</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">공간과 시간의 이야기</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>41.2만 자</span><b>&middot;</b><span>5시간 7분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 7분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -1723,12 +1729,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">When the Sleeper Wakes</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1899</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">잠자는 자가 깨어날 때</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>47.2만 자</span><b>&middot;</b><span>5시간 45분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 45분</span></p>
  </div>
 </a></article>
 <div class="era" data-decade="1900" role="separator"><span class="era__n">1900</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">19편</span></div>
@@ -1740,12 +1746,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Love and Mr Lewisham</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1900</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">사랑과 루이셤 씨</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 35분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 35분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="l"
@@ -1756,12 +1762,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The First Men in the Moon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1901</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">달 세계 최초의 인간</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1900" data-len="s"
@@ -1772,12 +1778,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Cardigan</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1901</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">카디건</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>103만 자</span><b>&middot;</b><span>12시간 52분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>12시간 52분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -1788,12 +1794,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Sea Lady</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1902</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">바다 아가씨</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>22.9만 자</span><b>&middot;</b><span>2시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="jacobs" data-decade="1900" data-len="m"
@@ -1804,12 +1810,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Monkey&#x27;s Paw</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">W. W. Jacobs</p><p class="cover__year">1902</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">원숭이 손</p>
   <p class="mt__by"><span class="form">단편</span><span>W. W. 제이컵스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>17분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -1820,12 +1826,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Twelve Stories<span class="sub">and a Dream</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1903</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">열두 편의 이야기와 꿈 하나</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.4만 자</span><b>&middot;</b><span>5시간 9분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 9분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="machen" data-decade="1900" data-len="m"
@@ -1836,12 +1842,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The White People</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Arthur Machen</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">백색 사람들</p>
   <p class="mt__by"><span class="form">중편</span><span>아서 마켄</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>8.9만 자</span><b>&middot;</b><span>1시간 14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 14분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -1852,12 +1858,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Food of the Gods</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">신들의 양식</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>42.6만 자</span><b>&middot;</b><span>5시간 14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 14분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1900" data-len="m"
@@ -1868,12 +1874,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">In Search of the Unknown</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">미지를 찾아서</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.8만 자</span><b>&middot;</b><span>5시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -1884,12 +1890,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">A Modern Utopia</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1905</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">현대의 유토피아</p>
   <p class="mt__by"><span class="form">사변소설</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>54만 자</span><b>&middot;</b><span>6시간 31분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 31분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -1900,12 +1906,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Kipps</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1905</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">킵스</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>63.1만 자</span><b>&middot;</b><span>7시간 46분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 46분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1900" data-len="m"
@@ -1916,12 +1922,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Empty House<span class="sub">and Other Ghost Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1906</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">빈집 외 유령 이야기</p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 41분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -1932,12 +1938,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">In the Days of the Comet</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1906</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">혜성의 날들</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>45.5만 자</span><b>&middot;</b><span>5시간 38분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 38분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1900" data-len="s"
@@ -1948,12 +1954,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Willows</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1907</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">버드나무</p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1900" data-len="l"
@@ -1964,12 +1970,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">John Silence, Physician Extraordinary</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">특별한 의사 존 사일런스</p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 30분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -1980,12 +1986,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The War in the Air</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">공중전</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>56만 자</span><b>&middot;</b><span>6시간 51분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 51분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="andreyev" data-decade="1900" data-len="l"
@@ -1996,12 +2002,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Seven Who Were Hanged</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Leonid Andreyev</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">사형수 7인</p>
   <p class="mt__by"><span class="form">중편</span><span>레오니트 안드레예프</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>17만 자</span><b>&middot;</b><span>2시간 5분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 5분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -2012,12 +2018,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Ann Veronica</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1909</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">앤 베로니카</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>54.8만 자</span><b>&middot;</b><span>6시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -2028,12 +2034,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tono-Bungay</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1909</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">토노번게이</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>75.2만 자</span><b>&middot;</b><span>9시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 22분</span></p>
  </div>
 </a></article>
 <div class="era" data-decade="1910" role="separator"><span class="era__n">1910</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">21편</span></div>
@@ -2045,12 +2051,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wendigo</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">웬디고</p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2061,12 +2067,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The History of Mr Polly</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">폴리 씨의 일대기</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>39.3만 자</span><b>&middot;</b><span>4시간 49분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 49분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2077,12 +2083,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Sleeper Awakes</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">잠든 자 깨어나다</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>43.7만 자</span><b>&middot;</b><span>5시간 20분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 20분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1910" data-len="s"
@@ -2093,12 +2099,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Centaur</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">켄타우로스</p>
   <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2109,12 +2115,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Country of the Blind<span class="sub">and Other Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">눈먼 자들의 나라 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>89.8만 자</span><b>&middot;</b><span>11시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>11시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2125,12 +2131,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Door in the Wall<span class="sub">and Other Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">담장 속의 문 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>23.6만 자</span><b>&middot;</b><span>3시간 1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 1분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2141,12 +2147,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The New Machiavelli</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">새로운 마키아벨리</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>83.2만 자</span><b>&middot;</b><span>10시간 9분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10시간 9분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -2157,12 +2163,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Marriage</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1912</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">결혼</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>85.8만 자</span><b>&middot;</b><span>10시간 23분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10시간 23분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2173,12 +2179,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Passionate Friends</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1913</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">열정적인 친구들</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 19분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
@@ -2189,12 +2195,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wife of Sir Isaac Harman</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1914</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">아이작 하먼 경의 아내</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>74.4만 자</span><b>&middot;</b><span>9시간 0분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 0분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2205,12 +2211,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The World Set Free</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1914</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">해방된 세계</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.6만 자</span><b>&middot;</b><span>4시간 35분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 35분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="akutagawa" data-decade="1910" data-len="s"
@@ -2221,12 +2227,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">羅生門</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">라쇼몽</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>5,720자</span><b>&middot;</b><span>10분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1910" data-len="m"
@@ -2237,12 +2243,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Metamorphosis</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">변신</p>
   <p class="mt__by"><span class="form">중편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>11.8만 자</span><b>&middot;</b><span>1시간 32분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 32분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -2253,12 +2259,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Bealby</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">빌비</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>39.7만 자</span><b>&middot;</b><span>4시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -2269,12 +2275,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Boon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">분</p>
   <p class="mt__by"><span class="form">잡문집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>28만 자</span><b>&middot;</b><span>3시간 21분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 21분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2285,12 +2291,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Research Magnificent</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">위대한 탐구</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>63.3만 자</span><b>&middot;</b><span>7시간 46분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 46분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
@@ -2301,12 +2307,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Mr Britling Sees It Through</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1916</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">브리틀링 씨, 끝까지 지켜보다</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>79.8만 자</span><b>&middot;</b><span>9시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2317,12 +2323,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Soul of a Bishop</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1917</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">주교의 영혼</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>44.8만 자</span><b>&middot;</b><span>5시간 33분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 33분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="akutagawa" data-decade="1910" data-len="s"
@@ -2333,12 +2339,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">地獄変</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1918</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">지옥변</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.6만 자</span><b>&middot;</b><span>44분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>44분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -2349,12 +2355,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Joan and Peter</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1918</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">조앤과 피터</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>121만 자</span><b>&middot;</b><span>14시간 43분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>14시간 43분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -2365,12 +2371,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Undying Fire</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1919</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">꺼지지 않는 불</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>26.2만 자</span><b>&middot;</b><span>3시간 15분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 15분</span></p>
  </div>
 </a></article>
 <div class="era" data-decade="1920" role="separator"><span class="era__n">1920</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">16편</span></div>
@@ -2382,12 +2388,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Flappers and Philosophers</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">말괄량이와 철학자들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>34.8만 자</span><b>&middot;</b><span>4시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -2398,12 +2404,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">This Side of Paradise</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">낙원의 이쪽</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>52만 자</span><b>&middot;</b><span>5시간 40분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 40분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1920" data-len="m"
@@ -2414,12 +2420,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Slayer of Souls</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">영혼을 죽이는 자</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.3만 자</span><b>&middot;</b><span>4시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 19분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="akutagawa" data-decade="1920" data-len="s"
@@ -2430,12 +2436,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">藪の中</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">덤불 속</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>8,490자</span><b>&middot;</b><span>14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>14분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -2446,12 +2452,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of the Jazz Age</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">재즈 시대의 이야기들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>49.7만 자</span><b>&middot;</b><span>6시간 8분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 8분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -2462,12 +2468,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Beautiful and Damned</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">아름답고 저주받은 사람들</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>72.2만 자</span><b>&middot;</b><span>8시간 45분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 45분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="m"
@@ -2478,12 +2484,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of the Unexpected</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">뜻밖의 이야기들</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>47.5만 자</span><b>&middot;</b><span>6시간 3분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 3분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
@@ -2494,12 +2500,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Secret Places of the Heart</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">마음의 은밀한 곳</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.9만 자</span><b>&middot;</b><span>4시간 28분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 28분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="s"
@@ -2510,12 +2516,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Vegetable</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1923</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">채소 — 대통령에서 집배원으로</p>
   <p class="mt__by"><span class="form">희곡</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>15.9만 자</span><b>&middot;</b><span>1시간 53분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 53분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="s"
@@ -2526,12 +2532,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Dream</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1924</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">꿈</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>46.9만 자</span><b>&middot;</b><span>5시간 59분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 59분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -2542,12 +2548,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Great Gatsby</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">위대한 개츠비</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>27.1만 자</span><b>&middot;</b><span>3시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
@@ -2558,12 +2564,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Trial</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">소송</p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>45만 자</span><b>&middot;</b><span>5시간 51분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 51분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
@@ -2574,12 +2580,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Christina Albertas Father</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">크리스티나 앨버타의 아버지</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>67.8만 자</span><b>&middot;</b><span>8시간 24분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 24분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -2590,12 +2596,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">All the Sad Young Men</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">모든 슬픈 젊은이들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.8만 자</span><b>&middot;</b><span>4시간 29분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 29분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
@@ -2606,12 +2612,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Castle</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">성</p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>53.3만 자</span><b>&middot;</b><span>6시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="harbou" data-decade="1920" data-len="s"
@@ -2622,12 +2628,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Metropolis</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Thea von Harbou</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">메트로폴리스</p>
   <p class="mt__by"><span class="form">장편</span><span>테아 폰 하르부</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.7만 자</span><b>&middot;</b><span>5시간 0분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 0분</span></p>
  </div>
 </a></article>
 <div class="era" data-decade="1930" role="separator"><span class="era__n">1930</span><span class="era__lab">년대</span><i class="era__line"></i><span class="era__ct">7편</span></div>
@@ -2639,12 +2645,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Knock at the Manor Gate</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1931</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">저택 대문을 두드리다</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2,934자</span><b>&middot;</b><span>2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="yumeno" data-decade="1930" data-len="s"
@@ -2655,12 +2661,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">正夢</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1931</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">정몽</p>
   <p class="mt__by"><span class="form">단편</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1,771자</span><b>&middot;</b><span>3분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2671,12 +2677,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Give It Up</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">단념해라!</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>680자</span><b>&middot;</b><span>1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2687,12 +2693,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Poseidon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">포세이돈</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2,468자</span><b>&middot;</b><span>2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2703,12 +2709,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Helmsman</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">키잡이</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1,166자</span><b>&middot;</b><span>1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="yumeno" data-decade="1930" data-len="s"
@@ -2719,12 +2725,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">少女地獄</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">소녀 지옥</p>
   <p class="mt__by"><span class="form">단편집</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>2시간 56분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 56분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="yumeno" data-decade="1930" data-len="s"
@@ -2735,12 +2741,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">悪魔祈祷書</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">악마 기도서</p>
   <p class="mt__by"><span class="form">단편</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1.3만 자</span><b>&middot;</b><span>22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>22분</span></p>
  </div>
 </a></article></div>
 <div class="grid" id="grid-author" hidden><nav class="authnav" id="authnav"><button class="authnav__b" data-go="kafka">프란츠 카프카<span>7</span></button><button class="authnav__b" data-go="wells">H. G. 웰스<span>45</span></button><button class="authnav__b" data-go="fitzgerald">F. 스콧 피츠제럴드<span>7</span></button><button class="authnav__b" data-go="harbou">테아 폰 하르부<span>1</span></button><button class="authnav__b" data-go="blackwood">앨저넌 블랙우드<span>5</span></button><button class="authnav__b" data-go="chambers">로버트 W. 체임버스<span>5</span></button><button class="authnav__b" data-go="machen">아서 마켄<span>1</span></button><button class="authnav__b" data-go="andreyev">레오니트 안드레예프<span>1</span></button><button class="authnav__b" data-go="jacobs">W. W. 제이컵스<span>1</span></button><button class="authnav__b" data-go="yumeno">유메노 규사쿠<span>3</span></button><button class="authnav__b" data-go="akutagawa">아쿠타가와 류노스케<span>3</span></button></nav><header class="plate" data-author="kafka"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6 21.5V2.8h12v18.7"/><path d="M14.7 3.6v17.9"/><path d="M3 21.5h18" opacity=".45"/></g><circle cx="13.4" cy="12.7" r=".75" fill="currentColor"/></svg></span><div class="plate__id"><h2>Franz Kafka</h2><p>1883–1924 &middot; 7편 &middot; 1915–1936</p><p class="plate__note">프라하의 보험국 직원이자, 20세기 문학을 다시 쓴 모더니즘의 중심.</p></div><i class="rule plate__rule"></i></header>
@@ -2752,12 +2758,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Metamorphosis</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">변신</p>
   <p class="mt__by"><span class="form">중편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>11.8만 자</span><b>&middot;</b><span>1시간 32분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 32분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
@@ -2768,12 +2774,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Trial</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">소송</p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>45만 자</span><b>&middot;</b><span>5시간 51분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 51분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1920" data-len="s"
@@ -2784,12 +2790,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Castle</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">성</p>
   <p class="mt__by"><span class="form">장편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>53.3만 자</span><b>&middot;</b><span>6시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="l"
@@ -2800,12 +2806,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Knock at the Manor Gate</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1931</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">저택 대문을 두드리다</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2,934자</span><b>&middot;</b><span>2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2816,12 +2822,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Give It Up</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">단념해라!</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>680자</span><b>&middot;</b><span>1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2832,12 +2838,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Poseidon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">포세이돈</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2,468자</span><b>&middot;</b><span>2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="kafka" data-decade="1930" data-len="s"
@@ -2848,12 +2854,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Helmsman</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Franz Kafka</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">키잡이</p>
   <p class="mt__by"><span class="form">단편</span><span>프란츠 카프카</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1,166자</span><b>&middot;</b><span>1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="wells"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8" opacity=".45"/><path d="M12 12 16.6 7.4"/></g><circle cx="12" cy="12" r=".85" fill="currentColor"/></svg></span><div class="plate__id"><h2>H. G. Wells</h2><p>1866–1946 &middot; 45편 &middot; 1895–1925</p><p class="plate__note">과학소설의 설계자. 사회소설과 미래사를 같은 손으로 썬 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -2865,12 +2871,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Select Conversations with an Uncle</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">삼촌과 나눈 대화 몇 토막</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.5만 자</span><b>&middot;</b><span>1시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 19분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -2881,12 +2887,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Stolen Bacillus<span class="sub">and Other Incidents</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">도난당한 세균 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>31.3만 자</span><b>&middot;</b><span>3시간 55분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 55분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -2897,12 +2903,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Time Machine</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">타임머신</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>18만 자</span><b>&middot;</b><span>2시간 16분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 16분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -2913,12 +2919,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wonderful Visit</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">놀라운 방문</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>22만 자</span><b>&middot;</b><span>2시간 42분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 42분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
@@ -2929,12 +2935,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Island of Doctor Moreau</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">모로 박사의 섬</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>24.1만 자</span><b>&middot;</b><span>3시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
@@ -2945,12 +2951,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Red Room</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">붉은 방</p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>17분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -2961,12 +2967,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wheels of Chance</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1896</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">우연의 수레바퀴</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>32만 자</span><b>&middot;</b><span>3시간 54분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 54분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -2977,12 +2983,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Invisible Man</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">투명인간</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>27.3만 자</span><b>&middot;</b><span>3시간 24분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 24분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="l"
@@ -2993,12 +2999,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Plattner Story and Others</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">플래트너 이야기 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>44.3만 자</span><b>&middot;</b><span>5시간 30분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 30분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="s"
@@ -3009,12 +3015,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Star</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">별</p>
   <p class="mt__by"><span class="form">단편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.5만 자</span><b>&middot;</b><span>18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -3025,12 +3031,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Thirty Strange Stories</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">기묘한 이야기 서른 편</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>65.4만 자</span><b>&middot;</b><span>8시간 7분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 7분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -3041,12 +3047,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The War of the Worlds</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1898</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">우주 전쟁</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>33.7만 자</span><b>&middot;</b><span>4시간 12분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 12분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -3057,12 +3063,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of Space and Time</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1899</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">공간과 시간의 이야기</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>41.2만 자</span><b>&middot;</b><span>5시간 7분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 7분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1890" data-len="m"
@@ -3073,12 +3079,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">When the Sleeper Wakes</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1899</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">잠자는 자가 깨어날 때</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>47.2만 자</span><b>&middot;</b><span>5시간 45분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 45분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -3089,12 +3095,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Love and Mr Lewisham</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1900</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">사랑과 루이셤 씨</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 35분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 35분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="l"
@@ -3105,12 +3111,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The First Men in the Moon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1901</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">달 세계 최초의 인간</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.9만 자</span><b>&middot;</b><span>4시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -3121,12 +3127,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Sea Lady</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1902</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">바다 아가씨</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>22.9만 자</span><b>&middot;</b><span>2시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -3137,12 +3143,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Twelve Stories<span class="sub">and a Dream</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1903</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">열두 편의 이야기와 꿈 하나</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.4만 자</span><b>&middot;</b><span>5시간 9분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 9분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -3153,12 +3159,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Food of the Gods</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">신들의 양식</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>42.6만 자</span><b>&middot;</b><span>5시간 14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 14분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -3169,12 +3175,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">A Modern Utopia</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1905</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">현대의 유토피아</p>
   <p class="mt__by"><span class="form">사변소설</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>54만 자</span><b>&middot;</b><span>6시간 31분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 31분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -3185,12 +3191,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Kipps</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1905</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">킵스</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>63.1만 자</span><b>&middot;</b><span>7시간 46분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 46분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -3201,12 +3207,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">In the Days of the Comet</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1906</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">혜성의 날들</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>45.5만 자</span><b>&middot;</b><span>5시간 38분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 38분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="m"
@@ -3217,12 +3223,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The War in the Air</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">공중전</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>56만 자</span><b>&middot;</b><span>6시간 51분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 51분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -3233,12 +3239,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Ann Veronica</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1909</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">앤 베로니카</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>54.8만 자</span><b>&middot;</b><span>6시간 47분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 47분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1900" data-len="s"
@@ -3249,12 +3255,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tono-Bungay</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1909</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">토노번게이</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>75.2만 자</span><b>&middot;</b><span>9시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3265,12 +3271,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The History of Mr Polly</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">폴리 씨의 일대기</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>39.3만 자</span><b>&middot;</b><span>4시간 49분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 49분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3281,12 +3287,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Sleeper Awakes</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">잠든 자 깨어나다</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>43.7만 자</span><b>&middot;</b><span>5시간 20분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 20분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3297,12 +3303,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Country of the Blind<span class="sub">and Other Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">눈먼 자들의 나라 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>89.8만 자</span><b>&middot;</b><span>11시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>11시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3313,12 +3319,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Door in the Wall<span class="sub">and Other Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">담장 속의 문 외</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>23.6만 자</span><b>&middot;</b><span>3시간 1분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 1분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3329,12 +3335,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The New Machiavelli</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">새로운 마키아벨리</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>83.2만 자</span><b>&middot;</b><span>10시간 9분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10시간 9분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -3345,12 +3351,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Marriage</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1912</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">결혼</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>85.8만 자</span><b>&middot;</b><span>10시간 23분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10시간 23분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3361,12 +3367,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Passionate Friends</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1913</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">열정적인 친구들</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>59.4만 자</span><b>&middot;</b><span>7시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 19분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
@@ -3377,12 +3383,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wife of Sir Isaac Harman</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1914</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">아이작 하먼 경의 아내</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>74.4만 자</span><b>&middot;</b><span>9시간 0분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 0분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3393,12 +3399,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The World Set Free</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1914</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">해방된 세계</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37.6만 자</span><b>&middot;</b><span>4시간 35분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 35분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -3409,12 +3415,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Bealby</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">빌비</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>39.7만 자</span><b>&middot;</b><span>4시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -3425,12 +3431,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Boon</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">분</p>
   <p class="mt__by"><span class="form">잡문집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>28만 자</span><b>&middot;</b><span>3시간 21분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 21분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3441,12 +3447,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Research Magnificent</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">위대한 탐구</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>63.3만 자</span><b>&middot;</b><span>7시간 46분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 46분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="l"
@@ -3457,12 +3463,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Mr Britling Sees It Through</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1916</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">브리틀링 씨, 끝까지 지켜보다</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>79.8만 자</span><b>&middot;</b><span>9시간 48분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>9시간 48분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3473,12 +3479,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Soul of a Bishop</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1917</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">주교의 영혼</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>44.8만 자</span><b>&middot;</b><span>5시간 33분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 33분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="s"
@@ -3489,12 +3495,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Joan and Peter</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1918</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">조앤과 피터</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>121만 자</span><b>&middot;</b><span>14시간 43분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>14시간 43분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1910" data-len="m"
@@ -3505,12 +3511,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Undying Fire</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1919</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">꺼지지 않는 불</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>26.2만 자</span><b>&middot;</b><span>3시간 15분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 15분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="m"
@@ -3521,12 +3527,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of the Unexpected</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">뜻밖의 이야기들</p>
   <p class="mt__by"><span class="form">단편집</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>47.5만 자</span><b>&middot;</b><span>6시간 3분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 3분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
@@ -3537,12 +3543,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Secret Places of the Heart</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">마음의 은밀한 곳</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.9만 자</span><b>&middot;</b><span>4시간 28분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 28분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="s"
@@ -3553,12 +3559,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Dream</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1924</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">꿈</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>46.9만 자</span><b>&middot;</b><span>5시간 59분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 59분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="wells" data-decade="1920" data-len="l"
@@ -3569,12 +3575,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Christina Albertas Father</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">H. G. Wells</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">크리스티나 앨버타의 아버지</p>
   <p class="mt__by"><span class="form">장편</span><span>H. G. 웰스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>67.8만 자</span><b>&middot;</b><span>8시간 24분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 24분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="fitzgerald"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M4 20a8 8 0 0 1 16 0"/><path d="M12 20V11.6"/><path d="M12 20 6.1 14.1"/><path d="M12 20 17.9 14.1"/><path d="M2.8 20h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>F. Scott Fitzgerald</h2><p>1896–1940 &middot; 7편 &middot; 1920–1926</p><p class="plate__note">재즈 시대의 기록자이자 그 시대에 가장 깊이 베인 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -3586,12 +3592,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Flappers and Philosophers</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">말괄량이와 철학자들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>34.8만 자</span><b>&middot;</b><span>4시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -3602,12 +3608,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">This Side of Paradise</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">낙원의 이쪽</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>52만 자</span><b>&middot;</b><span>5시간 40분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 40분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -3618,12 +3624,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Tales of the Jazz Age</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">재즈 시대의 이야기들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>49.7만 자</span><b>&middot;</b><span>6시간 8분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 8분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -3634,12 +3640,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Beautiful and Damned</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">아름답고 저주받은 사람들</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>72.2만 자</span><b>&middot;</b><span>8시간 45분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>8시간 45분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="s"
@@ -3650,12 +3656,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Vegetable</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1923</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">채소 — 대통령에서 집배원으로</p>
   <p class="mt__by"><span class="form">희곡</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>15.9만 자</span><b>&middot;</b><span>1시간 53분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 53분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -3666,12 +3672,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Great Gatsby</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1925</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">위대한 개츠비</p>
   <p class="mt__by"><span class="form">장편</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>27.1만 자</span><b>&middot;</b><span>3시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="fitzgerald" data-decade="1920" data-len="m"
@@ -3682,12 +3688,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">All the Sad Young Men</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">F. Scott Fitzgerald</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">모든 슬픈 젊은이들</p>
   <p class="mt__by"><span class="form">단편집</span><span>F. 스콧 피츠제럴드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.8만 자</span><b>&middot;</b><span>4시간 29분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 29분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="harbou"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M5 21.5V16h14v5.5"/><path d="M7.2 16v-5h9.6v5"/><path d="M9.4 11V5.6h5.2V11"/><path d="M12 5.6V2.6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Thea von Harbou</h2><p>1888–1954 &middot; 1편 &middot; 1926–1926</p><p class="plate__note">『메트로폴리스』의 소설가이자 각본가.</p></div><i class="rule plate__rule"></i></header>
@@ -3699,12 +3705,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Metropolis</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Thea von Harbou</p><p class="cover__year">1926</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">메트로폴리스</p>
   <p class="mt__by"><span class="form">장편</span><span>테아 폰 하르부</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.7만 자</span><b>&middot;</b><span>5시간 0분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 0분</span></p>
  </div>
 </a></article>
 <p class="solo">단 한 편.<br><i>Metropolis</i>, 1926년 — 이 서재에서 유일한 독일어권 작가의 작품입니다.</p>
@@ -3717,12 +3723,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Empty House<span class="sub">and Other Ghost Stories</span></h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1906</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">빈집 외 유령 이야기</p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>37만 자</span><b>&middot;</b><span>4시간 41분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 41분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1900" data-len="s"
@@ -3733,12 +3739,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Willows</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1907</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">버드나무</p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.9만 자</span><b>&middot;</b><span>1시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 22분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1900" data-len="l"
@@ -3749,12 +3755,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">John Silence, Physician Extraordinary</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">특별한 의사 존 사일런스</p>
   <p class="mt__by"><span class="form">단편집</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>60.2만 자</span><b>&middot;</b><span>7시간 30분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>7시간 30분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1910" data-len="s"
@@ -3765,12 +3771,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Wendigo</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1910</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">웬디고</p>
   <p class="mt__by"><span class="form">중편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>1시간 18분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 18분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="blackwood" data-decade="1910" data-len="s"
@@ -3781,12 +3787,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Centaur</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Algernon Blackwood</p><p class="cover__year">1911</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">켄타우로스</p>
   <p class="mt__by"><span class="form">장편</span><span>앨저넌 블랙우드</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>52.8만 자</span><b>&middot;</b><span>6시간 22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>6시간 22분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="chambers"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"><path d="M4.6 17.4 3.6 7.6l4.9 4.1L12 5.2l3.5 6.5 4.9-4.1-1 9.8z"/><path d="M2.8 21.5h18.4" opacity=".45"/></g><circle cx="12" cy="14.2" r=".85" fill="currentColor"/></svg></span><div class="plate__id"><h2>Robert W. Chambers</h2><p>1865–1933 &middot; 5편 &middot; 1895–1920</p><p class="plate__note">『노란 옷의 왕』으로 코즈믹 호러의 문을 연 뒤, 당대 가장 잘 팔리는 대중소설가가 된 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -3798,12 +3804,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The King in Yellow</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1895</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">노란 옷의 왕</p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.3만 자</span><b>&middot;</b><span>5시간 2분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 2분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1890" data-len="m"
@@ -3814,12 +3820,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Mystery of Choice</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1897</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">선택의 수수께끼</p>
   <p class="mt__by"><span class="form">단편집</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>32.5만 자</span><b>&middot;</b><span>4시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1900" data-len="s"
@@ -3830,12 +3836,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">Cardigan</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1901</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">카디건</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>103만 자</span><b>&middot;</b><span>12시간 52분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>12시간 52분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1900" data-len="m"
@@ -3846,12 +3852,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">In Search of the Unknown</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">미지를 찾아서</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>40.8만 자</span><b>&middot;</b><span>5시간 4분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>5시간 4분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="chambers" data-decade="1920" data-len="m"
@@ -3862,12 +3868,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Slayer of Souls</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Robert W. Chambers</p><p class="cover__year">1920</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">영혼을 죽이는 자</p>
   <p class="mt__by"><span class="form">장편</span><span>로버트 W. 체임버스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>35.3만 자</span><b>&middot;</b><span>4시간 19분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>4시간 19분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="machen"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M9.6 17.6V6.4c0-2.2 4.8-2.2 4.8 0v11.2"/><path d="M2.8 21.5c3.6-3.9 14.8-3.9 18.4 0" opacity=".45"/></g><circle cx="12" cy="9.4" r=".8" fill="currentColor"/></svg></span><div class="plate__id"><h2>Arthur Machen</h2><p>1863–1947 &middot; 1편 &middot; 1904–1904</p><p class="plate__note">웨일스 언덕의 옛 신들을 불러낸 신비주의자. 괴기소설을 경이의 문학으로 쓴 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -3879,12 +3885,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The White People</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Arthur Machen</p><p class="cover__year">1904</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">백색 사람들</p>
   <p class="mt__by"><span class="form">중편</span><span>아서 마켄</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>8.9만 자</span><b>&middot;</b><span>1시간 14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>1시간 14분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="andreyev"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M6.5 21.5V3.2h10.4"/><path d="M6.5 7.4 10.7 3.2" opacity=".6"/><path d="M16.9 3.2v5.3"/><circle cx="16.9" cy="10.4" r="1.9"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Leonid Andreyev</h2><p>1871–1919 &middot; 1편 &middot; 1908–1908</p><p class="plate__note">톨스토이 다음가는 재능이라 불린 러시아 작가. 죽음 앞의 인간을 끝까지 들여다본 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -3896,12 +3902,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Seven Who Were Hanged</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Leonid Andreyev</p><p class="cover__year">1908</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">사형수 7인</p>
   <p class="mt__by"><span class="form">중편</span><span>레오니트 안드레예프</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>17만 자</span><b>&middot;</b><span>2시간 5분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 5분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="jacobs"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M9 21.5v-6.3c-1.6-.6-2.4-2-2.4-3.6"/><path d="M15 21.5v-6.3c1.2-.9 1.9-2.4 1.9-4.1"/><path d="M9.6 14.6V6.1c0-1.2 1.6-1.2 1.6 0v6.2"/><path d="M11.2 12.3V4.4c0-1.2 1.6-1.2 1.6 0v7.9"/><path d="M12.8 12.3V6.3c0-1.2 1.6-1.2 1.6 0v6"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>W. W. Jacobs</h2><p>1863–1943 &middot; 1편 &middot; 1902–1902</p><p class="plate__note">템스강 부두의 익살꾼. 단 한 편의 괴담으로 세 가지 소원의 공포를 영원히 남긴 사람.</p></div><i class="rule plate__rule"></i></header>
@@ -3913,12 +3919,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">The Monkey&#x27;s Paw</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">W. W. Jacobs</p><p class="cover__year">1902</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">원숭이 손</p>
   <p class="mt__by"><span class="form">단편</span><span>W. W. 제이컵스</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.2만 자</span><b>&middot;</b><span>17분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">영문</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>17분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="yumeno"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M12 11.6c.6 0 .9.5.8 1-.2.8-1.2 1.1-1.9.7-1-.6-1.1-2-.4-2.9 1-1.2 2.9-1.2 4-.2 1.4 1.3 1.3 3.6-.1 4.9-1.7 1.6-4.5 1.5-6.1-.2-1.9-2-1.7-5.3.3-7.2 2.3-2.2 6.1-2 8.3.4"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Yumeno Kyūsaku</h2><p>1889–1936 &middot; 3편 &middot; 1931–1936</p><p class="plate__note">『도구라 마구라』의 작가. 편지와 독백으로 광기를 받아 적은 일본 환상문학의 괴물.</p></div><i class="rule plate__rule"></i></header>
@@ -3930,12 +3936,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">正夢</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1931</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">정몽</p>
   <p class="mt__by"><span class="form">단편</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1,771자</span><b>&middot;</b><span>3분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>3분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="yumeno" data-decade="1930" data-len="s"
@@ -3946,12 +3952,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">少女地獄</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">소녀 지옥</p>
   <p class="mt__by"><span class="form">단편집</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>10.6만 자</span><b>&middot;</b><span>2시간 56분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>2시간 56분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="yumeno" data-decade="1930" data-len="s"
@@ -3962,12 +3968,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">悪魔祈祷書</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Yumeno Kyūsaku</p><p class="cover__year">1936</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">악마 기도서</p>
   <p class="mt__by"><span class="form">단편</span><span>유메노 규사쿠</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>1.3만 자</span><b>&middot;</b><span>22분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>22분</span></p>
  </div>
 </a></article>
 <header class="plate" data-author="akutagawa"><span class="plate__mark"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square"><path d="M3.4 6.2h17.2"/><path d="M4.8 9.6h14.4"/><path d="M5.2 14h13.6" opacity=".6"/><path d="M6.6 6.2v15.3"/><path d="M17.4 6.2v15.3"/><path d="M12 9.6v4.4"/><path d="M2.8 21.5h18.4" opacity=".45"/></g></svg></span><div class="plate__id"><h2>Akutagawa Ryūnosuke</h2><p>1892–1927 &middot; 3편 &middot; 1915–1922</p><p class="plate__note">옛이야기를 근대의 칼로 다시 벼린 단편의 명인. 서른다섯에 스스로 떠났다.</p></div><i class="rule plate__rule"></i></header>
@@ -3979,12 +3985,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">羅生門</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1915</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">라쇼몽</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>5,720자</span><b>&middot;</b><span>10분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>10분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="akutagawa" data-decade="1910" data-len="s"
@@ -3995,12 +4001,12 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">地獄変</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1918</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">지옥변</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>2.6만 자</span><b>&middot;</b><span>44분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>44분</span></p>
  </div>
 </a></article>
 <article class="card" data-author="akutagawa" data-decade="1920" data-len="s"
@@ -4011,19 +4017,19 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <h2 class="cover__title">藪の中</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">Akutagawa Ryūnosuke</p><p class="cover__year">1922</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">덤불 속</p>
   <p class="mt__by"><span class="form">단편</span><span>아쿠타가와 류노스케</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>8,490자</span><b>&middot;</b><span>14분</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">일본어</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>14분</span></p>
  </div>
 </a></article></div>
 <footer class="lib-foot">
   <p>모든 작품은 퍼블릭 도메인입니다. 출처 — <a href="https://www.gutenberg.org">Project Gutenberg</a>
      &middot; <a href="https://standardebooks.org">Standard Ebooks</a>
      &middot; <a href="https://en.wikisource.org">Wikisource</a></p>
-  <p class="lib-foot__k"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>1</kbd>–<kbd>4</kbd> 정렬 &nbsp; <kbd>?</kbd> 단축키</p>
+  <p class="lib-foot__k"><kbd>?</kbd> 단축키 전체 보기</p>
 </footer>
 </div></main>
 
@@ -4150,7 +4156,7 @@ function save(k, v) {
 var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
-  dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
+  dim: 0, wake: false, showRemaining: true, showSession: false, showFolio: true,
   lang: "ko", trScale: 85, markUntr: true, asLpm: 16,
   nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko", nrAct: true,
   nrVoiceKo: "F2", nrVoiceEn: "M1", nrVoiceJa: "M2", nrGot: false, nrGpuFail: 0,
@@ -5444,7 +5450,7 @@ function paintShelf() {
     return '<li><a class="slip" href="#/w/' + encodeURIComponent(w.id) + '" data-author="' + w.author +
       '" style="--progress:' + p.frac.toFixed(4) + '"><span class="spine">' + (mk ? mk.outerHTML : "") +
       '</span><span class="slip__body"><span class="slip__title">' + esc((p.lang && p.lang !== "en" && w.titleKo) || w.title) + "</span>" +
-      '<span class="slip__meta">' + esc(w.authorKo) + " · " + w.year + " · 남은 " + fmtMin(left) +
+      '<span class="slip__meta">' + esc(w.authorKo) + " · 남은 " + fmtMin(left) +
       lang + " · " + ago(p.updated) + "</span>" +
       '<span class="slip__bar"><i></i><b>' + Math.floor(p.frac * 100) + "%</b></span></span></a></li>";
   }).join("");
@@ -5455,7 +5461,6 @@ function paintShelf() {
   }
 }
 function paintMine() {
-  var sess = load("rdr/v1/session", null);
   var done = 0, reading = 0, ko = 0;
   MANIFEST.forEach(function (w) {
     if (koCov(w.id) > 0) ko++;
@@ -5463,10 +5468,8 @@ function paintMine() {
     if (p.finished) done++; else if (p.frac > 0.002) reading++;
   });
   var bits = [];
-  if (reading) bits.push("읽는 중 " + reading);
   if (done) bits.push("완독 " + done);
   if (ko) bits.push(ko === MANIFEST.length ? "전편 한국어판" : "한글본 " + ko + "편");
-  if (sess && sess.totalMs > 60000) bits.push("누적 " + fmtMin(Math.round(sess.totalMs / 60000)));
   $("#mine").textContent = bits.length ? "  ·  " + bits.join(" · ") : "";
 }
 

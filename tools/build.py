@@ -164,12 +164,12 @@ def cover(w, i):
   <h2 class="cover__title">%(main)s%(sub)s</h2>
   <i class="rule rule--foot"></i>
   <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
-  <span class="cover__ko" hidden></span></div>
+  <span class="cover__ko" hidden></span>
+  <p class="openas" hidden><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
  <div class="mt">
   <p class="mt__ko">%(ko)s</p>
   <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
-  <p class="cap"><span class="cap__pct"></span><span>%(chars)s</span><b>&middot;</b><span>%(time)s</span></p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
+  <p class="cap"><span class="cap__pct"></span><span>%(time)s</span></p>
  </div>
 </a></article>""" % {
         "a": w["author"], "d": DECADE(w["year"]), "len": len_bucket(main), "y": w["year"],
@@ -408,15 +408,14 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <main id="library">
 <div class="topbar"><div class="topbar__in">
   <a class="topbar__home" href="../index.html"><b>서재</b><span>1895—1936</span></a>
-  <span class="topbar__hint"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>?</kbd> 단축키</span>
+  <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">
 <header class="masthead">
   <p class="mh__kicker">개인 서재</p>
   <h1 class="mh__title">1895<em>—</em>1936</h1>
-  <p class="mh__roll">%(roll)s</p>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; %(nauth)d인 &nbsp;·&nbsp; %(mchars)s &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat">%(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">
@@ -450,7 +449,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
   <p>모든 작품은 퍼블릭 도메인입니다. 출처 — <a href="https://www.gutenberg.org">Project Gutenberg</a>
      &middot; <a href="https://standardebooks.org">Standard Ebooks</a>
      &middot; <a href="https://en.wikisource.org">Wikisource</a></p>
-  <p class="lib-foot__k"><kbd>/</kbd> 찾기 &nbsp; <kbd>Enter</kbd> 이어읽기 &nbsp; <kbd>1</kbd>–<kbd>4</kbd> 정렬 &nbsp; <kbd>?</kbd> 단축키</p>
+  <p class="lib-foot__k"><kbd>?</kbd> 단축키 전체 보기</p>
 </footer>
 </div></main>
 %(shell)s

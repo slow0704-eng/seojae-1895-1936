@@ -446,20 +446,27 @@ body.lib-tuck .ctl{ transform:translateY(calc(-100% - 58px)) }
 .aub__mark{ width:14px; height:14px; color:var(--au); }
 .aub.on .aub__mark{ color:currentColor; }
 .aub__n{ font-size:.82em; font-variant-numeric:tabular-nums; }
-/* 열기 영문/한글/대역 — under a card that has a Korean edition */
-.openas{ display:flex; align-items:center; gap:4px; margin:4px 0 0; font-size:12px; }
+/* 열기 영문/한글/대역 — every one of the 79 cards carried the same three
+   buttons under its label (Apple Books, Kindle: tapping the book opens it;
+   options live on the book, not under it). They now sit on the board's foot
+   and appear on hover or keyboard focus; a phone opens in the last language
+   and switches inside the reader. */
+.openas{ position:absolute; left:6%; right:6%; bottom:7%; z-index:3; margin:0;
+  display:flex; justify-content:center; gap:4px; font-size:12px;
+  opacity:0; transform:translateY(4px); pointer-events:none;
+  transition:opacity .18s var(--ease), transform .18s var(--ease); }
 .openas[hidden]{ display:none; }
-.openas__l{ color:var(--fg-muted); font-size:12px; letter-spacing:.08em; margin-right:2px; }
-.openas [data-open]{ padding:.26em .7em; border:1px solid var(--border); border-radius:999px;
-  color:var(--fg); background:var(--bg); transition:color .1s, background-color .1s, border-color .1s; }
+.openas [data-open]{ flex:1; text-align:center; padding:.42em 0; border:1px solid var(--border);
+  border-radius:999px; color:var(--fg); background:var(--bg-panel);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:color .1s, background-color .1s, border-color .1s; }
 .openas [data-open]:hover{ border-color:var(--accent); color:var(--accent); }
 .openas [data-open].on{ border-color:var(--accent); color:var(--accent); font-weight:600; }
-@media (pointer:coarse){
-  .openas{ gap:6px; margin-top:6px }
-  .openas__l{ display:none }
-  .openas [data-open]{ display:inline-flex; align-items:center; justify-content:center; flex:1;
-    min-height:32px; padding:0 .5em; box-sizing:border-box }
+@media (hover:hover){
+  .card__link:hover .openas, .card__link:focus-visible .openas{
+    opacity:1; transform:none; pointer-events:auto; }
 }
+@media (hover:none){ .openas{ display:none !important; } }
 .facet__clear{ all:unset; cursor:pointer; justify-self:start; font-size:12px;
   color:var(--fg-muted); border-bottom:1px solid var(--ink-hair); }
 .facet__clear:hover{ color:var(--accent); border-bottom-color:var(--accent); }

@@ -33,7 +33,7 @@ function save(k, v) {
 var DEFAULTS = {
   v: 1, fs: 20, lh: 1.72, measure: 68,
   theme: null, font: "1", justify: false, indent: true,
-  dim: 0, wake: false, showRemaining: true, showSession: true, showFolio: true,
+  dim: 0, wake: false, showRemaining: true, showSession: false, showFolio: true,
   lang: "ko", trScale: 85, markUntr: true, asLpm: 16,
   nrEngine: "auto", nrRate: 1, nrVol: 100, nrRoom: true, nrAmb: "off", nrAmbVol: -24, nrBoth: "ko", nrAct: true,
   nrVoiceKo: "__VKO__", nrVoiceEn: "__VEN__", nrVoiceJa: "__VJA__", nrGot: false, nrGpuFail: 0,
@@ -1327,7 +1327,7 @@ function paintShelf() {
     return '<li><a class="slip" href="#/w/' + encodeURIComponent(w.id) + '" data-author="' + w.author +
       '" style="--progress:' + p.frac.toFixed(4) + '"><span class="spine">' + (mk ? mk.outerHTML : "") +
       '</span><span class="slip__body"><span class="slip__title">' + esc((p.lang && p.lang !== "en" && w.titleKo) || w.title) + "</span>" +
-      '<span class="slip__meta">' + esc(w.authorKo) + " · " + w.year + " · 남은 " + fmtMin(left) +
+      '<span class="slip__meta">' + esc(w.authorKo) + " · 남은 " + fmtMin(left) +
       lang + " · " + ago(p.updated) + "</span>" +
       '<span class="slip__bar"><i></i><b>' + Math.floor(p.frac * 100) + "%</b></span></span></a></li>";
   }).join("");
@@ -1338,7 +1338,6 @@ function paintShelf() {
   }
 }
 function paintMine() {
-  var sess = load("rdr/v1/session", null);
   var done = 0, reading = 0, ko = 0;
   MANIFEST.forEach(function (w) {
     if (koCov(w.id) > 0) ko++;
@@ -1346,10 +1345,8 @@ function paintMine() {
     if (p.finished) done++; else if (p.frac > 0.002) reading++;
   });
   var bits = [];
-  if (reading) bits.push("읽는 중 " + reading);
   if (done) bits.push("완독 " + done);
   if (ko) bits.push(ko === MANIFEST.length ? "전편 한국어판" : "한글본 " + ko + "편");
-  if (sess && sess.totalMs > 60000) bits.push("누적 " + fmtMin(Math.round(sess.totalMs / 60000)));
   $("#mine").textContent = bits.length ? "  ·  " + bits.join(" · ") : "";
 }
 
