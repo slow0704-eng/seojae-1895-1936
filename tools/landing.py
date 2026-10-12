@@ -15,14 +15,11 @@ HERE = _os.path.join(ROOT, "tools")
 SITE_DIR = chr(49436) + chr(51116)                     # 서재
 SITE_HREF = "%EC%84%9C%EC%9E%AC/index.html"            # 서재/index.html, percent-encoded
 
-from jacket import mark, jacket, roll
+from jacket import mark, jacket, roll, logo
 
 LCSS = io.open(_os.path.join(HERE, "landing.css"), encoding="utf-8").read()
 
-FAVICON = ("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'"
-           "%3E%3Crect%20width='24'%20height='24'%20rx='3'%20fill='%23FAF8F4'/%3E"
-           "%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E"
-           "%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E")
+FAVICON = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2048%2048'%3E%3Cstyle%3Eg%7Bstroke:%238A2E22%7D%40media%20%28prefers-color-scheme:dark%29%7Bg%7Bstroke:%23E0906E%7D%7D%3C/style%3E%3Cg%20fill='none'%20stroke-width='3.4'%3E%3Cpath%20d='M8%2022.5H2L24%202L46%2022.5H40'/%3E%3Cpath%20d='M24%202V46'/%3E%3Cpath%20d='M8%2022.5V40.2Q17%2040.6%2024%2046Q31%2040.6%2040%2040.2V22.5'/%3E%3Cpath%20d='M14%2018.2Q20.5%2019.4%2024%2026Q27.5%2019.4%2034%2018.2V36.6Q28.6%2037.2%2024%2041.2Q19.4%2037.2%2014%2036.6Z'/%3E%3C/g%3E%3C/svg%3E"  # the house mark (jacket.LOGO_PATHS), small-size cut without the middle page
 
 # A spread across the eleven hands and four decades. Anything missing from the
 # catalogue is simply dropped, so this list can never break the build.
@@ -142,6 +139,13 @@ def build_landing(cat, works):
 <meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 퍼블릭 도메인 영문 소설 %(n)d편을 한 페이지에 담은 오프라인 독서 서재. 네트워크 요청 없음.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="모던문고">
+<meta property="og:title" content="모던문고 — 원문과 새 번역으로 읽는 근대 소설">
+<meta property="og:description" content="1895–1936 근대 소설 %(n)d편. 카프카, 웰스, 피츠제럴드, 아쿠타가와 … 원문과 새 한국어 번역, 대역·낭독.">
+<meta property="og:image" content="https://slow0704-eng.github.io/seojae-1895-1936/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="%(fav)s">
 <link rel="alternate" href="%(site)s">
 <link rel="stylesheet" href="서재/fonts/pretendard/pretendard.css">
@@ -159,7 +163,7 @@ def build_landing(cat, works):
 <div class="shell">
 
 <header class="nav" id="nav">
-  <a class="nav__mark" href="#top"><b>모던문고</b><span>%(y0)d—%(y1)d</span></a>
+  <a class="nav__mark" href="#top" aria-label="모던문고 맨 위로">%(logo)s<b>모던문고</b><span>%(y0)d—%(y1)d</span></a>
   <nav class="nav__links" aria-label="바로가기">
     <a href="#wall">소장작</a><a href="#craft">조판</a><a href="#authors">작가</a><a href="#keys">단축키</a>
   </nav>
@@ -177,7 +181,8 @@ def build_landing(cat, works):
 <main id="top">
 
 <section class="hero wrap">
-  <p class="kicker hero__kick">모던문고 &middot; 원문과 새 번역으로 읽는 근대 소설</p>
+  <div class="hero__brand">%(logo_l)s<p class="hero__bw"><b>모던문고</b><span>MODERN BUNKO</span></p></div>
+  <p class="kicker hero__kick">원문과 새 번역으로 읽는 근대 소설</p>
   <h1 class="hero__t">%(y0)d<em>—</em>%(y1)d</h1>
   <p class="hero__roll">%(roll)s</p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
@@ -289,8 +294,8 @@ def build_landing(cat, works):
  <div class="wrap">
   <div class="ft__grid">
     <div>
-      <p class="ft__t">모던문고 %(y0)d—%(y1)d</p>
-      <p>퍼블릭 도메인 영문 소설 %(n)d편을 위한<br>오프라인 장시간 독서 사이트.</p>
+      <p class="ft__t">%(logo)s<b>모던문고</b><span>MODERN BUNKO</span></p>
+      <p>%(y0)d–%(y1)d 근대 소설 %(n)d편,<br>원문과 새 번역으로 읽는 오프라인 서재.</p>
     </div>
     <div>
       <h2 class="ft__h">원문 출처</h2>
@@ -362,7 +367,7 @@ def build_landing(cat, works):
 </script>
 </body>
 </html>
-""" % {"css": LCSS, "fav": FAVICON, "site": SITE_HREF,
+""" % {"css": LCSS, "fav": FAVICON, "logo": logo("brand__logo", 3, small=True), "logo_l": logo("hero__logo", 1.3), "site": SITE_HREF,
        "n": len(works), "y0": span[0], "y1": span[1], "yspan": span[1] - span[0],
        "chars": "{:,}".format(tot_chars), "mchars": man(tot_chars),
        "hours": tot_min // 60, "facts": facts_h, "roll": roll(cat["authors"]),

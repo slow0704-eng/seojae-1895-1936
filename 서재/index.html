@@ -7,7 +7,14 @@
 <meta name="description" content="모던문고 — 1895–1936년 근대 소설 79편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='3'%20fill='%23FAF8F4'/%3E%3Cg%20fill='none'%20stroke='%238A2E22'%20stroke-width='1.3'%3E%3Cpath%20d='M6%204.6h12v14.8H6z'/%3E%3Cpath%20d='M12%204.6v14.8'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="모던문고">
+<meta property="og:title" content="모던문고 — 원문과 새 번역으로 읽는 근대 소설">
+<meta property="og:description" content="1895–1936 근대 소설 79편. 카프카, 웰스, 피츠제럴드, 아쿠타가와 … 원문과 새 한국어 번역, 대역·낭독.">
+<meta property="og:image" content="https://slow0704-eng.github.io/seojae-1895-1936/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2048%2048'%3E%3Cstyle%3Eg%7Bstroke:%238A2E22%7D%40media%20%28prefers-color-scheme:dark%29%7Bg%7Bstroke:%23E0906E%7D%7D%3C/style%3E%3Cg%20fill='none'%20stroke-width='3.4'%3E%3Cpath%20d='M8%2022.5H2L24%202L46%2022.5H40'/%3E%3Cpath%20d='M24%202V46'/%3E%3Cpath%20d='M8%2022.5V40.2Q17%2040.6%2024%2046Q31%2040.6%2040%2040.2V22.5'/%3E%3Cpath%20d='M14%2018.2Q20.5%2019.4%2024%2026Q27.5%2019.4%2034%2018.2V36.6Q28.6%2037.2%2024%2041.2Q19.4%2037.2%2014%2036.6Z'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="stylesheet" href="fonts/pretendard/pretendard.css">
 <style>/* ===========================================================
    서재 1895—1936 · reading surface
@@ -948,9 +955,13 @@ body.narrating #asctl{ display:none; }
 @supports not (backdrop-filter:blur(1px)){ .topbar{ background:var(--bg) } }
 .topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
   max-width:var(--page-max); margin-inline:auto }
-.topbar__home{ display:flex; align-items:baseline; gap:9px; text-decoration:none; margin-right:auto }
-.topbar__home b{ font-family:var(--ff-display); font-weight:600; font-size:16px;
-  letter-spacing:.02em; color:var(--fg-heading) }
+/* the brand lockup, as drawn: house mark + 모던문고 in a plain sans (tools/DESIGN.md) */
+.topbar__home{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto }
+.topbar__logo{ width:24px; height:24px; flex:none; color:var(--fg-heading);
+  transition:color .18s var(--ease) }
+.topbar__home:hover .topbar__logo{ color:var(--accent) }
+.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:16.5px;
+  letter-spacing:.01em; color:var(--fg-heading) }
 .topbar__home span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
   font-size:12px; letter-spacing:.14em; color:var(--fg-muted) }
 .topbar__home:hover span{ color:var(--fg) }
@@ -1511,7 +1522,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html"><b>모던문고</b><span>1895—1936</span></a>
+  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면"><svg class="topbar__logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M8 22.5H2L24 2L46 22.5H40"/><path d="M24 2V46"/><path d="M8 22.5V40.2Q17 40.6 24 46Q31 40.6 40 40.2V22.5"/><path d="M14 18.2Q20.5 19.4 24 26Q27.5 19.4 34 18.2V36.6Q28.6 37.2 24 41.2Q19.4 37.2 14 36.6Z"/></svg><b>모던문고</b><span>1895—1936</span></a>
   <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">

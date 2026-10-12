@@ -50,6 +50,27 @@ MARKS = {
 }
 
 
+# The house mark — redrawn as line work from the brand image (Gemini, 2026-10):
+# a gabled roof over an open book, one line from the ridge down the spine.
+# 48-unit grid, stroke on currentColor, so it takes the theme like the author marks.
+LOGO_PATHS = ('<path d="M8 22.5H2L24 2L46 22.5H40"/><path d="M24 2V46"/>'
+              '<path d="M8 22.5V40.2Q17 40.6 24 46Q31 40.6 40 40.2V22.5"/>'
+              '<path d="M11 20.2V38.4Q18.5 38.9 24 43.6Q29.5 38.9 37 38.4V20.2"/>'
+              '<path d="M14 18.2Q20.5 19.4 24 26Q27.5 19.4 34 18.2V36.6Q28.6 37.2 24 41.2Q19.4 37.2 14 36.6Z"/>')
+
+
+# Below ~32px the three nested pages run together, so the small cut drops the
+# middle one (as the favicon does) and thickens the line.
+LOGO_SMALL = LOGO_PATHS.replace('<path d="M11 20.2V38.4Q18.5 38.9 24 43.6Q29.5 38.9 37 38.4V20.2"/>', '')
+
+
+def logo(cls="logo", sw=2.6, small=False):
+    """The mark at any size (sw is the stroke in grid units)."""
+    return ('<svg class="%s" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="%s"'
+            ' stroke-linejoin="miter" aria-hidden="true" focusable="false">%s</svg>'
+            % (cls, sw, LOGO_SMALL if small else LOGO_PATHS))
+
+
 def surname(en, orig="en"):
     """'Thea von Harbou' -> 'von Harbou', 'H. G. Wells' -> 'Wells'.
     Japanese names are written family name first: 'Yumeno Kyūsaku' -> 'Yumeno'."""

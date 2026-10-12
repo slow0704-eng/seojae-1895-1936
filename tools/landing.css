@@ -176,9 +176,12 @@ svg{ display:block }
 }
 .nav.is-stuck{ border-bottom-color:var(--hair) }
 @supports not (backdrop-filter:blur(1px)){ .nav{ background:var(--bg) } }
-.nav__mark{ display:flex; align-items:baseline; gap:9px; text-decoration:none; margin-right:auto }
-.nav__mark b{ font-family:var(--ff-display); font-weight:600; font-size:17px;
-  letter-spacing:.02em; color:var(--fg-h) }
+/* the brand lockup, as drawn: house mark + 모던문고 in a plain sans */
+.nav__mark{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto }
+.brand__logo{ width:24px; height:24px; flex:none; color:var(--fg-h) }
+.nav__mark:hover .brand__logo{ color:var(--accent) }
+.nav__mark b{ font-family:var(--ff-ui); font-weight:600; font-size:17px;
+  letter-spacing:.01em; color:var(--fg-h) }
 .nav__mark span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
   font-size:12px; letter-spacing:.14em; color:var(--fg-m) }
 @media (max-width:520px){ .nav__mark span{ display:none } }
@@ -412,8 +415,19 @@ kbd{
 .ft{ border-top:1px solid var(--hair); padding-block:44px 56px }
 .ft__grid{ display:grid; gap:26px; align-items:start }
 @media (min-width:820px){ .ft__grid{ grid-template-columns:1.4fr 1fr 1fr } }
-.ft__t{ font-family:var(--ff-display); font-size:15px; letter-spacing:.12em; color:var(--fg-h);
-  margin-bottom:10px }
+.ft__t{ display:flex; align-items:center; gap:10px; color:var(--fg-h); margin-bottom:12px }
+.ft__t .brand__logo{ width:30px; height:30px }
+.ft__t b{ font-family:var(--ff-ui); font-weight:600; font-size:16px; letter-spacing:.01em }
+.ft__t span{ font-family:var(--ff-ui); font-size:12px; letter-spacing:.16em; color:var(--fg-m) }
+/* hero: the full lockup over the dates */
+.hero__brand{ display:flex; justify-content:center; align-items:center; gap:clamp(14px,1.6vw,20px);
+  margin:0 auto clamp(18px,2.4vw,26px); color:var(--fg-h) }
+.hero__logo{ width:clamp(54px,6vw,72px); height:clamp(54px,6vw,72px); flex:none }
+.hero__bw{ margin:0; display:grid; gap:4px; text-align:left }
+.hero__bw b{ font-family:var(--ff-ui); font-weight:500; font-size:clamp(28px,3.2vw,38px);
+  line-height:1; letter-spacing:.02em }
+.hero__bw span{ font-family:var(--ff-ui); font-weight:400; font-size:clamp(12px,1.1vw,14px);
+  letter-spacing:.22em; color:var(--fg-m) }
 .ft p, .ft li{ font-size:12.5px; line-height:2; color:var(--fg-m) }
 .ft h4,.ft .ft__h{ font-weight:400;  font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg-m);
   margin-bottom:8px; font-weight:500 }

@@ -52,7 +52,7 @@ def write_tts():
         with open(_os.path.join(out, name), "wb") as f:
             f.write(body.encode("utf-8"))
 
-from jacket import mark, title_split, len_bucket, FORM_KO, roll
+from jacket import mark, title_split, len_bucket, FORM_KO, roll, logo
 import landing
 
 HEAD_RX = re.compile(r'^<h2 class="(chapter|part)" id="([^"]+)"[^>]*>(.*)</h2>$')
@@ -385,6 +385,13 @@ def index_page(cat, works):
 <meta name="description" content="모던문고 — 1895–1936년 근대 소설 %(n)d편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="모던문고">
+<meta property="og:title" content="모던문고 — 원문과 새 번역으로 읽는 근대 소설">
+<meta property="og:description" content="1895–1936 근대 소설 %(n)d편. 카프카, 웰스, 피츠제럴드, 아쿠타가와 … 원문과 새 한국어 번역, 대역·낭독.">
+<meta property="og:image" content="https://slow0704-eng.github.io/seojae-1895-1936/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="%(fav)s">
 <link rel="stylesheet" href="fonts/pretendard/pretendard.css">
 <style>%(css)s
@@ -409,7 +416,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 
 <main id="library">
 <div class="topbar"><div class="topbar__in">
-  <a class="topbar__home" href="../index.html"><b>모던문고</b><span>1895—1936</span></a>
+  <a class="topbar__home" href="../index.html" aria-label="모던문고 첫 화면">%(logo)s<b>모던문고</b><span>1895—1936</span></a>
   <span class="topbar__hint"><kbd>?</kbd> 단축키</span>
 </div></div>
 <div class="wrap">
@@ -462,7 +469,7 @@ var SEOJAE={ko:{},koIndex:function(m){SEOJAE.ko=m||{};}};</script>
 </body>
 </html>
 """ % {"css": CSS, "icss": IDXCSS, "js": JS, "shell": READER_SHELL,
-       "fav": landing.FAVICON,
+       "fav": landing.FAVICON, "logo": logo("topbar__logo", 3, small=True),
        "n": len(works), "mchars": man(tot_chars), "hours": tot_min // 60,
        "roll": roll(cat["authors"]), "nauth": len(cat["authors"]),
        "grid": "\n".join(grid), "plates": "\n".join(plates),

@@ -59,9 +59,13 @@
 @supports not (backdrop-filter:blur(1px)){ .topbar{ background:var(--bg) } }
 .topbar__in{ display:flex; align-items:center; gap:16px; width:100%;
   max-width:var(--page-max); margin-inline:auto }
-.topbar__home{ display:flex; align-items:baseline; gap:9px; text-decoration:none; margin-right:auto }
-.topbar__home b{ font-family:var(--ff-display); font-weight:600; font-size:16px;
-  letter-spacing:.02em; color:var(--fg-heading) }
+/* the brand lockup, as drawn: house mark + 모던문고 in a plain sans (tools/DESIGN.md) */
+.topbar__home{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto }
+.topbar__logo{ width:24px; height:24px; flex:none; color:var(--fg-heading);
+  transition:color .18s var(--ease) }
+.topbar__home:hover .topbar__logo{ color:var(--accent) }
+.topbar__home b{ font-family:var(--ff-ui); font-weight:600; font-size:16.5px;
+  letter-spacing:.01em; color:var(--fg-heading) }
 .topbar__home span{ font-family:var(--ff-display); font-variant-numeric:oldstyle-nums;
   font-size:12px; letter-spacing:.14em; color:var(--fg-muted) }
 .topbar__home:hover span{ color:var(--fg) }
