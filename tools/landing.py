@@ -182,7 +182,7 @@ def build_landing(cat, works):
 
 <section class="hero wrap">
   <div class="hero__brand">%(logo_l)s<p class="hero__bw"><b>모던문고</b></p></div>
-  <h1 class="hero__t">원문과 새 번역으로 읽는<br>근대 소설</h1>
+  <h1 class="hero__t">원문과 새 번역으로 읽는 근대 소설</h1>
   <p class="hero__kick"><span class="hero__yr">%(y0)d<em>—</em>%(y1)d</span> &middot; 작가 %(nauth)d명 &middot; 소설 %(n)d편</p>
   <p class="hero__roll">%(roll)s</p>
   <p class="lede hero__lede">한 시대를 통째로 옮겨 둔 책장입니다.
