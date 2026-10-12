@@ -1,0 +1,236 @@
+/* ===========================================================
+   모던문고 · the book cover — one component, the library and the front door
+   Drawn from the book's metadata, never fetched. Every part of the board
+   carries one fact (tools/DESIGN.md, '표지'):
+
+     small mark at the head  → author          (author mark)
+     title, typeface         → original language (Latin serif / Japanese mincho)
+     title, setting          → decade           (period title-page conventions)
+     Korean title, small     → our edition
+     emblem at the middle    → genre            (line drawing)
+     pattern at the foot     → decade           (period ornament)
+     spine band, width       → length           (reading time, log scale)
+     spine band, colour      → genre            (Penguin / Albatross codes)
+     board colour            → author's country
+     board texture           → form             (novel cloth, story laid paper …)
+
+   Markup comes from tools/jacket.py cover_board(); every data-* sits on the
+   .cover itself, so the board looks the same wherever it is placed. Theme
+   tokens differ between the two pages, hence the --c-* aliases below.
+   =========================================================== */
+.cover{
+  --c-panel:var(--bg-panel, var(--panel));
+  --c-hair:var(--ink-hair, var(--hair));
+  --c-muted:var(--fg-muted, var(--fg-m));
+  --c-head:var(--fg-heading, var(--fg-h));
+  --c-rule:color-mix(in srgb, var(--c-muted) 70%, transparent);
+  --cv-pad:9cqw;
+  --tx-ink:rgba(70,50,30,.032);
+  --tx-ink2:rgba(70,50,30,.055);
+}
+[data-theme="dark"] .cover, [data-theme="night"] .cover{
+  --tx-ink:rgba(255,255,255,.022); --tx-ink2:rgba(255,255,255,.04);
+}
+
+/* ---------- colours: genre (spine) and country (board) ---------- */
+:root{
+  --g-fiction:#C8632A;
+  --g-society:#C8632A;  /* Penguin orange — fiction           */
+  --g-mystery:#3C7350;  /* Penguin green — crime              */
+  --g-ideas:#2F6A99;    /* Pelican blue — ideas, non-fiction  */
+  --g-history:#A8365F;  /* Penguin cerise — travel, adventure */
+  --g-fable:#674C93;    /* Penguin purple — belles-lettres    */
+  --g-comic:#C99A1E;    /* Penguin yellow — miscellany        */
+  --g-sf:#2B7C79;       /* house: instrument teal             */
+  --g-weird:#3A3346;    /* house: lamp-black violet           */
+  --g-romance:#A83A36;  /* house: madder red                  */
+
+  --n-uk:#4F6A8A;       /* 영국 — slate, London stock brick at dusk */
+  --n-us:#A0623A;       /* 미국 — tobacco, the Scribner's spine     */
+  --n-de:#6B7558;       /* 독일어권 — Feldgrau                       */
+  --n-ru:#8E3F4F;       /* 러시아 — beet red                         */
+  --n-jp:#A08A5A;       /* 일본 — kakishibu, persimmon-tanned paper  */
+}
+[data-genre="sf"]{--g:var(--g-sf)} [data-genre="weird"]{--g:var(--g-weird)}
+[data-genre="fable"]{--g:var(--g-fable)} [data-genre="mystery"]{--g:var(--g-mystery)}
+[data-genre="society"]{--g:var(--g-society)} [data-genre="romance"]{--g:var(--g-romance)}
+[data-genre="comic"]{--g:var(--g-comic)} [data-genre="history"]{--g:var(--g-history)}
+[data-genre="ideas"]{--g:var(--g-ideas)}
+.cover[data-nat="uk"]{--n:var(--n-uk)} .cover[data-nat="us"]{--n:var(--n-us)}
+.cover[data-nat="de"]{--n:var(--n-de)} .cover[data-nat="ru"]{--n:var(--n-ru)}
+.cover[data-nat="jp"]{--n:var(--n-jp)}
+
+.cover, .spine{
+  --gc:var(--g, var(--g-fiction));
+  --band:var(--gc);
+  --paper:color-mix(in srgb, var(--n, var(--fg)) 11%, var(--c-panel, var(--bg-panel)));
+  --pc:color-mix(in srgb, var(--gc) 34%, transparent);
+}
+[data-theme="sepia"] .cover, [data-theme="sepia"] .spine{ --band:color-mix(in srgb, var(--gc) 86%, #8a6a3a) }
+[data-theme="dark"] .cover, [data-theme="dark"] .spine{
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 72%, #fff);
+  --band:color-mix(in srgb, var(--gc) 62%, var(--bg));
+  --paper:color-mix(in srgb, var(--n, var(--fg)) 16%, var(--c-panel, var(--bg-panel))); }
+[data-theme="night"] .cover, [data-theme="night"] .spine{
+  --gc:color-mix(in oklab, var(--g, var(--g-fiction)) 66%, #fff);
+  --band:color-mix(in srgb, var(--gc) 50%, var(--bg));
+  --pc:color-mix(in srgb, var(--gc) 22%, transparent);
+  --paper:color-mix(in srgb, var(--n, var(--fg)) 13%, var(--c-panel, var(--bg-panel))); }
+
+/* ---------- texture: form ---------- */
+.cover{ --tex:linear-gradient(transparent, transparent) }
+/* 장편 — bookcloth: a fine square weave */
+.cover[data-form="novel"]{ --tex:
+  repeating-linear-gradient(0deg, var(--tx-ink) 0 .5px, transparent .5px 1.5px),
+  repeating-linear-gradient(90deg, var(--tx-ink) 0 .5px, transparent .5px 1.5px) }
+/* 중편 — linen: a diagonal twill */
+.cover[data-form="novella"]{ --tex:
+  repeating-linear-gradient(45deg, var(--tx-ink2) 0 .7px, transparent .7px 3px) }
+/* 단편 — laid paper: close laid lines, wide chain lines */
+.cover[data-form="story"]{ --tex:
+  repeating-linear-gradient(90deg, var(--tx-ink) 0 1px, transparent 1px 11cqw),
+  repeating-linear-gradient(0deg, var(--tx-ink) 0 .4px, transparent .4px 1.2px) }
+/* 단편집 — pebble board: a stipple */
+.cover[data-form="collection"]{ --tex:
+  radial-gradient(circle, var(--tx-ink2) 0 .7px, transparent 1px) 0 0 / 3.2px 3.2px }
+/* 희곡 — curtain: soft vertical folds */
+.cover[data-form="play"]{ --tex:
+  repeating-linear-gradient(90deg, var(--tx-ink2) 0 1.5px, transparent 1.5px 5px) }
+/* 잡문집, 사변소설 — wove paper: plain, a faint mottle */
+.cover[data-form="miscellany"], .cover[data-form="essay-novel"]{ --tex:
+  radial-gradient(60% 40% at 30% 20%, var(--tx-ink), transparent),
+  radial-gradient(50% 40% at 75% 70%, var(--tx-ink), transparent) }
+
+/* ---------- the board ---------- */
+.cover{
+  --sp:max(4px, var(--spw, 5.5cqw));
+  position:relative; aspect-ratio:129/198; display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:6cqw auto auto auto auto auto minmax(2cqw,1fr) auto minmax(2cqw,1fr) auto auto 25%;
+  justify-items:center; padding-inline:calc(var(--cv-pad) + var(--sp)) var(--cv-pad);
+  border:1px solid var(--c-hair); border-radius:1px 3px 3px 1px;
+  box-shadow:var(--shadow-1);
+  /* quarter binding: cloth spine (width = length, colour = genre), hinge line,
+     the shadow of the joint, then the paper side with its texture */
+  background:
+    linear-gradient(90deg,
+      var(--band) 0 var(--sp),
+      color-mix(in srgb, #000 24%, var(--band)) var(--sp) calc(var(--sp) + 1px),
+      color-mix(in srgb, var(--fg) 7%, transparent) calc(var(--sp) + 1px) calc(var(--sp) + 5px),
+      transparent calc(var(--sp) + 5px)),
+    var(--tex),
+    linear-gradient(var(--paper), var(--paper));
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+/* one soft raking light across the board */
+.cover::before{ content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(118deg, color-mix(in srgb,#fff 24%,transparent), transparent 44%);
+  opacity:.55 }
+[data-theme="dark"] .cover::before,[data-theme="night"] .cover::before{ opacity:.05 }
+.cover__frame{ display:none; position:absolute; inset:3.4cqw 3.4cqw 3.4cqw calc(var(--sp) + 3.4cqw);
+  pointer-events:none; border:1px solid color-mix(in srgb, var(--c-rule) 50%, transparent) }
+.cover[data-decade="1890"] .cover__frame{ display:block }
+
+/* ---------- the parts, each in its own row ---------- */
+.cover__mark{ grid-row:2; width:9cqw; height:9cqw; color:color-mix(in srgb, var(--au) 62%, transparent) }
+.rule{ display:block; width:100% }
+.rule--head{ grid-row:3; margin-top:3cqw }
+.rule--foot{ grid-row:6; margin-top:2.6cqw; transform:scaleY(-1) }
+.cover__title{ grid-row:4; margin:3cqw 0 0; font-family:var(--ff-display); font-weight:400;
+  text-align:center; text-wrap:balance; hyphens:none; color:var(--c-head);
+  font-size:var(--cv-ts); line-height:1.25 }
+.cover__title .sub{ display:block; margin-top:.5em; font-size:.62em; font-style:italic; font-weight:400;
+  text-transform:none; letter-spacing:.015em; font-variant-caps:normal; color:var(--c-muted) }
+.cover__kt{ grid-row:5; margin:1.8cqw 0 0; font-family:"Seojae Serif KR","Noto Serif KR",serif;
+  font-size:max(9px, 4.8cqw); line-height:1.35; letter-spacing:.02em; text-align:center;
+  word-break:keep-all; text-wrap:balance; color:var(--c-muted) }
+.cover__emb{ grid-row:8; width:12cqw; height:12cqw; color:color-mix(in srgb, var(--gc) 78%, transparent) }
+.cover__author{ grid-row:10; margin:0; font-family:var(--ff-display); font-variant-caps:all-small-caps;
+  letter-spacing:.17em; font-size:5cqw; line-height:1.2; color:var(--c-muted); text-align:center }
+.cover__year{ grid-row:11; margin:1.2cqw 0 0; font-family:var(--ff-display);
+  font-variant-numeric:oldstyle-nums; letter-spacing:.24em; text-indent:.24em;
+  font-size:4.4cqw; color:color-mix(in srgb, var(--c-muted) 76%, transparent) }
+
+/* title size: how much title there is */
+.cover[data-len="s"]  { --cv-ts:10.8cqw }
+.cover[data-len="m"]  { --cv-ts:8.8cqw }
+.cover[data-len="l"]  { --cv-ts:7.4cqw }
+.cover[data-len="xl"] { --cv-ts:6.2cqw }
+
+/* title typeface: the original language */
+.cover[data-lang="ja"] .cover__title{
+  font-family:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP","Seojae Serif KR",serif;
+  letter-spacing:.12em; font-weight:500 }
+
+/* title setting: the decade's title-page convention (Latin titles) */
+.cover[data-lang="en"][data-decade="1890"] .cover__title{   /* Victorian: spaced capitals */
+  text-transform:uppercase; letter-spacing:.095em }
+.cover[data-lang="en"][data-decade="1900"] .cover__title{   /* Edwardian: firmer capitals */
+  text-transform:uppercase; letter-spacing:.05em; font-weight:500 }
+.cover[data-lang="en"][data-decade="1910"] .cover__title{   /* capitals and small capitals */
+  font-variant-caps:small-caps; letter-spacing:.06em; font-size:calc(var(--cv-ts) * 1.06) }
+.cover[data-lang="en"][data-decade="1920"] .cover__title{   /* Deco: heavy, tight capitals */
+  text-transform:uppercase; letter-spacing:.015em; font-weight:600; line-height:1.12 }
+.cover[data-lang="en"][data-decade="1930"] .cover__title{   /* modern: italic lower case */
+  font-style:italic; letter-spacing:0; font-size:calc(var(--cv-ts) * 1.12); line-height:1.15 }
+
+/* ---------- author rule signature ---------- */
+.cover[data-author="kafka"]      .rule{ height:2px; background:var(--c-rule) }
+.cover[data-author="wells"]      .rule{ height:4px; background:linear-gradient(
+   var(--c-rule) 0 1.5px,transparent 1.5px 3.5px,var(--c-rule) 3.5px 4px) }
+.cover[data-author="fitzgerald"] .rule{ height:6px; background:linear-gradient(
+   var(--c-rule) 0 .5px,transparent .5px 2px,var(--c-rule) 2px 3.5px,
+   transparent 3.5px 5.5px,var(--c-rule) 5.5px 6px) }
+.cover[data-author="harbou"]     .rule{ height:5px; background:linear-gradient(
+   var(--c-rule) 0 1px,transparent 1px 4px,var(--c-rule) 4px 5px) }
+.cover[data-author="blackwood"]  .rule{ height:3px; background:repeating-linear-gradient(90deg,
+   var(--c-rule) 0 7px,transparent 7px 10px) }
+.cover[data-author="chambers"]   .rule{ height:2px; background:repeating-linear-gradient(90deg,
+   var(--c-rule) 0 2px,transparent 2px 5px) }
+.cover[data-author="machen"]     .rule{ height:3px; background:repeating-linear-gradient(90deg,
+   var(--c-rule) 0 10px,transparent 10px 13px,var(--c-rule) 13px 15px,transparent 15px 18px) }
+.cover[data-author="andreyev"]   .rule{ height:1px; background:var(--c-rule) }
+.cover[data-author="jacobs"]     .rule{ height:3px; background:linear-gradient(
+   var(--c-rule) 0 .5px,transparent .5px 2.5px,var(--c-rule) 2.5px 3px) }
+.cover[data-author="yumeno"]     .rule{ height:4px; background:repeating-linear-gradient(90deg,
+   var(--c-rule) 0 1px,transparent 1px 4px) }
+.cover[data-author="akutagawa"]  .rule{ height:5px; background:linear-gradient(
+   var(--c-rule) 0 2px,transparent 2px 4px,var(--c-rule) 4px 5px) }
+
+/* ---------- pattern at the foot: decade ---------- */
+.cover__pat{ position:absolute; left:calc(var(--sp) + 7cqw); right:7cqw; top:77%; bottom:5%;
+  pointer-events:none; --d:calc(5cqw + var(--pv,0) * 1cqw);
+  -webkit-mask-image:linear-gradient(transparent, #000 45%); mask-image:linear-gradient(transparent, #000 45%) }
+/* 1890s — Arts and Crafts diaper: a quincunx of dots */
+.cover[data-decade="1890"] .cover__pat{
+  background:
+    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) 0 0 / var(--d) var(--d),
+    radial-gradient(circle, var(--pc) 0 calc(var(--d) * .11), transparent calc(var(--d) * .11 + .6px)) calc(var(--d) / 2) calc(var(--d) / 2) / var(--d) var(--d) }
+/* 1900s — Wiener Werkstätte: Hoffmann's square lattice */
+.cover[data-decade="1900"] .cover__pat{ --d:calc(4.4cqw + var(--pv,0) * 1.1cqw);
+  background:
+    repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d)),
+    repeating-linear-gradient(90deg, var(--pc) 0 1px, transparent 1px var(--d)) }
+/* 1910s — engraver's hatching, leaning one way or the other */
+.cover[data-decade="1910"] .cover__pat{ --d:calc(2.6cqw + var(--pv,0) * .7cqw);
+  background:repeating-linear-gradient(var(--ang, 45deg), var(--pc) 0 1px, transparent 1px var(--d)) }
+.cover[data-decade="1910"][data-pv="1"] .cover__pat,
+.cover[data-decade="1910"][data-pv="3"] .cover__pat{ --ang:-45deg }
+/* 1920s — Art Deco sunburst, rising from the foot */
+.cover[data-decade="1920"] .cover__pat{
+  background:repeating-conic-gradient(from -90deg at 50% 100%,
+    var(--pc) 0 1.4deg, transparent 1.4deg calc(6deg + var(--pv,0) * 2deg)) }
+/* 1930s — streamline: speed lines thinning toward one edge */
+.cover[data-decade="1930"] .cover__pat{ --d:calc(2.4cqw + var(--pv,0) * .6cqw);
+  background:repeating-linear-gradient(0deg, var(--pc) 0 1px, transparent 1px var(--d));
+  -webkit-mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
+          mask-image:linear-gradient(90deg, #000, transparent 85%), linear-gradient(transparent, #000 45%);
+  -webkit-mask-composite:source-in; mask-composite:intersect }
+
+@supports not (container-type:inline-size){
+  .cover{ padding-inline:15px }
+  .cover[data-len="s"]{ --cv-ts:18px } .cover[data-len="m"]{ --cv-ts:15px }
+  .cover[data-len="l"]{ --cv-ts:12.5px } .cover[data-len="xl"]{ --cv-ts:10.5px }
+  .cover__mark{ width:15px; height:15px } .cover__emb{ width:20px; height:20px }
+  .cover__author{ font-size:8.5px } .cover__year{ font-size:7.5px } .cover__kt{ font-size:9px }
+}

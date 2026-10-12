@@ -17,7 +17,8 @@ SITE_HREF = "%EC%84%9C%EC%9E%AC/index.html"            # 서재/index.html, perc
 
 from jacket import mark, jacket, roll, logo
 
-LCSS = io.open(_os.path.join(HERE, "landing.css"), encoding="utf-8").read()
+LCSS = (io.open(_os.path.join(HERE, "landing.css"), encoding="utf-8").read() + "\n" +
+        io.open(_os.path.join(HERE, "cover.css"), encoding="utf-8").read())
 
 FAVICON = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2048%2048'%3E%3Cstyle%3Eg%7Bstroke:%238A2E22%7D%40media%20%28prefers-color-scheme:dark%29%7Bg%7Bstroke:%23E0906E%7D%7D%3C/style%3E%3Cg%20fill='none'%20stroke-width='3.4'%3E%3Cpath%20d='M8%2022.5H2L24%202L46%2022.5H40'/%3E%3Cpath%20d='M24%202V46'/%3E%3Cpath%20d='M8%2022.5V40.2Q17%2040.6%2024%2046Q31%2040.6%2040%2040.2V22.5'/%3E%3Cpath%20d='M14%2018.2Q20.5%2019.4%2024%2026Q27.5%2019.4%2034%2018.2V36.6Q28.6%2037.2%2024%2041.2Q19.4%2037.2%2014%2036.6Z'/%3E%3C/g%3E%3C/svg%3E"  # the house mark (jacket.LOGO_PATHS), small-size cut without the middle page
 

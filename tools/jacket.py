@@ -118,20 +118,61 @@ FORM_KO = {
 }
 
 
-def jacket(w, cls="jkt", tag="div", href=None, extra=""):
-    """A standalone book jacket — used by the landing page. The portal builds
-    its own (it needs the progress and caption furniture around it)."""
+# ---------------------------------------------------------------- the cover
+# One board for the library and the front door (tools/cover.css). Every part
+# carries one fact; see the table at the top of cover.css.
+NATION = {"kafka": "de", "harbou": "de", "wells": "uk", "blackwood": "uk", "machen": "uk",
+          "jacobs": "uk", "fitzgerald": "us", "chambers": "us", "andreyev": "ru",
+          "yumeno": "jp", "akutagawa": "jp"}
+
+# genre emblems, 24-unit line work like the author marks
+EMBLEMS = {
+ "sf": '<circle cx="12" cy="12" r="5.2"/><ellipse cx="12" cy="12" rx="10.4" ry="3.1" transform="rotate(-18 12 12)"/>',
+ "weird": '<path d="M15.5 3.2a8.8 8.8 0 1 0 0 17.6a7.2 7.2 0 0 1 0-17.6z"/><path d="M19 6.5v3M17.5 8h3"/>',
+ "fable": '<path d="M19.5 3.5C11.5 4.5 6 10.5 4.5 20.5"/><path d="M19.5 3.5c-.5 6.5-5 10.5-11.5 11.5"/><path d="M10 13.5 8 11M13 10.5l-1.6-2.8"/>',
+ "mystery": '<circle cx="7.5" cy="12" r="3.6"/><path d="M11.1 12H21M17.2 12v3.2M20.2 12v2.2"/>',
+ "society": '<path d="M3 20.5V11l4.2-3.2L11.4 11v9.5"/><path d="M11.4 20.5V8.2L16.2 4 21 8.2v12.3"/><path d="M2 20.5h20"/><path d="M15 11h2.4M15 14.5h2.4" opacity=".6"/>',
+ "romance": '<circle cx="9.3" cy="12" r="5.2"/><circle cx="14.7" cy="12" r="5.2"/>',
+ "comic": '<path d="M4.5 18.5 3.2 6.8 9 12.2 12 4.6l3 7.6 5.8-5.4-1.3 11.7z"/><path d="M4.5 18.5h15"/><circle cx="3.2" cy="5.4" r="1.1"/><circle cx="12" cy="3.2" r="1.1"/><circle cx="20.8" cy="5.4" r="1.1"/>',
+ "history": '<path d="M6.5 3h11M6.5 21h11"/><path d="M8 3c0 5 8 6 8 9s-8 4-8 9M16 3c0 5-8 6-8 9s8 4 8 9"/>',
+ "ideas": '<circle cx="12" cy="12" r="3.6"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
+}
+
+
+def spine_width(minutes):
+    """Spine band width in cqw from reading time, on a log scale:
+    a one-minute parable gets a thin strip, a 15-hour novel a broad band."""
+    import math
+    f = math.log(max(1, minutes)) / math.log(900.0)
+    return 2.5 + 14.0 * min(1.0, f)
+
+
+def cover_board(w, title_tag="h2", extra=""):
     main, sub = title_split(w["title"])
-    subh = '<span class="jkt__s">%s</span>' % html.escape(sub) if sub else ""
-    open_tag = ('<a class="%s" data-len="%s" style="--au:var(--%s)" href="%s"%s>'
-                % (cls, len_bucket(main), w["author"], href, extra)) if href else (
-               '<%s class="%s" data-len="%s" style="--au:var(--%s)"%s>'
-               % (tag, cls, len_bucket(main), w["author"], extra))
-    close = "</a>" if href else "</%s>" % tag
-    # genre = spine cloth colour, the same rule as the library jackets
-    open_tag = open_tag.replace(' class="%s"' % cls, ' class="%s" data-genre="%s"' % (cls, html.escape(w.get("genre", ""))), 1)
-    return """%(open)s<span class="jkt__in">%(mark)s<i class="jkt__r jkt__r--h"></i><span class="jkt__t">%(main)s%(sub)s</span><i class="jkt__r jkt__r--f"></i><span class="jkt__a">%(auth)s</span><span class="jkt__y">%(year)d</span></span>%(close)s""" % {
-        "open": open_tag, "close": close,
-        "mark": mark(w["author"], "jkt__mark"),
-        "main": html.escape(main), "sub": subh,
-        "auth": html.escape(w["authorEn"]), "year": w["year"]}
+    lang = w.get("orig", "en")
+    pv = int(__import__("hashlib").md5(w["id"].encode()).hexdigest()[:4], 16) % 4
+    subh = '<span class="sub">%s</span>' % html.escape(sub) if sub else ""
+    emb = EMBLEMS.get(w.get("genre", ""), "")
+    return ('<div class="cover" data-author="%(a)s" data-decade="%(d)d" data-genre="%(g)s" data-form="%(f)s"'
+            ' data-nat="%(n)s" data-len="%(len)s" data-lang="%(lang)s" data-pv="%(pv)d"'
+            ' style="--pv:%(pv)d;--spw:%(spw).2fcqw;--au:var(--author-%(a)s, var(--%(a)s))">'
+            '<i class="cover__frame"></i><i class="cover__pat"></i>%(mark)s<i class="rule rule--head"></i>'
+            '<%(tt)s class="cover__title" lang="%(lang)s">%(main)s%(sub)s</%(tt)s>'
+            '<p class="cover__kt" lang="ko">%(ko)s</p>'
+            '<i class="rule rule--foot"></i>'
+            '<svg class="cover__emb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"'
+            ' aria-hidden="true" focusable="false">%(emb)s</svg>'
+            '<p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>%(extra)s</div>') % {
+        "a": w["author"], "d": min(1930, (w["year"] // 10) * 10), "g": html.escape(w.get("genre", "")),
+        "f": html.escape(w.get("form", "novel")), "n": NATION.get(w["author"], "uk"),
+        "len": len_bucket(main), "lang": lang, "pv": pv, "spw": spine_width(w["minutes"]),
+        "mark": mark(w["author"], "cover__mark"), "tt": title_tag,
+        "main": html.escape(main), "sub": subh, "ko": html.escape(w.get("titleKo", "")),
+        "emb": emb, "auth": html.escape(w["authorEn"]), "y": w["year"], "extra": extra}
+
+
+def jacket(w, cls="jkt", tag="div", href=None, extra=""):
+    """The front door's jacket: a link around the shared board."""
+    if href:
+        return '<a class="%s" href="%s"%s>%s</a>' % (cls, href, extra, cover_board(w, "p"))
+    return '<%s class="%s"%s>%s</%s>' % (tag, cls, extra, cover_board(w, "p"), tag)

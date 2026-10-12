@@ -20,7 +20,8 @@ import bookparse
 from meta import build as build_catalog, GENRE_KO
 
 CSS = io.open(_os.path.join(HERE, "reader.css"), encoding="utf-8").read()
-IDXCSS = io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read()
+IDXCSS = (io.open(_os.path.join(HERE, "cover.css"), encoding="utf-8").read() + "\n" +
+          io.open(_os.path.join(HERE, "index.css"), encoding="utf-8").read())
 JS = io.open(_os.path.join(HERE, "portal.js"), encoding="utf-8").read()
 
 # 낭독: 정규화·낭독 코드를 포털 IIFE 안에 넣고, 캘리브레이션 값(tools/tts/config.json)을 박습니다.
@@ -52,7 +53,7 @@ def write_tts():
         with open(_os.path.join(out, name), "wb") as f:
             f.write(body.encode("utf-8"))
 
-from jacket import mark, title_split, len_bucket, FORM_KO, roll, logo
+from jacket import mark, title_split, len_bucket, FORM_KO, roll, logo, cover_board
 import landing
 
 HEAD_RX = re.compile(r'^<h2 class="(chapter|part)" id="([^"]+)"[^>]*>(.*)</h2>$')
@@ -160,12 +161,7 @@ def cover(w, i):
  data-year="%(y)d" data-id="%(id)s" data-title="%(tl)s" data-ko="%(ko)s" data-mins="%(mins)d"
  data-form="%(formk)s" data-genre="%(genre)s" style="--i:%(i)d;--pv:%(pv)d">
 <a class="card__link" href="#/w/%(idq)s">
- <div class="cover"><i class="cover__frame"></i><i class="cover__pat"></i>%(mark)s<i class="rule rule--head"></i>
-  <h2 class="cover__title">%(main)s%(sub)s</h2>
-  <i class="rule rule--foot"></i>
-  <p class="cover__author">%(auth)s</p><p class="cover__year">%(y)d</p>
-  <span class="cover__ko" hidden></span>
-  <p class="openas" hidden><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p></div>
+ %(board)s
  <div class="mt">
   <p class="mt__ko">%(ko)s</p>
   <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
@@ -178,7 +174,9 @@ def cover(w, i):
         "formk": w.get("form", "novel"), "genre": w.get("genre", ""),
         # 0-3 from the id: which variant of the decade's pattern this board gets
         "pv": int(_hl.md5(w["id"].encode()).hexdigest()[:4], 16) % 4,
-        "mark": mark(w["author"], "cover__mark"), "main": html.escape(main), "sub": subh,
+        "board": cover_board(w, "h2", '<span class="cover__ko" hidden></span>'
+                             '<p class="openas" hidden><span data-open="en">%s</span><span data-open="ko">한글</span>'
+                             '<span data-open="both">대역</span></p>' % ORIG_KO.get(w.get("orig", "en"), "원문")),
         "auth": html.escape(w["authorEn"]), "authko": html.escape(w["authorKo"]),
         "form": FORM_KO.get(w.get("form", "novel"), "장편"), "chars": man(w["chars"]),
         "origlab": ORIG_KO.get(w.get("orig", "en"), "원문"),
