@@ -167,9 +167,9 @@ def cover(w, i):
   <span class="cover__ko" hidden></span></div>
  <div class="mt">
   <p class="mt__ko">%(ko)s</p>
-  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
   <p class="mt__by"><span class="form">%(form)s</span><span>%(authko)s</span></p>
   <p class="cap"><span class="cap__pct"></span><span>%(chars)s</span><b>&middot;</b><span>%(time)s</span></p>
+  <p class="openas" hidden><span class="openas__l">열기</span><span data-open="en">%(origlab)s</span><span data-open="ko">한글</span><span data-open="both">대역</span></p>
  </div>
 </a></article>""" % {
         "a": w["author"], "d": DECADE(w["year"]), "len": len_bucket(main), "y": w["year"],
