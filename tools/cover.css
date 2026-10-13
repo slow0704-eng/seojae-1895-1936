@@ -299,64 +299,6 @@
     var(--L) 22% 0 / 2px 100% no-repeat,
     var(--L) 0 76% / 100% 1px no-repeat }
 
-/* ---------- the object: one finish over every board ----------
-   What makes 79 drawn boards read as books from one press is the same
-   paper, the same ink and the same light on all of them. One layer on top
-   (.cover__fx), no images: the grain is an SVG noise tile, drawn once and
-   cached, so it costs a few hundred bytes and follows every theme.
-     grain   — the sheet's fibre, fine speckle + a broad cloud
-     age     — the decade: older boards browned at the edges, a little foxing
-     light   — bevelled board edge, cloth sheen on the spine
-     ink     — letterpress: words pressed into the sheet (in the type rules)
-     body    — a page block showing at the fore-edge and foot            */
-.cover{
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .24 0 0 0 0 .15 .75 0 0 0 -.37'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)'/%3E%3C/svg%3E");
-  --cloud:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .4 0 0 0 0 .2 .45 0 0 0 -.2'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23f)'/%3E%3C/svg%3E");
-  --age:.25; --age-ink:#8A6424; --edge-hi:rgba(255,255,255,.45); --page:#F5F0E4; --page-line:#D8CFBD;
-  --press:0 .06em 0 rgba(255,255,255,.55);
-}
-.cover[data-decade="1890"]{ --age:1 }   .cover[data-decade="1900"]{ --age:.8 }
-.cover[data-decade="1910"]{ --age:.6 }  .cover[data-decade="1920"]{ --age:.42 }
-[data-theme="sepia"] .cover{ --page:#EFE4CC; --page-line:#CDBB98; --press:0 .06em 0 rgba(255,250,235,.45) }
-[data-theme="dark"] .cover, [data-theme="night"] .cover{
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .92 0 0 0 0 .88 0 0 0 0 .8 .45 0 0 0 -.25'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)'/%3E%3C/svg%3E");
-  --cloud:linear-gradient(transparent, transparent);
-  --age-ink:#000; --edge-hi:rgba(255,255,255,.07); --page:#3A3631; --page-line:#1E1C1A;
-  --press:0 -.05em 0 rgba(0,0,0,.55) }
-[data-theme="night"] .cover{ --page:#2A2723; --page-line:#141312 }
-
-.cover__fx{ position:absolute; inset:0; z-index:1; pointer-events:none; border-radius:inherit;
-  background:
-    /* cloth sheen across the spine band: lit edge, rounded shade at the joint */
-    linear-gradient(90deg, rgba(255,255,255,.2), rgba(255,255,255,0) 38%, rgba(0,0,0,.16))
-      0 0 / var(--sp) 100% no-repeat,
-    /* foxing: two faint brown blooms, placed by the work's variant */
-    radial-gradient(circle at calc(18% + var(--pv,0) * 19%) calc(64% - var(--pv,0) * 9%),
-      color-mix(in srgb, var(--age-ink) calc(var(--age) * 9%), transparent) 0 1.4cqw, transparent 3.4cqw),
-    radial-gradient(circle at calc(86% - var(--pv,0) * 13%) calc(22% + var(--pv,0) * 15%),
-      color-mix(in srgb, var(--age-ink) calc(var(--age) * 7%), transparent) 0 1cqw, transparent 2.6cqw),
-    /* edges browned by light and hands, more on older books */
-    radial-gradient(125% 95% at 55% 48%, transparent 58%,
-      color-mix(in srgb, var(--age-ink) calc(var(--age) * 20%), transparent) 100%),
-    var(--grain) 0 0 / 180px 180px,
-    var(--cloud) 0 0 / 420px 420px;
-  /* a bevelled board: lit top-left, worn dark at the fore-edge */
-  box-shadow:inset 1px 1px 0 var(--edge-hi), inset -1px -1px 0 rgba(0,0,0,.07) }
-/* the page block behind the board, a sliver at the fore-edge and the foot
-   (it paints only outside the board, so it never covers the print) */
-.cover__fx::before{ content:""; position:absolute; pointer-events:none;
-  top:3px; left:calc(var(--sp) + 2px); right:-3px; bottom:-3px; border-radius:0 2px 2px 0;
-  background:
-    repeating-linear-gradient(90deg, var(--page) 0 .7px, var(--page-line) .7px 1.1px) right / 3px 100% no-repeat,
-    repeating-linear-gradient(0deg, var(--page) 0 .7px, var(--page-line) .7px 1.1px) bottom / 100% 3px no-repeat;
-  box-shadow:1px 1px 0 color-mix(in srgb, var(--page-line) 70%, transparent) }
-
-/* ink: words pressed into the sheet — a hairline of light under each stroke */
-.cover__title, .cover__kt, .cover__author, .cover__year{ text-shadow:var(--press) }
-.cover__emb, .cover__mark{ filter:drop-shadow(var(--press)) }
-
-@media (prefers-reduced-transparency:reduce){ .cover__fx{ background:none } }
-
 @supports not (container-type:inline-size){
   .cover{ padding-inline:15px }
   .cover[data-len="s"]{ --cv-ts:18px } .cover[data-len="m"]{ --cv-ts:15px }
