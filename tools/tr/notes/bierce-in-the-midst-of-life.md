@@ -119,3 +119,53 @@ p:932 `<span class="smallcaps">셋이 있기엔 방이 좁을 수 있다</span>,
 
 ## 결정 기록
 - (번역자가 청크 번호와 함께 덧붙임)
+- 001: 작업 파일에 절 번호(`I` `II`) 키가 따로 없음(「하늘의 기수」「아울크리크」 모두 `<hr>`로 처리된 듯) — 절 제목 새로 만들지 않음. 인용 부호 친 용어(“grip” “support” “parade rest” “unsteadfast footing”)는 대사 수 유지를 위해 큰따옴표 “ ” 그대로(“손잡이” “받침” “열중쉬어” “불안정한 발판”). “a Union regiment” → “북군 연대”. savage scene → 거친 풍경(사람 아닌 풍경).
+- 002: 「하늘의 기수」 p:13·p:14 드루즈의 자유 간접 사고(But no—there is a hope…)는 원문대로 현재형, 따옴표 없음. `<em>bivouac</em>` → `<em>야영</em>지`.
+- 003: 「아울크리크」 속생각 “ ” → ‘ ’(p:38·50·60·62) — check의 `대사 수` 경고는 이 때문, 그대로 둠. p:51 “Put it back, put it back!”은 손에게 외친 말이라 “ ” 유지. “martinet’s error” → “규율광의 실수”. `<em>diminuendo</em>` → `<em>디미누엔도</em>`.
+- 005: check 경고 `p:56 1→0`은 청크 안에 ‘ ’로 시작하는 속생각 문단(p:60·62)이 “ ” 문단(p:56)보다 많아 detect_opens가 ‘를 고른 탓 — 책 전체로는 “가 다수라 문제 없음. 구령 p:56은 노트 고정 구령 그대로 “ ”.
+- 006: 「치카모가」 바이런 인용(p:72–74) — p:72 끝을 「…아이도」로 열어 두고 p:73 「전쟁의 욕망을 억누르지 못했고,」 p:74 「운명을 시험하면 가장 높은 별마저 떠나 버린다는 것을 배우지 못했다.」 세 문단 그대로. “making believe” → “믿는 척”(“ ” 유지). 서술에서 the child/he → 「아이」로 받음, 「그」 거의 안 씀.
+- 007: p:80 “the thunder of the captains and the shouting”(욥 39:25) → “장관들의 호령과 외치는 소리”(개역 표현). “spoor” → “발자취”. shell(p:84) → 유탄.
+- 008: 「신들의 아들」 the commander → 「사령관」(p:94 corps commander는 「군단장」). “Tell General X. to send forward the skirmish line.” → “X 장군에게 산병선을 앞으로 내보내라고 전하게.”(하게체). “a blue-and-gold edition of the Poetry of War” → 「청색과 금색으로 장정한 『전쟁의 시』 한 권」. retiring/retreating → 「물러나는 것과 달아나는 것」.
+- 009: p:99 전체(You are not to forget… 부터 “Let me pay all”까지)를 독자에게 거는 말로 보고 하십시오체로 통일; “Let me pay all” → “제가 모두 치르겠습니다”. p:100부터 다시 현재형 평서.
+- 010: 「실종자」 <em>vis-à-vis</em> → <em>맞은편 상대</em>. “set” the trigger → 방아쇠를 “걸었다”(“ ” 유지). 전초 병사끼리 해체(p:110). 시어링 속생각(p:112) ‘ ’ 해라체 — 검사의 대사 수 경고는 의도된 것.
+- 026: 「양심」 하트로이 → 부관(중위): 하게체 「중위」; 부관 → 하트로이: 「대위님」. “It was all right, sir” → “괜찮았습니다, 대위.” 나팔 “assembly” → “집합”(따옴표 유지).
+- 027: 「장교의 한 유형」 랜섬 → 프라이스: 하게체 「프라이스 중위」; 프라이스 → 랜섬: 하십시오체. 캐머런 → 참모장: 하게체, 참모장 → 캐머런: 하십시오체. p:439 “—which permit me to repeat” → “—그 명령을 다시 말해 주지.” “It makes a difference.” → “그러면 이야기가 달라진다.”
+- 028: 모리스 → 랜섬: 하십시오체(「프라이스 중위님께서」); 랜섬 → 모리스: 해라체(“하사, …지시해라. 포도탄.”). 매스터슨 → 캐머런: 하게체 「캐머런」; 캐머런 → 매스터슨: 하십시오체 「장군님」. “dressed” → “정돈”(따옴표 유지). hospital attendants → 위생병.
+- 029: p:486 노트 고정 스몰캡 그대로(원문 쉼표 생략). 매스터슨 → 병사들: “그래, 제군.” 하게체; 화나서 랜섬에게 “Sir—Captain Ransome” → “이보게—랜섬 대위”. trail of the gun → 포가 꼬리. sabre → 기병도(장교 검도 기병도로 통일, 「장교의 한 유형」 안에서만).
+- 030: 「장교 하나, 병사 하나」 <em>impedimenta</em> → <em>짐</em>. first lieutenant(p:519) → “자기 중대 중위”. hired/field officers 등 용어표대로.
+- 021: 「파커 애더슨」 참모장 → 다른 장교: 하오체(“정신이 오락가락하시는 게 <em>아니오</em>.”) · “breathless … actors” / “Breathless, indeed, was one” 말장난은 「숨 가쁜 배우들」/「숨이 아예 끊어진 이」로 이음.
+- 022: 「전초」 주지사 → 아미스테드: 「자네」 하게체, 작별 “Good night.” → “잘 가게.”/아미스테드 “안녕히 계십시오, 주지사님.” · “Who is she?” → “그 여자가 누군가?” · 책 제목 본문은 `<em>바보 각하</em>` · 매스터슨의 “bad bit of jungle” → “고약한 밀림 자락”(p:353·369 같은 글자) · 핼럭 평가 “a theorist, sluggish, irresolute” → “이론가요, 느리고 결단력 없는 사람”.
+- 023: 주지사 → 하사: 하오체(“아미스테드 대위를 만나고 싶소.”) · 하사 → 대위: “이 사람이 대위님을 뵙겠다고 합니다.” · “At-ten-tion!” → “차—렷!” · 아미스테드 → 주지사 경례 인사: “알고 있습니다, 주지사님. 그리고 경례를 올립니다—제 주의 주지사께.”
+- 024: 주지사 → 군의관·전속 부관: 하오체(「사령관께 … 전해 주시오」) · 부관 → 주지사: 하십시오체 「주지사님」, the Commanding General → 「사령관님」 · “in the hands of my friends” → ‘친구들 손에 맡겨진’ 처지.
+- 025: 「양심」 초병 → 브룬: “통행증 내놓으시오.” · 브룬 사투리 두 번째 대사 “You-all have to be purty pertickler, I reckon” → “당신네도 아주 까다로워야 하는 모양이오.” · 하트로이 → 브룬(이름 밝히기 전부터) 하십시오체(“항복하십시오.” “아니면 죽습니다.”) · butternut 설명문은 “버터넛”이라 불리는 누런 회색의 집에서 짠 거친 천.
+- 036: 「코에서 나오는 남자」 “the States” → “동부”(캘리포니아에서 본 동부 주들; p:576·580 따옴표 유지) · burglary → 가택 침입 절도 · Spoony Glum → ‘울상 얼간이’(홑따옴표, 원문엔 따옴표 없음) · “Take care!” → “조심하시오!”.
+- 037: 「브라운빌」 p:584 대괄호 유지, 머리 각주는 `–한다` 평서. 베닝 → 폴린(숲): 하오체(“나는 위협은 받지 않겠소”), 폴린 → 베닝: 해요체. “summer place of last resort” → 「최후의 수단으로 찾는 여름 휴양지」 · “caravanserai” → “대상 숙소”.
+- 038: “Rigoletto” → 《리골레토》(노트 표기; 원문 “ ” 대신 겹낫표라 대사 수 경고 1→0은 의도) · 베닝 “She is raving” → “정신이 나간 거요.”(하오체) · heart failure 말장난 → 「심장 <em>마비</em>가 발명되기 전… 틀림없이 마비되어 멎기는 했지만」.
+- 039: 모런 속생각 p:625 ‘ ’(대사 수 경고 의도) · “God help me!” → “하느님 도우소서!”(p:622·634 같은 글자) · dined/dinner → 정찬 · 에바를 지문에서 「아가씨」「메이나드 양」「에바」로 받아 ‘그녀’ 줄임.
+- 040: 베닝 → 모런 하십시오체 「친구」(“친구, 틀림없이 보셨겠지만,”) · “deadfall”/“saloon” 본문은 원문대로 “덫”/“살룬” 겹따옴표 · “swung off”/“strung up” → “대롱대롱 매달렸다”/“줄에 매여 올라갔다” · copper the queen → 「퀸에 역으로 거는 것」 · “the bank” → “뱅크” · “clean dust” → “깨끗한 금가루” · navy revolver → 해군용 리볼버.
+- 041: 「길슨」 the Territory → 준주. 신문 이름 `<em>Patriot</em>`·`<em>Clarion</em>`은 노트대로 《매먼힐 패트리엇》《스쿼걸치 클래리언》(em 대신 겹낫표 — check의 emphasis 경고는 이 때문). “flush” → “돈이 두둑했다”(“ ” 유지). Milton Gilson, Esq. → 고 밀턴 길슨 선생. 유언 보충서(p:650)는 법률 문서 투 `–한다/–받는다`.
+- 043: 「지원자」 Early Comatose order → 초기 혼수 양식(원문에 따옴표 없어 따옴표 안 침). “castle in Spain” → “공중누각”. 서술 현재형(It is… / the Home is…)은 원문대로 현재형, 사건은 `–했다`.
+- 044: 「지원자」 틸보디 → 노인 하오체 「당신」, 노인 → 틸보디 하십시오체 「이사님들」. 말장난 “agreed that your application disagrees with them” → “당신의 지원이 자기들과 합의가 안 된다는 데 합의했소.” `<em>ex officio</em>` → `<em>직권상</em>`. “read his title clear” → “직함을 또렷이 읊는”(“ ” 유지).
+- 045: 「시신」 헬버슨 → 하퍼·맨처 하게체, 맨처 → 헬버슨 해체(「말이야」), 하퍼 → 헬버슨 하십시오체 「박사님」. ‘in your system’ → ‘체질 속에’, ‘confederate season’ → ‘공모하는 계절’. sack-coat → 색코트. face-cloth → 얼굴 가리개 천.
+- 031: 「장교 하나, 병사 하나」 보고서 p:534 “I have the honor to report” → “삼가 보고드립니다”; 구령 “forward” → “앞으로”(대사 수 유지).
+- 032: 「조지 서스턴」 `<em>personnel</em>` → `<em>인적 구성</em>`, `<em>en bivouac</em>` → `<em>야영</em>`, `<em>mêlée</em>` → `<em>난전</em>`. 병참관(말더듬) → 동료 참모: 해체/하게체(“…그 사람 방-방식이야.” “…못 냈을 걸세.”). 포로 남군의 안쪽 인용 ‘Throw down that sword…’ → ‘그 검 버리고 항복해, 이 빌어먹을 양키!’.
+- 033: 「흉내지빠귀」 그레이록의 “Halt!… who goes there?” 는 원문대로 두 대사(“정지!” … “누구냐?”). “Realm of Conjecture/Enchanted Land” → 추측의 나라/마법의 땅(고정).
+- 034: 그레이록 혼잣말(“I find myself disappointed…” said to himself)은 원문대로 “ ” 유지, 해라체. “the Confederacy” → “남부 연합 땅”. 마지막 “He had found his man.” → “그는 자기 사람을 찾았다.”
+- 035: 「코에서 나오는 남자」 현재 습관 문단(p:567–570) 현재형, 내력(p:571–) `–했다`. “squares” → 블록 · “Chinese and domestic competition” → 중국인과 이곳 사람의 경쟁 · “booked for burglary” → 주거 침입 절도죄로 기록 · “Officer No. 13” → 13호 경관.
+- 057: 「판자창」 멀록의 소리 낸 혼잣말(p:877 “내일은,” … “관을 만들고 무덤을 파야겠지…”)은 “ ” 둘 그대로, 해라체. “it <em>must</em> be all right” → “괜찮은 게 <em>틀림없어</em>”. 서술의 he → 「그」 최소, 아내는 「아내」.
+- 058: 「레드호스」 디먼트 편지 해요체 확정. “handsome”/“beauty” → “잘생겼다”/“아름다움”(인용 “ ” 유지). 대문자 He/Him(배리츠) → 「그분」. “bell-bird” → 「벨보이라는 새」. “chlorided to her fathers” → 「몸소 뒤져져 조상들 곁으로」. “Gunny” 앞치마 천 농담은 설명 없이 「내 앞치마 천을 두고 한 말」. 날짜 문단 「7월 3일」「7월 16일」「7월 17일」(마침표 없음).
+- 059: 배리츠 → 디먼트 바닷가 첫 두 마디(p:897·900)는 하십시오체 「디먼트 양」, p:904부터 해요체 「가엾은 사람」「내 사랑」(Dearest/dear/darling). gall/wormwood → 「뻔뻔함」/「쓰지 않았고」. “my leg is asleep” → 「다리가 저린 건데」. p:914 끝 쉼표 유지, p:915 서명 스몰캡, p:916 「추신—」.
+- 060: 「표범의 눈」 h:ch027 「표범의 눈」(절 제목 키 없음 — 새로 만들지 않음). “lithe” → “나긋하다”. ‘possession’ → ‘빙의’. theory(p:954·956) → 「추리」, hypothesis → 「가설」. 아기(Baby) → 「아기」. 말로 부부 해요체, 브레이딩 ↔ 아이린 해요체.
+- 061: 서술의 she → 「여자」(1절·2절 말로 부인), 액자에서는 「아이린」/「아가씨」. “the girl” → 「아가씨」. check의 대명사 경고는 「그녀」를 줄여 해소.
+- 062: “hired girl” → “고용 하녀”(노트 용어). 마지막 “peace. Peace and reparation.” → 「평안을. 평안과 보상을.」(노트 고정). “the foremost jurist of his time” → “당대 제일의 법률가”.
+- 046: 「시신을 지키는 사람」 저렛 속생각(p:710 “What have I to fear?”…)은 ‘ ’ 해라체, 소리 내어 외친 “What!”은 “ ” 유지 — check 대사 수 경고는 의도된 것. 혼잣말 “put things to rights” → “제자리에 돌려놔야겠다”/p:709 “제자리에 돌려놓는” 일(“ ” 유지). coupé → 쿠페 마차. reading-stand → 독서대. Jarette → 저렛 씨(Mr.) / 저렛.
+- 047: 헬버슨 → 맨처(낯선 이·옛 친구): 하게체 「이보게, 맨처」「이 사람아」. 하퍼 → 낯선 이: 무뚝뚝한 하십시오체(“당신 대체 누구십니까?”). 경관 → 군중: 해라체(“방을 비워—전부 나가!”). “the hill tribes” → 언덕 부족들(반어 그대로). “Dr. Harper” → 하퍼 박사.
+- 048: “High Supreme Medical Officer” → 최고 지존 의무관. 「남자와 뱀」 p:757 의고체 인용은 한 문장 `–나니, –느니라`. p:758 “he said to himself” → “ ” 유지(혼잣말 해라체). `<em>Marvells of Science.</em>` → `<em>《과학의 경이》</em>`(em 유지). “dragons of the prime” → “태고의 용들”. “wing” → “별관”. Zola of zoölogy → 동물학의 졸라.
+- 049: `<em>de trop</em>` → `<em>거추장스러운 것</em>`. 브레이턴 속생각 p:767 ‘ ’(경고 의도됨), p:769 “Nonsense!” 소리 낸 말은 “ ”. æolian harp → 아이올로스 하프. 드루링 ↔ 부인 해요체(「여보」).
+- 050: 드루링 → 하인들 앞 혼잣말: “발작으로 죽었군.” “맙소사!” “이게 어떻게 여기 들어왔지?”(해라체). 「지독한 여자」 <em>quien sabe</em> → <em>키엔 사베</em>(음역, 설명 없음). “Scarry” → “스캐리”(“ ” 유지). flume → 송수로 · hill claim → 언덕 광구 · burro → 당나귀 · headboards → 묘판 · God's Location → 신의 땅 · necropolis → 죽은 자의 도시.
+- 051: 「지독한 여자」 이탤릭 신문·잡지 제목은 `<em>《허디 헤럴드》</em>`·`<em>《헤럴드》</em>`처럼 em 유지 + 《》 (「알맞은 환경」 `<em>《메신저》</em>` 동일). 바니 편지(p:796–797) 은어는 풀지 않고 직역(“눈먼 놈인데 이가 끓어” “스캐리로 흙을 덮어 놨네”), p:798이 뜻을 설명하므로 그대로. “Ta-ta” → “잘 있어”, “plug” → “둔마”, blasted tree → 말라 죽은 나무, raven → 갈까마귀.
+- 052: 대문자 추상 명사 the Inevitable/the Assassin → ‘피할 수 없는 것’/‘암살자’(작은따옴표). coffin plate → 금속판/관 명판.
+- 053: 비명 다섯 문단 「<span class="smallcaps">마누엘리타 머피</span>.」/「미션샌페드로에서 나서—죽은 곳은」/「허디거디,」/「향년 47세.」/「지옥엔 이런 것들이 가득하다.」. 포퍼 → 일행 하십시오체(“말씀드린 대로,” “건너가서 그 자리를 보십시다.”), “Iron pyrites—fool’s gold.” → “황철석—바보의 금입니다.”
+- 054: 「알맞은 환경」 p:835 소년 속말(said to himself)은 ‘ ’ 해라체 — check `대사 수 2→0` 경고는 의도된 것. 마시 ↔ 콜스턴 하게체(“좋은 아침이군, 콜스턴.” “내 말 알겠지, 마시.”). <em>au courant</em> → <em>늘 꿰고</em>. “Good-morning” → “좋은 아침이군”.
+- 055: “By God, it is infamous!” → “맹세코, 파렴치한 짓이야!” 원고(p:861)는 하십시오체 공문 「본인」. whip-poor-will → 쏙독새, screech-owl → 올빼미. Scepticism/Truth는 따옴표 없이 「회의가 진실에게」.
+- 056: 추신(p:866) 마시에게 하게체, 서명 「“<span class="smallcaps">제임스 R</span>. 콜스턴.」 원문 태그 위치 그대로. 《타임스》 기사(p:870) 신문 문체 `–했다`, Commissioners of Lunacy → 정신 이상 심사 위원회. 「판자로 막은 창」 1인칭 `–했다`, “as you shall see” → 「곧 알게 되겠지만」.
