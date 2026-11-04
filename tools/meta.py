@@ -51,6 +51,11 @@ AUTHORS = {
         "life": "1863–1943", "slug": "jacobs",
         "note": "템스강 부두의 익살꾼. 단 한 편의 괴담으로 세 가지 소원의 공포를 영원히 남긴 사람.",
     },
+    "비어스": {
+        "en": "Ambrose Bierce", "ko": "앰브로스 비어스",
+        "life": "1842–1914", "slug": "bierce",
+        "note": "남북전쟁의 참호에서 걸어 나온 냉소가. 죽음을 농담처럼, 농담을 죽음처럼 쓴 미국 단편의 칼날.",
+    },
     "유메노": {
         "en": "Yumeno Kyūsaku", "ko": "유메노 규사쿠", "orig": "ja",
         "life": "1889–1936", "slug": "yumeno",
@@ -143,6 +148,12 @@ KO_TITLES = {
     "The White People": ("백색 사람들", ""),
     # Andreyev — Herman Bernstein's authorised translation, 1909
     "The Seven Who Were Hanged": ("사형수 7인", "Рассказ о семи повешенных"),
+    # Bierce
+    "In the Midst of Life": ("삶의 한가운데서", "Tales of Soldiers and Civilians"),
+    "Can Such Things Be": ("그런 일이 있을 수 있는가", "Can Such Things Be?"),
+    "Fantastic Fables": ("환상 우화집", ""),
+    "Negligible Tales": ("하찮은 이야기들", ""),
+    "The Parenticide Club": ("부모 살해 클럽", ""),
     # Jacobs
     "The Monkey's Paw": ("원숭이 손", ""),
     # Japanese originals (Aozora Bunko), keyed by the romanised file title
@@ -178,6 +189,9 @@ GENRE = {
     "fitzgerald-the-great-gatsby": "society", "fitzgerald-all-the-sad-young-men": "society",
     "harbou-metropolis": "sf",
     "jacobs-the-monkey-s-paw": "weird",
+    "bierce-in-the-midst-of-life": "history", "bierce-can-such-things-be": "weird",
+    "bierce-fantastic-fables": "fable", "bierce-negligible-tales": "comic",
+    "bierce-the-parenticide-club": "comic",
     "kafka-the-metamorphosis": "fable", "kafka-the-trial": "fable", "kafka-the-castle": "fable",
     "kafka-the-knock-at-the-manor-gate": "fable", "kafka-give-it-up": "fable",
     "kafka-poseidon": "fable", "kafka-the-helmsman": "fable",
@@ -243,6 +257,11 @@ FORM = {
     "The White People": "novella",
     "The Seven Who Were Hanged": "novella",
     "The Monkey's Paw": "story",
+    "In the Midst of Life": "collection",
+    "Can Such Things Be": "collection",
+    "Fantastic Fables": "collection",
+    "Negligible Tales": "collection",
+    "The Parenticide Club": "collection",
     "Shojo Jigoku": "collection",
     "Akuma Kitosho": "story",
     "Masayume": "story",
@@ -256,7 +275,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스", "유메노", "아쿠타가와"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스", "비어스", "유메노", "아쿠타가와"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder

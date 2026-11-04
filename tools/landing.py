@@ -33,13 +33,14 @@ WALL_A = ["wells-the-time-machine", "kafka-the-metamorphosis", "fitzgerald-the-g
           "machen-the-white-people",
           "andreyev-the-seven-who-were-hanged",
           "jacobs-the-monkey-s-paw",
+          "bierce-in-the-midst-of-life",
           "akutagawa-rashomon", "yumeno-shojo-jigoku"]
 WALL_B = ["kafka-the-castle", "wells-a-modern-utopia", "fitzgerald-the-beautiful-and-damned",
           "wells-ann-veronica", "wells-the-world-set-free", "fitzgerald-all-the-sad-young-men",
           "wells-the-food-of-the-gods", "kafka-poseidon", "wells-kipps",
           "fitzgerald-the-vegetable", "wells-the-sleeper-awakes", "wells-the-dream",
           "blackwood-the-wendigo", "blackwood-john-silence-physician-extraordinary",
-          "chambers-the-slayer-of-souls"]
+          "chambers-the-slayer-of-souls", "bierce-can-such-things-be"]
 
 # The reading surface, shown rather than described. Written for this page —
 # a type specimen, not an extract.
@@ -146,7 +147,7 @@ def build_landing(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>모던문고 — %(y0)d–%(y1)d 근대 소설 %(n)d편, 원문과 새 번역으로</title>
-<meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 원문·한글·대역으로 읽고, 소리 내어 들을 수 있습니다.">
+<meta name="description" content="모던문고 — %(y0)d–%(y1)d년 근대 소설 %(n)d편을 원문과 새 한국어 번역으로. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 앰브로스 비어스 · 유메노 규사쿠 · 아쿠타가와 류노스케. 원문·한글·대역으로 읽고, 소리 내어 들을 수 있습니다.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">

@@ -229,6 +229,8 @@
 .cover[data-author="andreyev"]   .rule{ height:1px; background:var(--c-rule) }
 .cover[data-author="jacobs"]     .rule{ height:3px; background:linear-gradient(
    var(--c-rule) 0 .5px,transparent .5px 2.5px,var(--c-rule) 2.5px 3px) }
+.cover[data-author="bierce"]     .rule{ height:4px; background:linear-gradient(
+   var(--c-rule) 0 .5px,transparent .5px 1.5px,var(--c-rule) 1.5px 4px) }
 .cover[data-author="yumeno"]     .rule{ height:4px; background:repeating-linear-gradient(90deg,
    var(--c-rule) 0 1px,transparent 1px 4px) }
 .cover[data-author="akutagawa"]  .rule{ height:5px; background:linear-gradient(

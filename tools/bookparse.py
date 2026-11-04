@@ -447,6 +447,7 @@ AUTHOR_BY_FOLDER = {
     "마켄": "Arthur Machen",
     "안드레예프": "Leonid Andreyev",
     "제이컵스": "W. W. Jacobs",
+    "비어스": "Ambrose Bierce",
 }
 
 
@@ -699,10 +700,12 @@ def find_body_start(doc, manifest, toc_used):
         for bi, sc in cands:
             if sc == best:
                 return _backup_over_heading(doc, bi, last_toc, toc_used)
-    # no headings at all: skip leading title/attribution blocks
+    # no headings at all: skip leading title/attribution blocks — but keep an
+    # ALL-CAPS title that sits right above the first prose (the first fable of
+    # Bierce's Fantastic Fables, whose titles are all plain capitals)
     for bi, b in enumerate(doc.blocks[:12]):
         if len(b.lines) >= 2 or len(b.text) > 200:
-            return bi
+            return _backup_over_heading(doc, bi, last_toc, toc_used)
     return 0
 
 

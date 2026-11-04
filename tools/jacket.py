@@ -38,6 +38,10 @@ MARKS = {
           '<path d="M9.6 14.6V6.1c0-1.2 1.6-1.2 1.6 0v6.2"/><path d="M11.2 12.3V4.4c0-1.2 1.6-1.2 1.6 0v7.9"/>'
           '<path d="M12.8 12.3V6.3c0-1.2 1.6-1.2 1.6 0v6"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
+ "bierce": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="square">'
+          '<path d="M2.8 7.2h18.4"/><path d="M6.4 7.2v14.3"/><path d="M17.6 7.2v14.3"/>'
+          '<path d="M6.4 21.5 17.6 7.2" opacity=".6"/><path d="M12 7.2v6.8"/>'
+          '<path d="M2.8 21.5h18.4" opacity=".45"/></g><circle cx="12" cy="14.9" r=".85" fill="currentColor"/>',
  "yumeno": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">'
           '<path d="M12 11.6c.6 0 .9.5.8 1-.2.8-1.2 1.1-1.9.7-1-.6-1.1-2-.4-2.9 1-1.2 2.9-1.2 4-.2 1.4 1.3 1.3 3.6-.1 4.9-1.7 1.6-4.5 1.5-6.1-.2-1.9-2-1.7-5.3.3-7.2 2.3-2.2 6.1-2 8.3.4"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
@@ -158,7 +162,7 @@ FORM_KO = {
 # One board for the library and the front door (tools/cover.css). Every part
 # carries one fact; see the table at the top of cover.css.
 NATION = {"kafka": "de", "harbou": "de", "wells": "uk", "blackwood": "uk", "machen": "uk",
-          "jacobs": "uk", "fitzgerald": "us", "chambers": "us", "andreyev": "ru",
+          "jacobs": "uk", "fitzgerald": "us", "chambers": "us", "bierce": "us", "andreyev": "ru",
           "yumeno": "jp", "akutagawa": "jp"}
 
 # genre emblems, 24-unit line work like the author marks

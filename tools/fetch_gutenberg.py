@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, re, sys, time, urllib.request
+import fixups
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ONLY = set(sys.argv[1:])   # folder names; empty = all
@@ -88,7 +89,26 @@ u"안드레예프": [
 u"제이컵스": [
     (12122,1902, "The Monkey's Paw"),
 ],
+u"비어스": [
+    (13334,1909, "In the Midst of Life"),
+    (4366, 1909, "Can Such Things Be"),
+    (374,  1899, "Fantastic Fables"),
+],
 }
+
+# 모음집 한 권에서 소설 부분만 잘라 따로 싣는 것: (ebook, folder, year, title, 첫 머리글, 끝 머리글, 수록작)
+# 비어스 전집 8권(1911)은 단편(Negligible Tales · The Parenticide Club) 뒤에 수필·풍자문이 이어진다.
+EXTRACTS = [
+    (15599, u"비어스", 1911, "Negligible Tales", "A BOTTOMLESS GRAVE", "THE PARENTICIDE CLUB",
+     ["A Bottomless Grave", "Jupiter Doke, Brigadier-General", "The Widower Turmore",
+      "The City of the Gone Away", "The Major's Tale", "Curried Cow", "A Revolt of the Gods",
+      "The Baptism of Dobsho", "The Race at Left Bower", "The Failure of Hope & Wandel",
+      "Perry Chumly's Eclipse", "A Providential Intimation", "Mr. Swiddler's Flip-Flap",
+      "The Little Story"]),
+    (15599, u"비어스", 1911, "The Parenticide Club", "MY FAVORITE MURDER", "THE FOURTH ESTATE",
+     ["My Favorite Murder", "Oil of Dog", "An Imperfect Conflagration", "The Hypnotist"]),
+]
+
 
 START = re.compile(r"\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)
 END   = re.compile(r"\*\*\*\s*END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK.*?\*\*\*", re.I)
@@ -128,7 +148,7 @@ for folder, items in MANIFEST.items():
         if os.path.exists(path) and os.path.getsize(path) > 3000:
             print("skip", folder, title); continue
         try:
-            body = strip(fetch(bid))
+            body = fixups.apply(title, strip(fetch(bid)))
             if len(body) < 2000: raise ValueError("too short: %d" % len(body))
             with open(path, "wb") as f:
                 f.write(body.encode("utf-8"))
@@ -136,5 +156,24 @@ for folder, items in MANIFEST.items():
         except Exception as e:
             print("FAIL", folder, bid, title, repr(e)[:120])
             fails.append((folder, bid, title, repr(e)[:120]))
+for bid, folder, year, title, head, tail, stories in EXTRACTS:
+    if ONLY and folder not in ONLY: continue
+    d = os.path.join(ROOT, folder)
+    if not os.path.isdir(d): os.makedirs(d)
+    path = os.path.join(d, "%d_%s.txt" % (year, title))
+    if os.path.exists(path) and os.path.getsize(path) > 3000:
+        print("skip", folder, title); continue
+    try:
+        body = strip(fetch(bid))
+        a = body.rfind("\n" + head + "\n"); b = body.rfind("\n" + tail + "\n")
+        if a < 0 or b < 0 or b <= a: raise ValueError("markers not found")
+        part = fixups.extract_header(title, year, stories) + body[a:b].strip("\n") + "\n"
+        part = fixups.apply(title, part)
+        with open(path, "wb") as f:
+            f.write(part.encode("utf-8"))
+        print("ok  ", folder, year, title, len(part))
+    except Exception as e:
+        print("FAIL", folder, bid, title, repr(e)[:120])
+        fails.append((folder, bid, title, repr(e)[:120]))
 print("\nFAILURES:", len(fails))
 for f in fails: print(f)
