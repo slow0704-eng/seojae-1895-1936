@@ -380,13 +380,13 @@ def index_page(cat, works):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>모던문고 — 원문과 새 번역으로 읽는 근대 소설</title>
-<meta name="description" content="모던문고 — 1895–1936년 근대 소설 %(n)d편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 앰브로스 비어스 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
+<meta name="description" content="모던문고 — 1846–1936년 근대 소설 %(n)d편을 영어·일본어 원문과 새 한국어 번역으로. 대역 읽기·낭독·오프라인. 카프카 · H. G. 웰스 · F. 스콧 피츠제럴드 · 테아 폰 하르부 · 앨저넌 블랙우드 · 로버트 W. 체임버스 · 아서 마켄 · 레오니트 안드레예프 · W. W. 제이컵스 · 앰브로스 비어스 · 허먼 멜빌 · 유메노 규사쿠 · 아쿠타가와 류노스케.">
 <meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191817" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="모던문고">
 <meta property="og:title" content="모던문고 — 원문과 새 번역으로 읽는 근대 소설">
-<meta property="og:description" content="1895–1936 근대 소설 %(n)d편. 카프카, 웰스, 피츠제럴드, 아쿠타가와 … 원문과 새 한국어 번역, 대역·낭독.">
+<meta property="og:description" content="1846–1936 근대 소설 %(n)d편. 카프카, 웰스, 피츠제럴드, 아쿠타가와 … 원문과 새 한국어 번역, 대역·낭독.">
 <meta property="og:image" content="https://slow0704-eng.github.io/seojae-1895-1936/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -432,7 +432,7 @@ r.dataset.indent=(s.indent===false)?"off":"on";
 <header class="masthead">
   <h1 class="mh__title">서재</h1>
   <i class="rule mh__rule"></i>
-  <p class="mh__stat"><span class="mh__yr">1895–1936</span> &nbsp;·&nbsp; %(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
+  <p class="mh__stat"><span class="mh__yr">1846–1936</span> &nbsp;·&nbsp; %(n)d편 &nbsp;·&nbsp; 작가 %(nauth)d명 &nbsp;·&nbsp; 약 %(hours)d시간<span class="mh__mine" id="mine"></span></p>
 </header>
 <section class="now" id="now" hidden><h2 class="now__h">읽는&nbsp;중</h2><ul class="now__list" id="nowlist"></ul></section>
 <nav class="ctl">

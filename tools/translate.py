@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Korean translation pipeline for 서재 1895—1936.
+"""Korean translation pipeline for 서재 1846—1936.
 
 The English text already ships as 서재/data/orig/<id>.js (a SEOJAE.receive() call).
 This module slices that text into translation *jobs*, collects the Korean that
@@ -349,7 +349,7 @@ def to_text(bid, cols=0, partial=False):
             "원제  " + w["title"]]
     if w.get("titleOrig"):
         head.append("원어  " + w["titleOrig"])
-    head += ["", "서재 1895—1936 · 새로 옮긴 한국어판",
+    head += ["", "서재 1846—1936 · 새로 옮긴 한국어판",
              "원문은 퍼블릭 도메인, 번역은 이 서재에서 새로 옮긴 것입니다."]
     if n < of:
         head.append("번역 %d%% · 나머지 문단은 원문 그대로입니다." % (100 * n // of))

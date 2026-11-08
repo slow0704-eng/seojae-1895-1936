@@ -42,6 +42,11 @@ MARKS = {
           '<path d="M2.8 7.2h18.4"/><path d="M6.4 7.2v14.3"/><path d="M17.6 7.2v14.3"/>'
           '<path d="M6.4 21.5 17.6 7.2" opacity=".6"/><path d="M12 7.2v6.8"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g><circle cx="12" cy="14.9" r=".85" fill="currentColor"/>',
+ "melville": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">'
+          '<path d="M12 21.2V9.6"/>'
+          '<path d="M12 9.6C9.4 9.6 5.2 7.4 3.4 3.2 7.6 3.6 10.6 6.2 12 9.6"/>'
+          '<path d="M12 9.6c2.6 0 6.8-2.2 8.6-6.4-4.2.4-7.2 3-8.6 6.4"/>'
+          '<path d="M3.2 21.2h17.6" opacity=".45"/></g><circle cx="12" cy="14.6" r=".85" fill="currentColor"/>',
  "yumeno": '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">'
           '<path d="M12 11.6c.6 0 .9.5.8 1-.2.8-1.2 1.1-1.9.7-1-.6-1.1-2-.4-2.9 1-1.2 2.9-1.2 4-.2 1.4 1.3 1.3 3.6-.1 4.9-1.7 1.6-4.5 1.5-6.1-.2-1.9-2-1.7-5.3.3-7.2 2.3-2.2 6.1-2 8.3.4"/>'
           '<path d="M2.8 21.5h18.4" opacity=".45"/></g>',
@@ -118,7 +123,8 @@ def len_bucket(t):
 
 _ADV = None
 # the decade's title setting in cover.css: case, tracking (em), weight factor
-TITLE_SET = {1890: ("U", .095, 1.0), 1900: ("U", .05, 1.02), 1910: ("SC", .06, 1.0),
+TITLE_SET = {1840: ("U", .12, 1.0), 1850: ("U", .12, 1.0),
+             1890: ("U", .095, 1.0), 1900: ("U", .05, 1.02), 1910: ("SC", .06, 1.0),
              1920: ("U", .015, 1.05), 1930: ("I", 0.0, 1.0)}
 
 
@@ -134,7 +140,7 @@ def title_fit(t, decade, lang):
     if _ADV is None:
         _ADV = json.load(io.open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
                                                "serif_adv.json"), encoding="utf-8"))
-    case, trk, wt = TITLE_SET[min(1930, decade)]
+    case, trk, wt = TITLE_SET[min(TITLE_SET, key=lambda d: abs(d - decade))]
 
     def ch(c):
         if case == "U":
@@ -162,7 +168,7 @@ FORM_KO = {
 # One board for the library and the front door (tools/cover.css). Every part
 # carries one fact; see the table at the top of cover.css.
 NATION = {"kafka": "de", "harbou": "de", "wells": "uk", "blackwood": "uk", "machen": "uk",
-          "jacobs": "uk", "fitzgerald": "us", "chambers": "us", "bierce": "us", "andreyev": "ru",
+          "jacobs": "uk", "fitzgerald": "us", "chambers": "us", "bierce": "us", "melville": "us", "andreyev": "ru",
           "yumeno": "jp", "akutagawa": "jp"}
 
 # genre emblems, 24-unit line work like the author marks

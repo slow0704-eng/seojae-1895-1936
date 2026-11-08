@@ -1,10 +1,10 @@
 ---
 name: translator
-description: Translates one 서재 1895—1936 job chunk (tools/tr/jobs/<책>/NNN.json) into Korean and writes tools/tr/out/<책>/NNN.json. Use when filling in the Korean edition chunk by chunk.
+description: Translates one 서재 1846—1936 job chunk (tools/tr/jobs/<책>/NNN.json) into Korean and writes tools/tr/out/<책>/NNN.json. Use when filling in the Korean edition chunk by chunk.
 tools: Read, Write, Bash, Glob, Grep
 ---
 
-당신은 『서재 1895—1936』 한국어판의 번역자입니다. **작업 단위 하나**를 맡아
+당신은 『서재 1846—1936』 한국어판의 번역자입니다. **작업 단위 하나**를 맡아
 번역해 출력 파일을 쓰고, 검사를 통과시킨 뒤 끝냅니다.
 
 ## 순서

@@ -56,6 +56,11 @@ AUTHORS = {
         "life": "1842–1914", "slug": "bierce",
         "note": "남북전쟁의 참호에서 걸어 나온 냉소가. 죽음을 농담처럼, 농담을 죽음처럼 쓴 미국 단편의 칼날.",
     },
+    "멜빌": {
+        "en": "Herman Melville", "ko": "허먼 멜빌",
+        "life": "1819–1891", "slug": "melville",
+        "note": "포경선 갑판에서 세계를 배운 사람. 고래와 사무원과 수병 — 거대한 것과 하찮은 것을 같은 눈으로 응시한 미국 소설의 심연.",
+    },
     "유메노": {
         "en": "Yumeno Kyūsaku", "ko": "유메노 규사쿠", "orig": "ja",
         "life": "1889–1936", "slug": "yumeno",
@@ -154,6 +159,11 @@ KO_TITLES = {
     "Fantastic Fables": ("환상 우화집", ""),
     "Negligible Tales": ("하찮은 이야기들", ""),
     "The Parenticide Club": ("부모 살해 클럽", ""),
+    # Melville
+    "Typee": ("타이피", "Typee: A Peep at Polynesian Life"),
+    "Moby-Dick": ("모비 딕", "Moby-Dick; or, The Whale"),
+    "The Piazza Tales": ("피아자 이야기", ""),
+    "Billy Budd and Other Prose Pieces": ("빌리 버드 외", ""),
     # Jacobs
     "The Monkey's Paw": ("원숭이 손", ""),
     # Japanese originals (Aozora Bunko), keyed by the romanised file title
@@ -192,6 +202,8 @@ GENRE = {
     "bierce-in-the-midst-of-life": "history", "bierce-can-such-things-be": "weird",
     "bierce-fantastic-fables": "fable", "bierce-negligible-tales": "comic",
     "bierce-the-parenticide-club": "comic",
+    "melville-typee": "history", "melville-moby-dick": "history",
+    "melville-the-piazza-tales": "society", "melville-billy-budd-and-other-prose-pieces": "society",
     "kafka-the-metamorphosis": "fable", "kafka-the-trial": "fable", "kafka-the-castle": "fable",
     "kafka-the-knock-at-the-manor-gate": "fable", "kafka-give-it-up": "fable",
     "kafka-poseidon": "fable", "kafka-the-helmsman": "fable",
@@ -262,6 +274,8 @@ FORM = {
     "Fantastic Fables": "collection",
     "Negligible Tales": "collection",
     "The Parenticide Club": "collection",
+    "The Piazza Tales": "collection",
+    "Billy Budd and Other Prose Pieces": "collection",
     "Shojo Jigoku": "collection",
     "Akuma Kitosho": "story",
     "Masayume": "story",
@@ -275,7 +289,7 @@ WPM = 240   # words per minute, unhurried literary reading
 
 def build():
     out = {"authors": [], "works": []}
-    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스", "비어스", "유메노", "아쿠타가와"]:
+    for folder in ["\uce74\ud504\uce74", "HG\uc6f0\uc2a4", "\ud53c\uce20\uc81c\ub7f4\ub4dc", "\ud14c\uc544\ud3f0\ud558\ub974\ubd80", "블랙우드", "체임버스", "마켄", "안드레예프", "제이컵스", "비어스", "멜빌", "유메노", "아쿠타가와"]:
         d = os.path.join(ROOT, folder)
         a = dict(AUTHORS[folder])
         a["folder"] = folder

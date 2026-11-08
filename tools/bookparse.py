@@ -240,6 +240,8 @@ def _has_sentence_break(s):
         word, punct, nxt = m.groups()
         if punct == "." and word.upper().strip("'") in ABBREVS:
             continue
+        if punct == "." and word.isdigit():
+            continue                       # "CHAPTER 100. Leg and Arm." (Moby-Dick)
         if punct == "." and len(word) <= 2:
             continue                       # initials: "H. G. WELLS"
         return True
@@ -387,8 +389,8 @@ def classify_heading_line(s):
         t = t[1:-1].strip()               # _BOOK THE SECOND_
     if not t:
         return None
-    if len(t) > 90:
-        return None
+    if len(t) > 90 and not (len(t) <= 120 and _RX_CHAPTER.match(t)):
+        return None                   # a long chapter title (Moby-Dick 57) is still one
 
     m = _RX_BOOK.match(t)
     if m and _num_of(m.group(2)) is not None:
@@ -448,6 +450,7 @@ AUTHOR_BY_FOLDER = {
     "안드레예프": "Leonid Andreyev",
     "제이컵스": "W. W. Jacobs",
     "비어스": "Ambrose Bierce",
+    "멜빌": "Herman Melville",
 }
 
 
@@ -529,7 +532,7 @@ TOC_HEAD_RX = re.compile(
     r"^\s*(?:A\s+)?(?:TABLE\s+OF\s+)?CONTENTS?[.:]?\s*$", re.I)
 
 
-MAX_TOC_ENTRIES = 120
+MAX_TOC_ENTRIES = 160                     # Moby-Dick lists 138
 
 
 def harvest_manifest(doc):
@@ -547,7 +550,7 @@ def harvest_manifest(doc):
         j, misses = bi + 1, 0
         prev_end = b.lineno
         seen_keys = set()
-        while (j < len(doc.blocks) and misses < 2 and j < bi + 80
+        while (j < len(doc.blocks) and misses < 2 and j < bi + 200
                and len(entries) < MAX_TOC_ENTRIES):
             blk = doc.blocks[j]
             # a big vertical gap means the table of contents is over
@@ -635,6 +638,10 @@ def _toc_row(line):
         return None
     label = ""
     m = re.match(r"^((?:%s|\d{1,3})\.?)[\s.—:-]+(\S.*)$" % ROMAN, s)
+    # "I AND MY CHIMNEY" opens with the pronoun, not with numeral one
+    if (m and m.group(1) == "I" and not re.match(r"^I[.—:-]", s)
+            and re.match(r"^(?:AND|AM|WAS|HAVE|HAD|WILL|SHALL|MYSELF)\b", m.group(2))):
+        m = None
     if m and _num_of(m.group(1)) is not None:
         label, s = m.group(1).rstrip("."), m.group(2)
     grp = bool(re.match(r"^(BOOK|PART|CHAPTER)\b", s, re.I))
@@ -812,7 +819,7 @@ def allcaps_head_candidate(b, prev_block, next_block, body_indent):
     if len(b.lines) > 2:
         return None
     t = b.text.strip()
-    if not (2 <= len(t) <= 62):
+    if not (2 <= len(t) <= 66):
         return None
     if not _is_allcaps(t):
         return None
@@ -869,6 +876,7 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
     for e in manifest:
         keys.setdefault(e["key"], e)
     mkeys = [k for k in keys if len(k) >= 4]
+    exact_hit = set()                     # titles already met in the body
 
     def manifest_match(txt):
         t = _strip_quotes((txt or "").strip())
@@ -876,6 +884,7 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
         if not k:
             return None
         if k in keys:
+            exact_hit.add(k)
             return keys[k]
         # "JEMINA" in the TOC vs "JEMINA, THE MOUNTAIN GIRL" in the body:
         # only accept when the extra text is a subtitle and the line reads
@@ -883,6 +892,11 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
         if len(k) >= 8 and _title_like(t) and t[0] not in "“‘\"'":
             for mk in mkeys:
                 if len(mk) < 8:
+                    continue
+                # a title already met exactly is not met again in a looser
+                # form by a line of text: "Poor Jimmy Rose!" inside the
+                # story "Jimmy Rose" (a capitalised line is still a heading)
+                if mk in exact_hit and not _is_allcaps(t):
                     continue
                 # the body title carries a subtitle the TOC omitted
                 if k.startswith(mk + " ") and len(k) - len(mk) <= 41:
@@ -915,6 +929,11 @@ def classify_blocks(doc, blocks, manifest, profile, body_indent):
         head = None
         if len(b.lines) <= 2:
             head = classify_heading_line(b.text)
+            # "I AND MY CHIMNEY" is a listed title, not section I called
+            # "AND MY CHIMNEY"
+            if (head and head[0] == "numeric" and head[2]
+                    and _norm_key(_strip_quotes(b.text.strip())) in keys):
+                head = None
             if head is None and len(b.lines) == 2:
                 h0 = classify_heading_line(b.lines[0].strip())
                 l1 = b.lines[1].strip()
@@ -1079,6 +1098,29 @@ def confirm_allcaps(blocks, level, manifest):
         run = []
 
 
+_OPENING_DIVISIONS = {"preface", "foreword", "introduction", "prologue", "proem"}
+
+
+def demote_unlisted_named(blocks, manifest):
+    """A PREFACE that the table of contents does not list, standing after a
+    listed title, opens that piece (the preface of Billy Budd in the
+    Constable volume): a subhead, not a chapter of the book. Only openings
+    are treated so; an unlisted APPENDIX or INTERLUDE stays a chapter."""
+    if not manifest:
+        return
+    keys = {e["key"] for e in manifest}
+    seen_listed = False
+    for b in blocks:
+        if b.kind != "head":
+            continue
+        h = b.meta["h"]
+        if h["type"] == "manifest" or _norm_key(h["title"]) in keys:
+            seen_listed = True
+        elif (h["type"] == "named" and seen_listed and not h.get("forced_level")
+              and h["title"].lower() in _OPENING_DIVISIONS):
+            h["forced_level"] = "subhead"
+
+
 def drop_repeated_heads(blocks, level):
     """PG half-titles and running heads repeat a chapter title."""
     heads = [b for b in blocks if b.kind == "head"]
@@ -1087,7 +1129,7 @@ def drop_repeated_heads(blocks, level):
         if ka and ka == kb and not a.meta["h"].get("num"):
             a.kind = "drop"
             a.meta["why"] = "half-title"
-    last_chap = None
+    last_chap, last_num = None, None
     prev_of = {}
     prev = None
     for b in blocks:
@@ -1102,7 +1144,9 @@ def drop_repeated_heads(blocks, level):
         if lvl != "chapter":
             continue
         k = _norm_key(h["title"])
-        if k and k == last_chap:
+        # two chapters may share a title (Moby-Dick 26 and 27, both "Knights
+        # and Squires"): a running head never carries a different number
+        if k and k == last_chap and not (h.get("num") and last_num and h["num"] != last_num):
             p = prev_of.get(id(b))
             # a "repeat" that finishes an open sentence is text, not a head:
             # "Written in staring black letters on the barrier was / RUE BARRÉE."
@@ -1114,7 +1158,7 @@ def drop_repeated_heads(blocks, level):
             b.kind = "drop"
             b.meta["why"] = "running head"
         else:
-            last_chap = k
+            last_chap, last_num = k, h.get("num")
 
 
 def promote_group_heads(blocks, level):
@@ -1505,6 +1549,7 @@ def parse(path):
     confirm_allcaps(body, level, manifest)
     level = infer_levels(body)
     merge_number_title(body, level)
+    demote_unlisted_named(body, manifest)
     drop_repeated_heads(body, level)
     promote_group_heads(body, level)
 

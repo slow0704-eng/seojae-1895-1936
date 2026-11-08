@@ -94,6 +94,12 @@ u"비어스": [
     (4366, 1909, "Can Such Things Be"),
     (374,  1899, "Fantastic Fables"),
 ],
+u"멜빌": [
+    (1900, 1846, "Typee"),
+    (2701, 1851, "Moby-Dick"),
+    (15859,1856, "The Piazza Tales"),
+    (76513,1924, "Billy Budd and Other Prose Pieces"),
+],
 }
 
 # 모음집 한 권에서 소설 부분만 잘라 따로 싣는 것: (ebook, folder, year, title, 첫 머리글, 끝 머리글, 수록작)

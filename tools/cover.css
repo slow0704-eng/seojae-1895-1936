@@ -157,6 +157,8 @@
 .cover__frame{ position:absolute; inset:var(--fr) var(--fr) var(--fr) calc(var(--sp) + var(--fr));
   pointer-events:none; border:1px solid color-mix(in srgb, var(--ink) 58%, transparent) }
 .cover[data-decade="1890"] .cover__frame{ border:3px double color-mix(in srgb, var(--ink) 62%, transparent) }
+/* antebellum: one heavier rule */
+.cover:is([data-decade="1840"],[data-decade="1850"]) .cover__frame{ border-width:2px }
 
 /* ---------- the parts, each in its own row ---------- */
 .cover__mark{ grid-row:2; width:10.5cqw; height:10.5cqw; color:var(--ink) }
@@ -200,6 +202,8 @@
   font-synthesis:none; --trk:.12em; font-weight:500 }
 
 /* title setting: the decade's title-page convention (Latin titles) */
+.cover[data-lang="en"]:is([data-decade="1840"],[data-decade="1850"]) .cover__title{   /* antebellum: wide-spaced capitals */
+  text-transform:uppercase; --trk:.12em; font-weight:400; line-height:1.16 }
 .cover[data-lang="en"][data-decade="1890"] .cover__title{   /* Victorian: spaced capitals */
   text-transform:uppercase; --trk:.095em; line-height:1.14 }
 .cover[data-lang="en"][data-decade="1900"] .cover__title{   /* Edwardian: firmer capitals */
@@ -231,6 +235,8 @@
    var(--c-rule) 0 .5px,transparent .5px 2.5px,var(--c-rule) 2.5px 3px) }
 .cover[data-author="bierce"]     .rule{ height:4px; background:linear-gradient(
    var(--c-rule) 0 .5px,transparent .5px 1.5px,var(--c-rule) 1.5px 4px) }
+.cover[data-author="melville"]   .rule{ height:5px; background:linear-gradient(
+   var(--c-rule) 0 1.5px,transparent 1.5px 3.5px,var(--c-rule) 3.5px 4px,transparent 4px 5px) }
 .cover[data-author="yumeno"]     .rule{ height:4px; background:repeating-linear-gradient(90deg,
    var(--c-rule) 0 1px,transparent 1px 4px) }
 .cover[data-author="akutagawa"]  .rule{ height:5px; background:linear-gradient(
@@ -242,6 +248,15 @@
   pointer-events:none; --d:calc(5cqw + var(--pv,0) * 1cqw);
   --L:linear-gradient(var(--pc), var(--pc));
   border-top:1px solid color-mix(in srgb, var(--ink) 58%, transparent) }
+/* 1840s–50s — Greek Revival fret: two rules with alternating keys, the
+   meander border of American title pages of the period */
+.cover:is([data-decade="1840"],[data-decade="1850"]) .cover__pat{ --d:calc(4.2cqw + var(--pv,0) * .8cqw);
+  background:
+    var(--L) 0 28% / 100% 1px no-repeat,
+    var(--L) 0 72% / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--pc) 0 1px, transparent 1px var(--d)) 0 28% / 100% 24% no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 calc(var(--d) / 2), var(--pc) 0 calc(var(--d) / 2 + 1px), transparent 0 var(--d)) 0 48% / 100% 24% no-repeat }
+.cover[data-decade="1850"] .cover__pat{ --d:calc(3.4cqw + var(--pv,0) * .8cqw) }
 /* 1890s — Victorian diaper: a lozenge lattice, a dot in every diamond
    (inset off the double frame; the frame alone marks the decade) */
 .cover[data-decade="1890"] .cover__pat{ margin:0 3px 3px;
