@@ -4483,11 +4483,23 @@ function overlayOpened(sel) {
 function anyOverlay() { return document.body.classList.contains("drawer-on") || document.body.classList.contains("set-on") || document.body.classList.contains("pal-on"); }
 
 /* ---------- movement ---------- */
+/* A second press while the first is still gliding must start from where the
+   first was going, not from where the page happens to be mid-glide — otherwise
+   four quick presses land most of a screen short. */
+var pgTarget = null, pgAt = 0;
 function pageBy(dir) {
   touched = true;
-  scrollBy({ top: dir * (innerHeight - 2 * S.fs * S.lh - 24), behavior: "smooth" });
+  var gliding = pgTarget != null && Date.now() - pgAt < 700;
+  var max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+  pgTarget = Math.max(0, Math.min(max, (gliding ? pgTarget : scrollY) + dir * (innerHeight - 2 * S.fs * S.lh - 24)));
+  pgAt = Date.now();
+  scrollTo({ top: pgTarget, behavior: "smooth" });
   lastActive = Date.now(); flushSoon();
 }
+function pageSettled() { pgTarget = null; }
+addEventListener("scrollend", pageSettled);
+addEventListener("wheel", pageSettled, { passive: true });
+addEventListener("touchmove", pageSettled, { passive: true });
 function jumpToFraction(f) {
   touched = true;
   var target = f * WORK.chars, lo = 0, hi = paras.length - 1;
